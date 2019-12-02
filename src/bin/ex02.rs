@@ -18,7 +18,6 @@ fn main() -> () {
 
 struct Solution;
 
-
 impl Solution {
     pub fn is_match(s: String, p: String) -> bool {
         let pattern: Pattern = p.parse().expect("failed to parse the pattern");
@@ -71,9 +70,7 @@ impl std::str::FromStr for Pattern {
             match ch {
                 '.' => acc.push(PatternNode(CharMatch::Any, Quantifier::One)),
                 '*' => match acc.pop() {
-                    None => {
-                        return Err("asterisk cannot start an expression".to_owned())
-                    }
+                    None => return Err("asterisk cannot start an expression".to_owned()),
                     Some(PatternNode(_ch, Quantifier::Any)) => {
                         return Err("cannot have two asterisks in a row".to_owned())
                     }
@@ -193,12 +190,8 @@ impl<'s, I> Cursor<'s, I> {
         match *self {
             Cursor::Before(slice) if slice.is_empty() => (None, Cursor::After(slice)),
             Cursor::Before(slice) => (Some(&slice[0]), Cursor::Inside(slice, 0)),
-            Cursor::Inside(slice, pos) if pos + 1 >= slice.len() => {
-                (None, Cursor::After(slice))
-            }
-            Cursor::Inside(slice, pos) => {
-                (Some(&slice[pos + 1]), Cursor::Inside(slice, pos + 1))
-            }
+            Cursor::Inside(slice, pos) if pos + 1 >= slice.len() => (None, Cursor::After(slice)),
+            Cursor::Inside(slice, pos) => (Some(&slice[pos + 1]), Cursor::Inside(slice, pos + 1)),
             Cursor::After(slice) => (None, Cursor::After(slice)),
         }
     }
