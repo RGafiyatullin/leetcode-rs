@@ -1,3 +1,5 @@
+// https://leetcode.com/problems/find-the-town-judge/
+
 fn main() -> () {
     let stdin = std::io::stdin();
     let mut input = String::new();
