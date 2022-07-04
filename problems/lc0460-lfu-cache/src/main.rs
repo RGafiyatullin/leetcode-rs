@@ -63,7 +63,7 @@ fn main() {
             }
         };
         let result = command.apply(&mut cache);
-        eprintln!("{:#?}", cache);
+        // eprintln!("{:#?}", cache);
         println!("> {:?}", result)
     }
 }

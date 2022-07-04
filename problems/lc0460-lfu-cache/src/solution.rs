@@ -32,8 +32,6 @@ mod lfu_cache {
         pub fn new(capacity: usize) -> Self {
             // eprintln!("NEW [capacity: {}]", capacity);
 
-            assert!(capacity > 0);
-
             Self {
                 capacity,
                 map: HashMap::with_capacity(capacity),
@@ -50,6 +48,10 @@ mod lfu_cache {
         K: Hash + Eq + Clone,
     {
         pub fn get(&mut self, key: K) -> Option<&V> {
+            if self.capacity == 0 {
+                return None;
+            }
+
             // eprintln!("GET");
 
             let q_idx = self.map.get(&key).copied()?;
@@ -58,6 +60,10 @@ mod lfu_cache {
         }
 
         pub fn put(&mut self, key: K, value: V) {
+            if self.capacity == 0 {
+                return;
+            }
+
             // eprintln!("PUT");
 
             if let Some(q_idx) = self.map.get(&key).copied() {
