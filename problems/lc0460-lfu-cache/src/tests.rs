@@ -34,6 +34,8 @@ fn test_all_cases() {
             let expected = *expected;
 
             let actual = command.apply(&mut cache);
+            eprintln!("| {:#?}", cache);
+
             assert_eq!(actual, expected, "case: {:?}", command);
         }
     }

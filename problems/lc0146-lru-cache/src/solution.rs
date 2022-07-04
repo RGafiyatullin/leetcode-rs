@@ -48,9 +48,9 @@ mod lru_cache {
         K: Hash + Eq + Clone,
     {
         pub fn get(&mut self, key: K) -> Option<&V> {
-            let idx = self.map.get(&key).copied()?;
-            self.q_pop_to_the_top(idx);
-            Some(&self.queue[idx].value)
+            let q_idx = self.map.get(&key).copied()?;
+            self.q_pop_to_the_top(q_idx);
+            Some(&self.queue[q_idx].value)
         }
 
         pub fn put(&mut self, key: K, value: V) {
@@ -67,7 +67,8 @@ mod lru_cache {
                     };
                     let q_idx = self.queue.len();
                     self.queue.push(q_entry);
-                    self.q_paste_to_top(q_idx);
+
+                    self.q_insert_to_head(q_idx);
 
                     self.map.insert(key, q_idx);
                 } else {
@@ -77,9 +78,10 @@ mod lru_cache {
 
                         self.queue[q_evicted_idx].key = key.to_owned();
                         self.queue[q_evicted_idx].value = value;
-                        self.map.insert(key, q_evicted_idx);
 
-                        self.q_paste_to_top(q_evicted_idx);
+                        self.q_insert_to_head(q_evicted_idx);
+
+                        self.map.insert(key, q_evicted_idx);
                     } else {
                         panic!("Need to evict an entry but there is no tail of the queue")
                     }
@@ -100,7 +102,7 @@ mod lru_cache {
     where
         K: Hash + Eq + Clone,
     {
-        fn q_paste_to_top(&mut self, q_idx: usize) {
+        fn q_insert_to_head(&mut self, q_idx: usize) {
             match (self.q_head, self.q_tail) {
                 (None, None) => {
                     self.q_head = Some(q_idx);
@@ -163,7 +165,7 @@ mod lru_cache {
 
         fn q_pop_to_the_top(&mut self, q_idx: usize) {
             let _q_entry = self.q_cut(q_idx);
-            self.q_paste_to_top(q_idx);
+            self.q_insert_to_head(q_idx);
         }
     }
 }
