@@ -16,8 +16,8 @@ impl LFUCache {
 }
 
 mod lfu_cache {
-    use std::{collections::HashMap, hash::Hash};
-
+    use std::{collections::{HashMap, BTreeMap}, hash::Hash};
+    
     #[derive(Debug, Clone)]
     pub struct Cache<K, V> {
         capacity: usize,
@@ -26,6 +26,8 @@ mod lfu_cache {
         q_tail: Option<usize>,
 
         map: HashMap<K, usize>,
+
+        hit_index: BTreeMap<usize, usize>,
     }
 
     impl<K, V> Cache<K, V> {
@@ -39,6 +41,8 @@ mod lfu_cache {
                 queue: Vec::with_capacity(capacity),
                 q_head: None,
                 q_tail: None,
+
+                hit_index: Default::default(),
             }
         }
     }
@@ -82,18 +86,26 @@ mod lfu_cache {
                     self.queue.push(q_entry);
                     self.map.insert(key, q_idx);
 
-                    self.q_insert_to_tail_and_bubble(q_idx)
+                    self.q_insert_by_hit_count(0, q_idx);
+                    self.hit_index.insert(0, q_idx);
                 } else {
                     if let Some(q_evicted_idx) = self.q_tail {
-                        self.q_cut(q_evicted_idx);
+                        let (_prev_of_evicted, next_of_evicted) = self.q_cut(q_evicted_idx);
                         assert!(self.map.remove(&self.queue[q_evicted_idx].key).is_some());
+
+                        let hits_of_evicted_record = self.queue[q_evicted_idx].hits;
 
                         self.queue[q_evicted_idx].key = key.to_owned();
                         self.queue[q_evicted_idx].value = value;
                         self.queue[q_evicted_idx].hits = 0;
                         self.map.insert(key, q_evicted_idx);
 
-                        self.q_insert_to_tail_and_bubble(q_evicted_idx)
+                        if let Some(head_candidate) = next_of_evicted {
+                            self.q_update_hit_index(head_candidate, hits_of_evicted_record);
+                        }
+
+                        self.q_insert_by_hit_count(0, q_evicted_idx);
+                        self.hit_index.insert(0, q_evicted_idx);
                     } else {
                         panic!("Need to evict an entry but there is no tail of the queue")
                     }
@@ -120,15 +132,53 @@ mod lfu_cache {
         fn q_hit(&mut self, q_idx: usize) {
             // eprintln!("q_hit({})", q_idx);
 
-            let (prev_opt, _) = self.q_cut(q_idx);
-            self.queue[q_idx].hits += 1;
+            let (prev_opt, next_opt) = self.q_cut(q_idx);
 
-            if let Some(prev) = prev_opt {
-                // starting with prev, find the first entry with `.hits > self.queue[idx].hits`,
-                // and insert the entry after it.
-                self.q_insert_after_or_bubble(prev, q_idx)
+            let hits_before = self.queue[q_idx].hits;
+            let hits_after = hits_before + 1;
+
+            self.queue[q_idx].hits = hits_after;
+
+            if let Some(_prev) = prev_opt {
+                
+                // update the hit-index at `hits_before` value
+                if let Some(next) = next_opt {
+                    self.q_update_hit_index(next, hits_before);
+                }
+
+                // find a place in the queue to insert the entry (using the hit-index)
+                self.q_insert_by_hit_count(hits_after, q_idx);
             } else {
                 // insert that entry to the head of the queue.
+                self.q_insert_to_head(q_idx);
+            }
+
+            self.hit_index.insert(hits_after, q_idx);
+        }
+
+        fn q_update_hit_index(&mut self, head_candidate: usize, expected_hit_count: usize) {
+            if self.queue[head_candidate].hits != expected_hit_count {
+                assert!(self.queue[head_candidate].hits < expected_hit_count);
+                self.hit_index.remove(&expected_hit_count);
+            } else {
+                self.hit_index.insert(expected_hit_count, head_candidate);
+            }
+        }
+
+        fn q_insert_by_hit_count(&mut self, hit_count: usize, q_idx: usize) {
+            // find a place in the queue to insert the entry (using the hit-index)
+            if let Some((candidate_hits, candidate_idx)) = self.hit_index.range(..hit_count).next_back() {
+                let candidate_hits = *candidate_hits;
+                let candidate_idx = *candidate_idx;
+
+                if candidate_hits == hit_count {
+                    self.q_insert_before(candidate_idx, q_idx);
+                } else {
+                    assert!(candidate_hits > hit_count);
+
+                    self.q_insert_after(candidate_idx, q_idx);
+                }
+            } else {
                 self.q_insert_to_head(q_idx);
             }
         }
@@ -146,32 +196,17 @@ mod lfu_cache {
                 self.q_tail = Some(q_idx);
             }
         }
+        fn q_insert_before(&mut self, q_before: usize, q_idx: usize) {
+            // eprintln!("q_insert_before({}, {})", q_before, q_idx);
 
-        fn q_insert_to_tail_and_bubble(&mut self, q_idx: usize) {
-            // eprintln!("q_insert_to_tail_and_bubble({})", q_idx);
-
-            if let Some(tail) = self.q_tail {
-                self.q_insert_after_or_bubble(tail, q_idx);
+            self.queue[q_idx].next = Some(q_before);
+            self.queue[q_idx].prev = self.queue[q_before].prev.replace(q_idx);
+            if let Some(prev) = self.queue[q_idx].prev {
+                self.queue[prev].next = Some(q_idx);
             } else {
-                self.q_insert_to_head(q_idx);
-            }
-        }
+                assert_eq!(self.q_head, Some(q_before));
 
-        fn q_insert_after_or_bubble(&mut self, q_after: usize, q_idx: usize) {
-            // eprintln!("q_insert_after_or_bubble({}, {})", q_after, q_idx);
-
-            let mut next_candidate = Some(q_after);
-            let mut inserted = false;
-            while let Some(candidate) = next_candidate.take() {
-                if self.queue[candidate].hits > self.queue[q_idx].hits {
-                    self.q_insert_after(candidate, q_idx);
-                    inserted = true;
-                } else {
-                    next_candidate = self.queue[candidate].prev;
-                }
-            }
-            if !inserted {
-                self.q_insert_to_head(q_idx);
+                self.q_head = Some(q_idx);
             }
         }
 

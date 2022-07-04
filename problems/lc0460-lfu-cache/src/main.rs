@@ -62,8 +62,11 @@ fn main() {
                 continue;
             }
         };
+        let t0 = std::time::Instant::now();
         let result = command.apply(&mut cache);
+        let elapsed = t0.elapsed();
+        
         // eprintln!("{:#?}", cache);
-        println!("> {:?}", result)
+        println!("> {:?} [{}ns]\t{:?}", result, elapsed.as_nanos(), command)
     }
 }
