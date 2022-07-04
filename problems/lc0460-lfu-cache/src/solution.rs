@@ -30,7 +30,7 @@ mod lfu_cache {
 
     impl<K, V> Cache<K, V> {
         pub fn new(capacity: usize) -> Self {
-            eprintln!("NEW [capacity: {}]", capacity);
+            // eprintln!("NEW [capacity: {}]", capacity);
 
             assert!(capacity > 0);
 
@@ -50,7 +50,7 @@ mod lfu_cache {
         K: Hash + Eq + Clone,
     {
         pub fn get(&mut self, key: K) -> Option<&V> {
-            eprintln!("GET");
+            // eprintln!("GET");
 
             let q_idx = self.map.get(&key).copied()?;
             self.q_hit(q_idx);
@@ -58,7 +58,7 @@ mod lfu_cache {
         }
 
         pub fn put(&mut self, key: K, value: V) {
-            eprintln!("PUT");
+            // eprintln!("PUT");
 
             if let Some(q_idx) = self.map.get(&key).copied() {
                 self.queue[q_idx].value = value;
@@ -112,7 +112,7 @@ mod lfu_cache {
         K: Hash + Eq + Clone,
     {
         fn q_hit(&mut self, q_idx: usize) {
-            eprintln!("q_hit({})", q_idx);
+            // eprintln!("q_hit({})", q_idx);
 
             let (prev_opt, _) = self.q_cut(q_idx);
             self.queue[q_idx].hits += 1;
@@ -128,7 +128,7 @@ mod lfu_cache {
         }
 
         fn q_insert_after(&mut self, q_after: usize, q_idx: usize) {
-            eprintln!("q_insert_after({}, {})", q_after, q_idx);
+            // eprintln!("q_insert_after({}, {})", q_after, q_idx);
 
             self.queue[q_idx].prev = Some(q_after);
             self.queue[q_idx].next = self.queue[q_after].next.replace(q_idx);
@@ -142,7 +142,7 @@ mod lfu_cache {
         }
 
         fn q_insert_to_tail_and_bubble(&mut self, q_idx: usize) {
-            eprintln!("q_insert_to_tail_and_bubble({})", q_idx);
+            // eprintln!("q_insert_to_tail_and_bubble({})", q_idx);
 
             if let Some(tail) = self.q_tail {
                 self.q_insert_after_or_bubble(tail, q_idx);
@@ -152,7 +152,7 @@ mod lfu_cache {
         }
 
         fn q_insert_after_or_bubble(&mut self, q_after: usize, q_idx: usize) {
-            eprintln!("q_insert_after_or_bubble({}, {})", q_after, q_idx);
+            // eprintln!("q_insert_after_or_bubble({}, {})", q_after, q_idx);
 
             let mut next_candidate = Some(q_after);
             let mut inserted = false;
@@ -170,7 +170,7 @@ mod lfu_cache {
         }
 
         fn q_insert_to_head(&mut self, q_idx: usize) {
-            eprintln!("q_insert_to_head({})", q_idx);
+            // eprintln!("q_insert_to_head({})", q_idx);
 
             match (self.q_head, self.q_tail) {
                 (None, None) => {
@@ -189,7 +189,7 @@ mod lfu_cache {
         }
 
         fn q_cut(&mut self, q_idx: usize) -> (Option<usize>, Option<usize>) {
-            eprintln!("q_cut({})", q_idx);
+            // eprintln!("q_cut({})", q_idx);
 
             let prev_opt = self.queue[q_idx].prev.take();
             let next_opt = self.queue[q_idx].next.take();
