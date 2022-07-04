@@ -1,5 +1,5 @@
 [workspace]
 members = [
-    "old",
+    "archive/2019",
     "problems/*",
 ]
