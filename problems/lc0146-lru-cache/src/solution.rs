@@ -19,14 +19,6 @@ mod lru_cache {
     use std::{collections::HashMap, hash::Hash};
 
     #[derive(Debug, Clone)]
-    struct QEntry<K, V> {
-        key: K,
-        value: V,
-        prev: Option<usize>,
-        next: Option<usize>,
-    }
-
-    #[derive(Debug, Clone)]
     pub struct Cache<K, V> {
         capacity: usize,
         queue: Vec<QEntry<K, V>>,
@@ -50,6 +42,7 @@ mod lru_cache {
             }
         }
     }
+
     impl<K, V> Cache<K, V>
     where
         K: Hash + Eq + Clone,
@@ -66,7 +59,12 @@ mod lru_cache {
                 self.q_pop_to_the_top(q_idx);
             } else {
                 if self.queue.len() < self.capacity {
-                    let q_entry = QEntry { key: key.to_owned(), value, prev: None, next: None };
+                    let q_entry = QEntry {
+                        key: key.to_owned(),
+                        value,
+                        prev: None,
+                        next: None,
+                    };
                     let q_idx = self.queue.len();
                     self.queue.push(q_entry);
                     self.q_paste_to_top(q_idx);
@@ -88,19 +86,32 @@ mod lru_cache {
                 }
             }
         }
+    }
 
+    #[derive(Debug, Clone)]
+    struct QEntry<K, V> {
+        key: K,
+        value: V,
+        prev: Option<usize>,
+        next: Option<usize>,
+    }
+
+    impl<K, V> Cache<K, V>
+    where
+        K: Hash + Eq + Clone,
+    {
         fn q_paste_to_top(&mut self, q_idx: usize) {
             match (self.q_head, self.q_tail) {
                 (None, None) => {
                     self.q_head = Some(q_idx);
                     self.q_tail = Some(q_idx);
-                },
+                }
 
                 (Some(q_head), Some(_q_tail)) => {
                     self.queue[q_head].prev = Some(q_idx);
                     self.queue[q_idx].next = Some(q_head);
                     self.q_head = Some(q_idx);
-                },
+                }
 
                 (q_head, q_tail) => panic!("Invalid queue ends: {:?}", (q_head, q_tail)),
             }
