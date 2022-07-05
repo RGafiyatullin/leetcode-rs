@@ -167,10 +167,11 @@ mod lfu_cache {
 
         fn q_insert_by_hit_count(&mut self, hit_count: usize, q_idx: usize) {
             // find a place in the queue to insert the entry (using the hit-index)
-            if let Some((candidate_hits, candidate_idx)) = self.hit_index.range(..hit_count).next_back() {
+            
+            if let Some((candidate_hits, candidate_idx)) = self.hit_index.range(hit_count..).next_back() {
                 let candidate_hits = *candidate_hits;
                 let candidate_idx = *candidate_idx;
-
+            
                 if candidate_hits == hit_count {
                     self.q_insert_before(candidate_idx, q_idx);
                 } else {
