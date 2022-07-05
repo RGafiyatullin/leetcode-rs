@@ -1,6 +1,7 @@
 use std::{io::BufRead, str::FromStr};
 
-mod solution;
+mod solution_2;
+use solution_2::LFUCache;
 
 #[cfg(test)]
 mod tests;
@@ -35,10 +36,10 @@ impl FromStr for Command {
 }
 
 impl Command {
-    fn apply(&self, cache: &mut solution::LFUCache) -> Option<i32> {
+    fn apply(&self, cache: &mut LFUCache) -> Option<i32> {
         match *self {
             Command::Init(capacity) => {
-                *cache = solution::LFUCache::new(capacity);
+                *cache = LFUCache::new(capacity);
                 None
             }
             Command::Get(key) => Some(cache.get(key)),
@@ -51,7 +52,7 @@ impl Command {
 }
 
 fn main() {
-    let mut cache = solution::LFUCache::new(1);
+    let mut cache = LFUCache::new(1);
 
     for line in std::io::stdin().lock().lines() {
         let line = line.expect("Failed to read from stdin");

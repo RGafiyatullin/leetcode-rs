@@ -1,5 +1,5 @@
-use super::solution::LFUCache;
 use super::Command;
+use super::LFUCache;
 
 const CASES: &[&[(Command, Option<i32>)]] = &[
     /*
@@ -47,6 +47,7 @@ fn test_all_cases() {
             let command = *command;
             let expected = *expected;
 
+            eprintln!("> {:?}", command);
             let actual = command.apply(&mut cache);
             eprintln!("| {:#?}", cache);
 

@@ -10,14 +10,13 @@ impl Solution {
         nums.sort();
 
         for n in nums {
-            current_len = 
-                if last_n == Some(n - 1) {
-                    current_len + 1
-                } else if last_n == Some(n) {
-                    current_len
-                } else {
-                    1
-                };
+            current_len = if last_n == Some(n - 1) {
+                current_len + 1
+            } else if last_n == Some(n) {
+                current_len
+            } else {
+                1
+            };
             longest_len = std::cmp::max(longest_len, current_len);
             last_n = Some(n);
         }
