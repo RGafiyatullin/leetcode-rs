@@ -23,6 +23,20 @@ const CASES: &[&[(Command, Option<i32>)]] = &[
         (Command::Get(3), Some(3)),
         (Command::Get(4), Some(4)),
     ],
+    &[
+        (Command::Init(3), None),
+        (Command::Put(2, 2), None),
+        (Command::Put(1, 1), None),
+        (Command::Get(2), Some(2)),
+        (Command::Get(1), Some(1)),
+        (Command::Get(2), Some(2)),
+        (Command::Put(3, 3), None),
+        (Command::Put(4, 4), None),
+        (Command::Get(3), Some(-1)),
+        (Command::Get(2), Some(2)),
+        (Command::Get(1), Some(1)),
+        (Command::Get(4), Some(4)),
+    ],
 ];
 
 #[test]
@@ -38,5 +52,20 @@ fn test_all_cases() {
 
             assert_eq!(actual, expected, "case: {:?}", command);
         }
+    }
+}
+
+#[test]
+fn test_one_case() {
+    let mut cache = LFUCache::new(1);
+    for (command, expected) in CASES[1] {
+        let command = *command;
+        let expected = *expected;
+
+        eprintln!("> {:#?}", command);
+        let actual = command.apply(&mut cache);
+        eprintln!("| {:#?}", cache);
+
+        assert_eq!(actual, expected, "case: {:?}", command);
     }
 }

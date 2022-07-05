@@ -16,8 +16,11 @@ impl LFUCache {
 }
 
 mod lfu_cache {
-    use std::{collections::{HashMap, BTreeMap}, hash::Hash};
-    
+    use std::{
+        collections::{BTreeMap, HashMap},
+        hash::Hash,
+    };
+
     #[derive(Debug, Clone)]
     pub struct Cache<K, V> {
         capacity: usize,
@@ -101,7 +104,7 @@ mod lfu_cache {
                         self.map.insert(key, q_evicted_idx);
 
                         if let Some(head_candidate) = next_of_evicted {
-                            self.q_update_hit_index(head_candidate, hits_of_evicted_record);
+                            self.q_update_hit_index(Some(head_candidate), hits_of_evicted_record);
                         }
 
                         self.q_insert_by_hit_count(0, q_evicted_idx);
@@ -132,7 +135,7 @@ mod lfu_cache {
         fn q_hit(&mut self, q_idx: usize) {
             // eprintln!("q_hit({})", q_idx);
 
-            let (prev_opt, next_opt) = self.q_cut(q_idx);
+            let (prev_opt, _next_opt) = self.q_cut(q_idx);
 
             let hits_before = self.queue[q_idx].hits;
             let hits_after = hits_before + 1;
@@ -140,12 +143,6 @@ mod lfu_cache {
             self.queue[q_idx].hits = hits_after;
 
             if let Some(_prev) = prev_opt {
-                
-                // update the hit-index at `hits_before` value
-                if let Some(next) = next_opt {
-                    self.q_update_hit_index(next, hits_before);
-                }
-
                 // find a place in the queue to insert the entry (using the hit-index)
                 self.q_insert_by_hit_count(hits_after, q_idx);
             } else {
@@ -156,22 +153,39 @@ mod lfu_cache {
             self.hit_index.insert(hits_after, q_idx);
         }
 
-        fn q_update_hit_index(&mut self, head_candidate: usize, expected_hit_count: usize) {
-            if self.queue[head_candidate].hits != expected_hit_count {
-                assert!(self.queue[head_candidate].hits < expected_hit_count);
-                self.hit_index.remove(&expected_hit_count);
+        fn q_update_hit_index(&mut self, head_candidate: Option<usize>, expected_hit_count: usize) {
+            // eprintln!("q_update_hit_index({:?}, {})", head_candidate, expected_hit_count);
+
+            if let Some(head_candidate) = head_candidate {
+                if self.queue[head_candidate].hits != expected_hit_count {
+                    // assert!(self.queue[head_candidate].hits < expected_hit_count);
+                    self.hit_index.remove(&expected_hit_count);
+                } else {
+                    self.hit_index.insert(expected_hit_count, head_candidate);
+                }
             } else {
-                self.hit_index.insert(expected_hit_count, head_candidate);
+                self.hit_index.remove(&expected_hit_count);
             }
         }
 
         fn q_insert_by_hit_count(&mut self, hit_count: usize, q_idx: usize) {
             // find a place in the queue to insert the entry (using the hit-index)
-            
-            if let Some((candidate_hits, candidate_idx)) = self.hit_index.range(hit_count..).next_back() {
+            // eprintln!(
+            //     "q_insert_by_hit_count(hit_count: {}, idx: {})",
+            //     hit_count, q_idx
+            // );
+            // eprintln!(" self.hit_index: {:?}", self.hit_index);
+            let mut range = self.hit_index.range(hit_count..);
+            // eprintln!(" range: {:?}", range);
+
+            if let Some((candidate_hits, candidate_idx)) = range.next() {
                 let candidate_hits = *candidate_hits;
                 let candidate_idx = *candidate_idx;
-            
+                // eprintln!(
+                //     " candidate_hits: {}, candidate_idx: {}",
+                //     candidate_hits, candidate_idx
+                // );
+
                 if candidate_hits == hit_count {
                     self.q_insert_before(candidate_idx, q_idx);
                 } else {
@@ -236,7 +250,10 @@ mod lfu_cache {
             let prev_opt = self.queue[q_idx].prev.take();
             let next_opt = self.queue[q_idx].next.take();
 
-            // eprintln!("cutting q[{}] => [p: {:?}, n: {:?}]", q_idx, prev_opt, next_opt);
+            // eprintln!(
+            //     "cutting q[{}] => [p: {:?}, n: {:?}]",
+            //     q_idx, prev_opt, next_opt
+            // );
 
             let change_head = if let Some(prev) = prev_opt {
                 // assert not is-head
@@ -273,6 +290,11 @@ mod lfu_cache {
             }
             if let Some(q_tail) = change_tail {
                 self.q_tail = q_tail;
+            }
+
+            let hit_count = self.queue[q_idx].hits;
+            if self.hit_index.get(&hit_count).copied() == Some(q_idx) {
+                self.q_update_hit_index(next_opt, hit_count);
             }
 
             (prev_opt, next_opt)
