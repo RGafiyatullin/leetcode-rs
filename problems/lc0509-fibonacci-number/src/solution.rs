@@ -14,7 +14,7 @@ impl FibWindow {
     fn n(&self) -> i32 {
         match self.prev {
             None => self.n0,
-            Some((n0, None)) => self.n1,
+            Some((_n0, None)) => self.n1,
             Some((n_minus_1, Some(n_minus_2))) => n_minus_1 + n_minus_2,
         }
     }
@@ -46,4 +46,21 @@ impl Solution {
     }
 }
 
-
+#[test]
+fn test() {
+    for (n, f) in &[
+        (0, 0),
+        (1, 1),
+        (2, 1),
+        (3, 2),
+        (4, 3),
+        (5, 5),
+        (6, 8),
+        (7, 13),
+        (8, 21),
+        (9, 34),
+        (10, 55),
+    ] {
+        assert_eq!(Solution::fib(*n), *f);
+    }
+}

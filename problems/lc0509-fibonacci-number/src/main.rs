@@ -1,6 +1,5 @@
 use std::io::BufRead;
 
-
 mod solution;
 
 fn main() {
@@ -10,6 +9,5 @@ fn main() {
             Ok(n) => println!("fib({}) = {}", n, solution::Solution::fib(n)),
             Err(reason) => println!("ERR: {}", reason),
         }
-        
     }
 }
