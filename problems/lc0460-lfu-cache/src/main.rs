@@ -26,7 +26,8 @@ impl FromStr for Command {
             "put" => Ok(Command::Put(
                 arg,
                 iter.next()
-                    .ok_or("empty value".to_owned())?
+                    .map(ToOwned::to_owned)
+                    .unwrap_or(arg.to_string())
                     .parse::<i32>()
                     .map_err(|e| e.to_string())?,
             )),
@@ -56,6 +57,7 @@ fn main() {
 
     for line in std::io::stdin().lock().lines() {
         let line = line.expect("Failed to read from stdin");
+
         let command = match line.parse::<Command>() {
             Ok(command) => command,
             Err(e) => {
@@ -63,11 +65,14 @@ fn main() {
                 continue;
             }
         };
+        eprintln!("{:?}", command);
+
         let t0 = std::time::Instant::now();
         let result = command.apply(&mut cache);
         let elapsed = t0.elapsed();
 
         // eprintln!("{:#?}", cache);
+        cache.dump();
         println!("> {:?} [{}ns]\t{:?}", result, elapsed.as_nanos(), command)
     }
 }
