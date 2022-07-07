@@ -1,95 +1,92 @@
 pub struct Solution;
 
-use std::collections::{btree_map::Entry, BTreeMap, BTreeSet, HashSet};
+use std::collections::{HashMap, HashSet};
+
+type EdgeSet = HashMap<(usize, usize), HashSet<(usize, usize)>>;
 
 impl Solution {
-    pub fn num_islands(land_map: Vec<Vec<char>>) -> i32 {
-        let mut next_isle_id: usize = 0;
-        let mut isles: Vec<Vec<Option<usize>>> = Vec::with_capacity(land_map.len());
-        let mut isle_connections: BTreeMap<usize, BTreeSet<usize>> = Default::default();
+    pub fn num_islands(grid: Vec<Vec<char>>) -> i32 {
+        let mut graph_count = 0;
 
-        for land_row in land_map.iter() {
-            let mut isles_row = Vec::with_capacity(land_row.len());
-            for (col_idx, is_land) in land_row.iter().map(|c| *c == '1').enumerate() {
-                match (
-                    is_land,
-                    isles_row.last().map(Option::as_ref).flatten().copied(),
-                    isles.last().map(|r| r[col_idx]).flatten(),
-                ) {
-                    (false, _, _) => isles_row.push(None),
+        let mut edges: EdgeSet = Default::default();
+        for (lo, hi) in grid_to_edges(&grid) {
+            edges.entry(lo).or_default().insert(hi);
+            edges.entry(hi).or_default().insert(lo);
+        }
 
-                    (true, Some(isle_id), None) => {
-                        // eprintln!("L: {}", isle_id);
-                        isles_row.push(Some(isle_id))
-                    }
-                    (true, None, Some(isle_id)) => {
-                        // eprintln!("U: {}", isle_id);
-                        isles_row.push(Some(isle_id))
-                    }
-                    (true, Some(left_isle_id), Some(upper_isle_id))
-                        if left_isle_id == upper_isle_id =>
-                    {
-                        // eprintln!("L&U: {}", left_isle_id);
-                        isles_row.push(Some(left_isle_id))
-                    }
+        while let Some(&entry_point) =  edges.keys().next() {
+            let _vertices_count = take_graph(&mut edges, entry_point).into_iter().count();
+            graph_count += 1;
+            // eprintln!("#{} [vertices-count: {}]", graph_count, vertices_count);
+        }
 
-                    (true, Some(left_isle_id), Some(upper_isle_id)) => {
-                        assert_ne!(left_isle_id, upper_isle_id);
+        graph_count
+    }
+}
 
-                        // eprintln!("L: {}; U: {}", left_isle_id, upper_isle_id);
+fn take_graph(edges: &mut EdgeSet, entry_point: (usize, usize)) -> impl IntoIterator<Item = (usize, usize)> {
+    let mut queue = vec![entry_point];
 
-                        let lo_isle_id = std::cmp::min(left_isle_id, upper_isle_id);
-                        let hi_isle_id = std::cmp::max(left_isle_id, upper_isle_id);
+    let mut visited = HashSet::new();
 
-                        match isle_connections.entry(lo_isle_id) {
-                            Entry::Vacant(entry) => {
-                                entry.insert(std::iter::once(hi_isle_id).collect());
-                            }
-                            Entry::Occupied(mut entry) => {
-                                entry.get_mut().insert(hi_isle_id);
-                            }
+    while let Some(vertex) = queue.pop() {
+        visited.insert(vertex);
+        if let Some(outbound) = edges.remove(&vertex) {
+            for neighbour in outbound {
+                queue.push(neighbour);
+            }
+        }
+    }
+
+    visited
+}
+
+fn grid_to_edges<'a, G, R>(grid: &'a G) -> impl IntoIterator<Item = ((usize, usize), (usize, usize))> + 'a
+where
+    G: AsRef<[R]> + 'a,
+    R: AsRef<[char]> + 'a,
+{
+    grid.as_ref()
+        .iter()
+        .enumerate()
+        .scan(Option::<&R>::None, |prev_row, (row_idx, row)| {
+            let prev_row = std::mem::replace(prev_row, Some(row));
+
+            let row_edges = row
+                .as_ref()
+                .iter()
+                .enumerate()
+                .scan(
+                    Option::<char>::None,
+                    move |prev_cell, (col_idx, sq_type): (usize, &char)| {
+                        let sq_type = *sq_type;
+                        
+                        let prev_cell = std::mem::replace(prev_cell, Some(sq_type));
+
+                        let this_is_land = sq_type == '1';
+                        let left_is_land = prev_cell.map_or(false, |c| c == '1');
+                        let up_is_land = prev_row.map_or(false, |r| r.as_ref()[col_idx] == '1');
+
+                        let mut edges = [None, None, None];
+
+                        if this_is_land && up_is_land {
+                            edges[0] = Some(((row_idx - 1, col_idx), (row_idx, col_idx)));
                         }
 
-                        isles_row.push(Some(lo_isle_id));
-                    }
+                        if this_is_land && left_is_land {
+                            edges[1] = Some(((row_idx, col_idx - 1), (row_idx, col_idx)));
+                        }
 
-                    (true, None, None) => {
-                        let new_isle_id = next_isle_id;
-                        next_isle_id += 1;
+                        if this_is_land {
+                            edges[2] = Some(((row_idx, col_idx), (row_idx, col_idx)));
+                        }
 
-                        // eprintln!("NEW ISLAND: {:?}", new_isle_id);
+                        Some(edges.into_iter().filter_map(std::convert::identity))
+                    },
+                )
+                .flatten();
 
-                        isles_row.push(Some(new_isle_id));
-                    }
-                }
-            }
-            isles.push(isles_row);
-        }
-
-        let mut isles = (0..next_isle_id).collect::<Vec<_>>();
-
-        for (&lo_id, hi_ids) in isle_connections.range(..) {
-            eprintln!("lo_id: {} => {:?}", lo_id, hi_ids);
-            let target_id = if let Some(min_id) = hi_ids.iter().map(|&id| isles[id]).min() {
-                eprintln!("  // target_id = min( {}, {} )", min_id, lo_id);
-                std::cmp::min(min_id, isles[lo_id])
-            } else {
-                eprintln!("  // target_id = {}", isles[lo_id]);
-                isles[lo_id]
-            };
-            eprintln!("  target_id = {}", target_id);
-            isles[lo_id] = target_id;
-            for &hi_id in hi_ids.range(..) {
-                assert!(hi_id > lo_id);
-                isles[hi_id] = target_id;
-            }
-        }
-
-        eprintln!("===");
-        for (from, to) in isles.iter().copied().enumerate() {
-            eprintln!("{} => {}", from, to);
-        }
-
-        isles.into_iter().collect::<HashSet<_>>().len() as i32
-    }
+            Some(row_edges)
+        })
+        .flatten()
 }

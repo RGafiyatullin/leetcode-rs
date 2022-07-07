@@ -19,7 +19,8 @@ fn test_my_cases() {
 
 #[test]
 fn specific_case() {
-    run_one_case(MY_CASES[6])
+    // run_one_case(MY_CASES[6])
+    run_one_case(LEETCODE_CASES[1])
 }
 
 fn run_one_case(case: (&[&[char]], i32)) {
@@ -27,4 +28,3 @@ fn run_one_case(case: (&[&[char]], i32)) {
     let actual = Solution::num_islands(grid.iter().map(|s| s.to_vec()).collect());
     assert_eq!(actual, expected);
 }
-
