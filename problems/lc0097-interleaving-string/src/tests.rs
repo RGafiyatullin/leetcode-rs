@@ -1,8 +1,6 @@
 use crate::Solution;
 
-const CASES: &[
-    (&str, &str, &str, bool)
-] = &[
+const CASES: &[(&str, &str, &str, bool)] = &[
     ("", "", "", true),
     ("aabcc", "dbbca", "aadbbcbcac", true),
     ("aabcc", "dbbca", "aadbbbaccc", false),
@@ -19,9 +17,6 @@ fn all_cases() {
 fn case_0() {
     run_one_case(CASES[0]);
 }
-
-
-
 
 fn run_one_case(case: (&str, &str, &str, bool)) {
     let (s1, s2, s3, expected) = case;
