@@ -81,7 +81,7 @@ where
                             edges[2] = Some(((row_idx, col_idx), (row_idx, col_idx)));
                         }
 
-                        Some(edges.into_iter().filter_map(std::convert::identity))
+                        Some(edges)
                     },
                 )
                 .flatten();
@@ -89,4 +89,5 @@ where
             Some(row_edges)
         })
         .flatten()
+        .filter_map(std::convert::identity)
 }
