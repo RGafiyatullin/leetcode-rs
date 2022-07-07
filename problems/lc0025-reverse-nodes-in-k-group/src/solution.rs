@@ -1,5 +1,3 @@
-
-
 use super::*;
 
 impl Solution {
@@ -18,8 +16,8 @@ impl Solution {
             } else {
                 assert!(buf.len() < k);
                 output.extend(buf.drain(..));
-                break reverse(output).into()
-            }   
+                break reverse(output).into();
+            }
         }
     }
 }
@@ -49,7 +47,10 @@ impl<'a> Iterator for &'a mut LL {
 }
 
 impl Extend<i32> for LL {
-    fn extend<T>(&mut self, iter: T) where T: IntoIterator<Item = i32> {
+    fn extend<T>(&mut self, iter: T)
+    where
+        T: IntoIterator<Item = i32>,
+    {
         for i in iter {
             self.0 = Some(Box::new(ListNode {
                 val: i,
@@ -70,7 +71,6 @@ impl Into<Option<Box<ListNode>>> for LL {
         self.0
     }
 }
-
 
 fn reverse(mut src: LL) -> LL {
     let mut out = LL::default();

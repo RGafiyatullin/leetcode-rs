@@ -19,7 +19,7 @@ impl Solution {
             src: [Cursor::new(left), Cursor::new(right)],
             target: Cursor::new(target),
         }));
-        
+
         let mut found = false;
         while let Some(candidate) = candidates.next() {
             // eprintln!("candidate: {}", candidate);
@@ -113,8 +113,9 @@ impl<T> CandidatePool<T> {
     }
 }
 
-impl<T> Extend<T> for CandidatePool<T> 
-where T: Hash + Eq + Clone
+impl<T> Extend<T> for CandidatePool<T>
+where
+    T: Hash + Eq + Clone,
 {
     fn extend<I: IntoIterator<Item = T>>(&mut self, iter: I) {
         for item in iter {
@@ -138,17 +139,15 @@ impl Hash for Cursor<'_> {
     }
 }
 
-
-
-
-
 impl<'a, const I: usize> std::fmt::Display for Candidate<'a, I> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "Candidate[target: {}; src: ", self.target.pos)?;
-        self.src.iter().fold(&mut f.debug_list(), |l, s| l.entry(&s.pos)).finish()?;
+        self.src
+            .iter()
+            .fold(&mut f.debug_list(), |l, s| l.entry(&s.pos))
+            .finish()?;
         write!(f, "]")?;
 
         Ok(())
     }
 }
-
