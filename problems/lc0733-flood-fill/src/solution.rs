@@ -7,7 +7,7 @@ impl Solution {
         let pos = (sr as usize, sc as usize);
         let mut visit_plan = VisitPlan::default();
         visit_plan.extend(std::iter::once(pos));
-        
+
         while let Some(pos) = visit_plan.next() {
             visit(&mut visit_plan, &mut image, pos, color);
         }
@@ -16,11 +16,14 @@ impl Solution {
     }
 }
 
-fn visit<V>(visit_plan: &mut V, image: &mut Vec<Vec<i32>>, pos: (usize, usize), target_color: i32) where V: Extend<(usize, usize)> {
+fn visit<V>(visit_plan: &mut V, image: &mut Vec<Vec<i32>>, pos: (usize, usize), target_color: i32)
+where
+    V: Extend<(usize, usize)>,
+{
     let (row, col) = pos;
     let orig_color = image[row][col];
     image[row][col] = target_color;
-    
+
     if row != 0 && image[row - 1][col] == orig_color {
         visit_plan.extend(std::iter::once((row - 1, col)));
     }
@@ -61,4 +64,3 @@ impl Extend<(usize, usize)> for VisitPlan {
         }
     }
 }
-

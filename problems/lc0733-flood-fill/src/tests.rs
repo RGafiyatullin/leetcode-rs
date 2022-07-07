@@ -21,5 +21,9 @@ fn run_one_case(case: (&[&[i32]], i32, i32, i32, &[&[i32]])) {
     let expected = expected.iter().copied().map(Vec::from).collect::<Vec<_>>();
     let actual = Solution::flood_fill(matrix.to_owned(), sr, sc, new_color);
 
-    assert_eq!(actual, expected, "matrix: {:?}, sr: {}, sc: {}, new_color: {}, expected: {:?}", matrix, sr, sc, new_color, expected);
+    assert_eq!(
+        actual, expected,
+        "matrix: {:?}, sr: {}, sc: {}, new_color: {}, expected: {:?}",
+        matrix, sr, sc, new_color, expected
+    );
 }
