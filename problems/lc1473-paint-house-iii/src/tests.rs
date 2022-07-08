@@ -35,5 +35,5 @@ fn test_my_cases() {
 
 #[test]
 fn run_specific_case() {
-    run_one_case(LEETCODE_CASES[5])
+    run_one_case(LEETCODE_CASES[6])
 }

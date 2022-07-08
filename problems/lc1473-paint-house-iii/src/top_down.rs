@@ -27,8 +27,7 @@ impl Solution {
                 prev: house,
                 this_idx: 0,
                 groups: 1,
-
-                solution: vec![house],
+                // solution: vec![house],
             };
             next.check(&mut memo, tail, 0, groups_target);
         } else {
@@ -39,8 +38,7 @@ impl Solution {
                     prev: color,
                     this_idx: 0,
                     groups: 1,
-
-                    solution: vec![color],
+                    // solution: vec![color],
                 };
 
                 next.check(&mut memo, tail, color_price, groups_target)
@@ -62,8 +60,7 @@ struct State {
     prev: i32,
     this_idx: usize,
     groups: usize,
-
-    solution: Vec<i32>,
+    // solution: Vec<i32>,
 }
 
 impl Input<'_> {
@@ -115,12 +112,11 @@ impl State {
                     prev: house,
                     this_idx: self.this_idx + 1,
                     groups: group_count,
-
-                    solution: {
-                        let mut v = self.solution.clone();
-                        v.push(house);
-                        v
-                    },
+                    // solution: {
+                    //     let mut v = self.solution.clone();
+                    //     v.push(house);
+                    //     v
+                    // },
                 };
                 next.check(memo, tail, cost_so_far, groups_target);
             } else {
@@ -137,12 +133,11 @@ impl State {
                         prev: color,
                         this_idx: self.this_idx + 1,
                         groups: group_count,
-
-                        solution: {
-                            let mut v = self.solution.clone();
-                            v.push(color);
-                            v
-                        },
+                        // solution: {
+                        //     let mut v = self.solution.clone();
+                        //     v.push(color);
+                        //     v
+                        // },
                     };
 
                     next.check(memo, tail, cost_so_far + color_price, groups_target)
