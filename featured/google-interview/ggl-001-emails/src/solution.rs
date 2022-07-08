@@ -23,6 +23,6 @@ fn normalize(input: &str) -> (String, &str) {
         .split_once('+')
         .map(|(id, topic)| (id, Some(topic)))
         .unwrap_or((user, None));
-    
+
     (user.replace('.', ""), domain)
 }
