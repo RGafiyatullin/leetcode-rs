@@ -5,8 +5,8 @@ use std::collections::{HashMap, HashSet};
 type EdgeSet = HashMap<(usize, usize), HashSet<(usize, usize)>>;
 
 impl Solution {
-    pub fn num_islands(grid: Vec<Vec<char>>) -> i32 {
-        let mut graph_count = 0;
+    pub fn max_area_of_island(grid: Vec<Vec<i32>>) -> i32 {
+        let mut max_area: usize = 0;
 
         let mut edges: EdgeSet = Default::default();
         for (lo, hi) in grid_to_edges(&grid) {
@@ -15,12 +15,11 @@ impl Solution {
         }
 
         while let Some(&entry_point) = edges.keys().next() {
-            let _vertices_count = take_graph(&mut edges, entry_point).into_iter().count();
-            graph_count += 1;
-            // eprintln!("#{} [vertices-count: {}]", graph_count, vertices_count);
+            let vertices_count = take_graph(&mut edges, entry_point).into_iter().count();
+            max_area = std::cmp::max(vertices_count, max_area);
         }
 
-        graph_count
+        max_area as i32
     }
 }
 
@@ -44,8 +43,8 @@ fn take_graph(
     visited
 }
 
-type CellType = char;
-const LAND: CellType = '1';
+type CellType = i32;
+const LAND: CellType = 1;
 
 fn grid_to_edges<'a, G, R>(
     grid: &'a G,
