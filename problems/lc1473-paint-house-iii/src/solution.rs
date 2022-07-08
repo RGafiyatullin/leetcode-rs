@@ -1,5 +1,6 @@
-
 pub struct Solution;
+
+use std::collections::HashMap;
 
 impl Solution {
     pub fn min_cost(houses: Vec<i32>, cost: Vec<Vec<i32>>, _m: i32, _n: i32, target: i32) -> i32 {
@@ -10,7 +11,10 @@ impl Solution {
 
         let groups_target = target as usize;
 
-        let mut memo = Memo { min_cost: None };
+        let mut memo = Memo {
+            min_cost: None,
+            intermediate_costs: Default::default(),
+        };
 
         let input = Input {
             houses: houses.as_slice(),
@@ -27,7 +31,6 @@ impl Solution {
                 solution: vec![house],
             };
             next.check(&mut memo, tail, 0, groups_target);
-
         } else {
             for (color_idx, color_price) in colors.iter().copied().enumerate() {
                 let color = color_idx as i32 + 1;
@@ -43,7 +46,7 @@ impl Solution {
                 next.check(&mut memo, tail, color_price, groups_target)
             }
         }
-        
+
         memo.min_cost.unwrap_or(-1)
     }
 }
@@ -68,10 +71,14 @@ impl Input<'_> {
         let (houses_head, houses) = self.houses.split_first()?;
         let (cost_head, cost) = self.cost.split_first()?;
 
-        Some((*houses_head, cost_head.as_ref(), Input {
-            houses: houses,
-            cost: cost,
-        }))
+        Some((
+            *houses_head,
+            cost_head.as_ref(),
+            Input {
+                houses: houses,
+                cost: cost,
+            },
+        ))
     }
 }
 
@@ -79,9 +86,24 @@ impl State {
     fn check(&self, memo: &mut Memo, input: Input, cost_so_far: i32, groups_target: usize) {
         if self.groups > groups_target {
             // eprintln!("too many groups: {:?}", self.solution);
-            return
+            return;
         }
-        
+
+        if let Some(min_cost) = memo.min_cost {
+            if min_cost <= cost_so_far {
+                return;
+            }
+        }
+
+        let key = (self.prev, self.groups, self.this_idx);
+
+        if let Some(prev_cost) = memo.intermediate_costs.get(&key) {
+            if prev_cost <= &cost_so_far {
+                return;
+            }
+        }
+        memo.intermediate_costs.insert(key, cost_so_far);
+
         if let Some((house, colors, tail)) = input.split() {
             if house != 0 {
                 let group_count = if self.prev == house {
@@ -98,10 +120,9 @@ impl State {
                         let mut v = self.solution.clone();
                         v.push(house);
                         v
-                    }
+                    },
                 };
                 next.check(memo, tail, cost_so_far, groups_target);
-
             } else {
                 for (color_idx, color_price) in colors.iter().copied().enumerate() {
                     let color = color_idx as i32 + 1;
@@ -121,7 +142,7 @@ impl State {
                             let mut v = self.solution.clone();
                             v.push(color);
                             v
-                        }
+                        },
                     };
 
                     next.check(memo, tail, cost_so_far + color_price, groups_target)
@@ -143,4 +164,5 @@ impl State {
 #[derive(Debug)]
 struct Memo {
     min_cost: Option<i32>,
+    intermediate_costs: HashMap<(i32, usize, usize), i32>,
 }
