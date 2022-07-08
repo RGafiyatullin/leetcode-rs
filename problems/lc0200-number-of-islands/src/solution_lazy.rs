@@ -14,7 +14,7 @@ impl Solution {
             edges.entry(hi).or_default().insert(lo);
         }
 
-        while let Some(&entry_point) =  edges.keys().next() {
+        while let Some(&entry_point) = edges.keys().next() {
             let _vertices_count = take_graph(&mut edges, entry_point).into_iter().count();
             graph_count += 1;
             // eprintln!("#{} [vertices-count: {}]", graph_count, vertices_count);
@@ -24,7 +24,10 @@ impl Solution {
     }
 }
 
-fn take_graph(edges: &mut EdgeSet, entry_point: (usize, usize)) -> impl IntoIterator<Item = (usize, usize)> {
+fn take_graph(
+    edges: &mut EdgeSet,
+    entry_point: (usize, usize),
+) -> impl IntoIterator<Item = (usize, usize)> {
     let mut queue = vec![entry_point];
 
     let mut visited = HashSet::new();
@@ -41,10 +44,15 @@ fn take_graph(edges: &mut EdgeSet, entry_point: (usize, usize)) -> impl IntoIter
     visited
 }
 
-fn grid_to_edges<'a, G, R>(grid: &'a G) -> impl IntoIterator<Item = ((usize, usize), (usize, usize))> + 'a
+type CellType = char;
+const LAND: CellType = '1';
+
+fn grid_to_edges<'a, G, R>(
+    grid: &'a G,
+) -> impl IntoIterator<Item = ((usize, usize), (usize, usize))> + 'a
 where
     G: AsRef<[R]> + 'a,
-    R: AsRef<[char]> + 'a,
+    R: AsRef<[CellType]> + 'a,
 {
     grid.as_ref()
         .iter()
@@ -57,15 +65,15 @@ where
                 .iter()
                 .enumerate()
                 .scan(
-                    Option::<char>::None,
-                    move |prev_cell, (col_idx, sq_type): (usize, &char)| {
+                    Option::<CellType>::None,
+                    move |prev_cell, (col_idx, sq_type): (usize, &CellType)| {
                         let sq_type = *sq_type;
-                        
+
                         let prev_cell = std::mem::replace(prev_cell, Some(sq_type));
 
-                        let this_is_land = sq_type == '1';
-                        let left_is_land = prev_cell.map_or(false, |c| c == '1');
-                        let up_is_land = prev_row.map_or(false, |r| r.as_ref()[col_idx] == '1');
+                        let this_is_land = sq_type == LAND;
+                        let left_is_land = prev_cell.map_or(false, |c| c == LAND);
+                        let up_is_land = prev_row.map_or(false, |r| r.as_ref()[col_idx] == LAND);
 
                         let mut edges = [None, None, None];
 

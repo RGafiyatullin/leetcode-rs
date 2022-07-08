@@ -5,8 +5,11 @@ use std::collections::{HashMap, HashSet};
 type EdgeSet = HashMap<(usize, usize), HashSet<(usize, usize)>>;
 
 impl Solution {
-    pub fn max_area_of_island(grid: Vec<Vec<i32>>) -> i32 {
-        let mut max_area: usize = 0;
+    pub fn closed_island(grid: Vec<Vec<i32>>) -> i32 {
+        let mut graph_count = 0;
+
+        let dim_rows = grid.len();
+        let dim_cols = grid.first().map(|r| r.len()).unwrap_or(0);
 
         let mut edges: EdgeSet = Default::default();
         for (lo, hi) in grid_to_edges(&grid) {
@@ -15,12 +18,21 @@ impl Solution {
         }
 
         while let Some(&entry_point) = edges.keys().next() {
-            let vertices_count = take_graph(&mut edges, entry_point).into_iter().count();
-            max_area = std::cmp::max(vertices_count, max_area);
+            let is_closed = take_graph(&mut edges, entry_point)
+                .into_iter()
+                .all(|v| !is_at_edge(dim_rows, dim_cols, v.0, v.1));
+            if is_closed {
+                graph_count += 1;
+            }
+            // eprintln!("#{} [vertices-count: {}]", graph_count, vertices_count);
         }
 
-        max_area as i32
+        graph_count
     }
+}
+
+fn is_at_edge(dim_rows: usize, dim_cols: usize, row: usize, col: usize) -> bool {
+    row == 0 || row == dim_rows - 1 || col == 0 || col == dim_cols - 1
 }
 
 fn take_graph(
@@ -44,7 +56,7 @@ fn take_graph(
 }
 
 type CellType = i32;
-const LAND: CellType = 1;
+const LAND: CellType = 0;
 
 fn grid_to_edges<'a, G, R>(
     grid: &'a G,
