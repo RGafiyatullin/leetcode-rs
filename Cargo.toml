@@ -2,4 +2,5 @@
 members = [
     "archive/2019",
     "problems/*",
+    "featured/*/*",
 ]
