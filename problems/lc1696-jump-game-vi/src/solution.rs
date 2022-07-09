@@ -1,3 +1,5 @@
+use std::collections::BTreeMap;
+
 pub struct Solution;
 
 impl Solution {
@@ -9,14 +11,14 @@ impl Solution {
 
         let max_step_len: usize = k as usize;
 
-        let mut memo = Memo::new(vec![Option::<i32>::None; max_step_len + 1]);
+        let mut memo = Memo::new(vec![Option::<i32>::None; max_step_len]);
+
+        let mut prio = BTreeMap::<i32, usize>::new();
 
         for step_value in cost.iter().rev().copied().skip(1) {
-            memo.scroll_back();
-
             let mut max_step_value = Option::<i32>::None;
 
-            for steps_back in 1..=max_step_len {
+            for steps_back in 0..max_step_len {
                 let candidate = memo.get(steps_back).unwrap_or(0) + step_value;
                 max_step_value = Some(std::cmp::max(
                     candidate,
@@ -24,7 +26,17 @@ impl Solution {
                 ));
             }
 
-            *memo.get_mut(0) = max_step_value;
+            if let Some(v) = max_step_value {
+                *prio.entry(v).or_insert(0) += 1;
+            }
+
+            if let Some(evicted) = memo.push(max_step_value) {
+                let rc = prio.get_mut(&evicted).expect("It should have been put into `prio` previously");
+                *rc = rc.saturating_sub(1);
+                if *rc == 0 {
+                    prio.remove(&evicted);
+                }
+            }
         }
 
         memo.get(0).expect("cost.len() >= 1. QED") + cost.last().expect("cost.len() >= 1. QED")
@@ -75,13 +87,15 @@ impl<T, V> Memo<T, V> {
         &mut slice[(self.cursor + index) % slice.len()]
     }
 
-    pub fn scroll_back(&mut self)
+    pub fn push(&mut self, value: T) -> T
     where
-        V: AsRef<[T]>,
+        V: AsMut<[T]>,
     {
         self.cursor = self
             .cursor
             .checked_sub(1)
-            .unwrap_or(self.slice.as_ref().len() - 1);
+            .unwrap_or(self.slice.as_mut().len() - 1);
+        std::mem::replace(self.get_mut(0), value)
+
     }
 }
