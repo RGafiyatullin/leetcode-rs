@@ -16,10 +16,11 @@ impl Solution {
         let mut prio = BTreeMap::<i32, usize>::new();
 
         for step_value in cost.iter().copied() {
-            let best_step_score = prio.range(..).next_back().map(|(k, _)| *k).unwrap_or(0) + step_value;
-            
+            let best_step_score =
+                prio.range(..).next_back().map(|(k, _)| *k).unwrap_or(0) + step_value;
+
             *prio.entry(best_step_score).or_insert(0) += 1;
-            
+
             if let Some(evicted) = memo.push(Some(best_step_score)) {
                 let rc = prio
                     .get_mut(&evicted)
