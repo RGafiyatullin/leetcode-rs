@@ -6,14 +6,17 @@ type EdgeSet = HashMap<(usize, usize), HashSet<(usize, usize)>>;
 
 impl Solution {
     pub fn count_sub_islands(grid1: Vec<Vec<i32>>, grid2: Vec<Vec<i32>>) -> i32 {
-        let mask = 
-            grid2.iter().zip(grid1)
+        let mask = grid2
+            .iter()
+            .zip(grid1)
             .map(|(g2_row, g1_row)| {
-                g2_row.iter()
+                g2_row
+                    .iter()
                     .zip(g1_row)
                     .map(|(&g2_cell, g1_cell)| g2_cell == 1 && g1_cell == 1)
                     .collect()
-            }).collect::<Vec<Vec<_>>>();
+            })
+            .collect::<Vec<Vec<_>>>();
 
         let mut edges: EdgeSet = Default::default();
         for (lo, hi) in grid_to_edges(&grid2) {
@@ -23,7 +26,10 @@ impl Solution {
 
         let mut graph_count = 0;
         while let Some(&entry_point) = edges.keys().next() {
-            if take_graph(&mut edges, entry_point).into_iter().all(|(row, col)| mask[row][col]) {
+            if take_graph(&mut edges, entry_point)
+                .into_iter()
+                .all(|(row, col)| mask[row][col])
+            {
                 graph_count += 1;
             }
         }
@@ -31,7 +37,6 @@ impl Solution {
         graph_count
     }
 }
-
 
 fn take_graph(
     edges: &mut EdgeSet,

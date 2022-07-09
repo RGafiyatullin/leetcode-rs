@@ -3,7 +3,8 @@ pub struct Solution;
 impl Solution {
     pub fn license_key_formatting(s: String, k: i32) -> String {
         let k = k as usize;
-        let mut out = s.chars()
+        let mut out = s
+            .chars()
             .rev()
             .filter(|ch| ch.is_alphanumeric())
             .map(|ch| ch.to_ascii_uppercase())
@@ -18,7 +19,6 @@ impl Solution {
                 acc
             });
 
-        
         if let Some('-') = out.last() {
             out.pop();
         }
@@ -27,4 +27,3 @@ impl Solution {
         out.into_iter().collect()
     }
 }
-
