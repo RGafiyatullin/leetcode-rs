@@ -1,6 +1,6 @@
-use std::collections::BTreeMap;
-
 pub struct Solution;
+
+use std::collections::BTreeMap;
 
 impl Solution {
     pub fn max_result(cost: Vec<i32>, k: i32) -> i32 {
@@ -15,23 +15,15 @@ impl Solution {
 
         let mut prio = BTreeMap::<i32, usize>::new();
 
-        for step_value in cost.iter().rev().copied().skip(1) {
-            let mut max_step_value = Option::<i32>::None;
-
-            for steps_back in 0..max_step_len {
-                let candidate = memo.get(steps_back).unwrap_or(0) + step_value;
-                max_step_value = Some(std::cmp::max(
-                    candidate,
-                    max_step_value.unwrap_or(candidate),
-                ));
-            }
-
-            if let Some(v) = max_step_value {
-                *prio.entry(v).or_insert(0) += 1;
-            }
-
-            if let Some(evicted) = memo.push(max_step_value) {
-                let rc = prio.get_mut(&evicted).expect("It should have been put into `prio` previously");
+        for step_value in cost.iter().copied() {
+            let best_step_score = prio.range(..).next_back().map(|(k, _)| *k).unwrap_or(0) + step_value;
+            
+            *prio.entry(best_step_score).or_insert(0) += 1;
+            
+            if let Some(evicted) = memo.push(Some(best_step_score)) {
+                let rc = prio
+                    .get_mut(&evicted)
+                    .expect("It should have been put into `prio` previously");
                 *rc = rc.saturating_sub(1);
                 if *rc == 0 {
                     prio.remove(&evicted);
@@ -39,7 +31,7 @@ impl Solution {
             }
         }
 
-        memo.get(0).expect("cost.len() >= 1. QED") + cost.last().expect("cost.len() >= 1. QED")
+        memo.get(0).expect("cost.len() >= 1. QED")
     }
 }
 
@@ -96,6 +88,5 @@ impl<T, V> Memo<T, V> {
             .checked_sub(1)
             .unwrap_or(self.slice.as_mut().len() - 1);
         std::mem::replace(self.get_mut(0), value)
-
     }
 }

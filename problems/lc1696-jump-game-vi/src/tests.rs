@@ -20,6 +20,11 @@ fn run_all_cases() {
     }
 }
 
+#[test]
+fn run_specific_case() {
+    run_one_case(CASES[3]);
+}
+
 const CASES: &[(&[i32], i32, i32)] = &[
     (&[1, -1, -2, 4, -7, 3], 2, 7),
     (&[10, -5, -2, 4, 0, 3], 3, 17),
