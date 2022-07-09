@@ -1,4 +1,5 @@
 pub struct Solution;
+
 #[derive(Debug, Clone, Copy)]
 struct Window<const SZ: usize> {
     prev: [i32; SZ],
@@ -38,6 +39,14 @@ impl<const SZ: usize> Window<SZ> {
 }
 
 impl Solution {
+    pub fn tribonacci(n: i32) -> i32 {
+        let mut window = Window::new([0, 1, 1]);
+        for _ in 0..n {
+            window = window.next();
+        }
+        window.n()
+    }
+
     pub fn fib(n: i32) -> i32 {
         let mut window = Window::new([0, 1]);
         for _ in 0..n {
@@ -48,7 +57,7 @@ impl Solution {
 }
 
 #[test]
-fn test() {
+fn test_fib() {
     for (n, f) in &[
         (0, 0),
         (1, 1),
@@ -63,5 +72,20 @@ fn test() {
         (10, 55),
     ] {
         assert_eq!(Solution::fib(*n), *f);
+    }
+}
+
+#[test]
+fn test_trib() {
+    for (n, f) in &[
+        (0, 0),
+        (1, 1),
+        (2, 1),
+        (3, 2),
+        (4, 4),
+        (5, 7),
+        (25, 1389537),
+    ] {
+        assert_eq!(Solution::tribonacci(*n), *f);
     }
 }
