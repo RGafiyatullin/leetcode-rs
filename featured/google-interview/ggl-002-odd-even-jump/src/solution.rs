@@ -33,16 +33,20 @@ impl Solution {
 
             if let Some(after_odd_jump) = after_odd_jump {
                 memo.good_odd.insert(
-                    idx, 
-                    memo.good_even.get(&after_odd_jump).copied().expect(format!("{:?} should have already been computed", after_odd_jump).as_str())
+                    idx,
+                    memo.good_even.get(&after_odd_jump).copied().expect(
+                        format!("{:?} should have already been computed", after_odd_jump).as_str(),
+                    ),
                 );
             } else {
                 memo.good_odd.insert(idx, false);
             }
             if let Some(after_even_jump) = after_even_jump {
                 memo.good_even.insert(
-                    idx, 
-                    memo.good_odd.get(&after_even_jump).copied().expect(format!("{:?} should have already been computed", after_even_jump).as_str())
+                    idx,
+                    memo.good_odd.get(&after_even_jump).copied().expect(
+                        format!("{:?} should have already been computed", after_even_jump).as_str(),
+                    ),
                 );
             } else {
                 memo.good_even.insert(idx, false);

@@ -1,10 +1,7 @@
-use crate::Solution;
 use crate::solution::Window;
+use crate::Solution;
 
-const CASES: &[(i32, i32)] = &[
-    (2, 2),
-    (3, 3)
-];
+const CASES: &[(i32, i32)] = &[(2, 2), (3, 3)];
 
 fn run_one_case(case: (i32, i32)) {
     let (n, expected) = case;
@@ -19,11 +16,10 @@ fn run_all_cases() {
     }
 }
 
-
 #[test]
 fn dump_sequence() {
     let mut window = Window::new([1, 1]);
- 
+
     for i in 1..=10 {
         println!("{:?} => {:?}", i, window.n());
         window = window.next();

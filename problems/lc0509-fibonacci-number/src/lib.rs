@@ -75,7 +75,6 @@ fn test_fib() {
     }
 }
 
-
 #[test]
 fn test_trib() {
     for (n, f) in &[
