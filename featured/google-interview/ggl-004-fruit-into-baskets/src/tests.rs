@@ -1,9 +1,10 @@
 use crate::Solution;
 
 const CASES: &[(&[i32], i32)] = &[
-    (&[1,2,1], 3),
-    (&[0,1,2,2], 3),
-    (&[1,2,3,2,2], 4),
+    (&[1, 2, 1], 3),
+    (&[0, 1, 2, 2], 3),
+    (&[1, 2, 3, 2, 2], 4),
+    (&[0, 1, 0, 1, 0], 5),
 ];
 
 fn run_one_case(case: (&[i32], i32)) {
@@ -18,7 +19,18 @@ fn many_trees_all_different() {
 }
 #[test]
 fn many_trees_two_alternating_types() {
-    run_one_case(((0..100000).map(|idx| idx % 2).collect::<Vec<_>>().as_slice(), 100000));
+    run_one_case((
+        (0..100000)
+            .map(|idx| idx % 2)
+            .collect::<Vec<_>>()
+            .as_slice(),
+        100000,
+    ));
+}
+
+#[test]
+fn run_specific_case() {
+    run_one_case(CASES[3]);
 }
 
 #[test]
