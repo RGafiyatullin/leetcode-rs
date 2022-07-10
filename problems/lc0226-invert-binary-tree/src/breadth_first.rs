@@ -2,8 +2,8 @@ use super::*;
 
 pub struct Solution;
 
-use std::rc::Rc;
 use std::cell::RefCell;
+use std::rc::Rc;
 
 use std::collections::VecDeque;
 
@@ -11,7 +11,7 @@ impl Solution {
     pub fn invert_tree(root: Option<Rc<RefCell<TreeNode>>>) -> Option<Rc<RefCell<TreeNode>>> {
         if let Some(root) = root {
             let mut queue: VecDeque<_> = vec![Rc::clone(&root)].into();
-            
+
             while let Some(node) = queue.pop_front() {
                 let mut node = node.borrow_mut();
                 let mut next_left = None;
