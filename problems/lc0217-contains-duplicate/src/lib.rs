@@ -8,18 +8,19 @@ impl Solution {
         let count = nums.len();
         let count_unique = nums.into_iter().collect::<HashSet<_>>().len();
 
-        count == count_unique
+        count != count_unique
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     const CASES: &[(&[i32], bool)] = &[
-        (&[1], true),
-        (&[1,2], true),
-        (&[1,1], false),
+        (&[1], false),
+        (&[1,2], false),
+        (&[1,1], true),
+        (&[1,2,3,1], true),
     ];
 
     #[test]
