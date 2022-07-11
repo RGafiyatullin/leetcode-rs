@@ -9,7 +9,7 @@ impl Solution {
 
         for i in 1..nums.len() {
             current = std::cmp::max(0, current);
-            
+
             current += nums[i];
 
             max = std::cmp::max(current, max);
@@ -18,4 +18,3 @@ impl Solution {
         max
     }
 }
-
