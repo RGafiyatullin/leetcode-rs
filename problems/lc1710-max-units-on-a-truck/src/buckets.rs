@@ -5,12 +5,15 @@ impl Solution {
         assert!(box_types.len() <= 1000);
 
         let mut units = 0;
-        box_types.into_iter().fold(vec![0;1000], |mut acc, pair| {
-            acc[pair[1] as usize - 1] += pair[0];
-            acc
-        })
+        box_types
             .into_iter()
-            .enumerate().rev()
+            .fold(vec![0; 1000], |mut acc, pair| {
+                acc[pair[1] as usize - 1] += pair[0];
+                acc
+            })
+            .into_iter()
+            .enumerate()
+            .rev()
             .map_while(|(idx, count)| {
                 let units_per_box = idx as i32 + 1;
                 let boxes = std::cmp::min(capacity, count);
@@ -23,9 +26,9 @@ impl Solution {
                 } else {
                     None
                 }
-            }).count();
+            })
+            .count();
 
         units
     }
-
 }
