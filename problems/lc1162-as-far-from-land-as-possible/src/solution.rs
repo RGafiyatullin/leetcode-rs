@@ -42,16 +42,15 @@ impl Solution {
                 .for_each(|neighbour| queue.push_back((neighbour, next_dist)));
         }
 
-        let dist = 
-            dist_map
-                .into_iter()
-                .map(IntoIterator::into_iter)
-                .flatten()
-                .filter_map(std::convert::identity)
-                .max()
-                .unwrap_or(0);
+        let dist = dist_map
+            .into_iter()
+            .map(IntoIterator::into_iter)
+            .flatten()
+            .filter_map(std::convert::identity)
+            .max()
+            .unwrap_or(0);
         if dist == 0 {
-            -1 
+            -1
         } else {
             dist as i32
         }
