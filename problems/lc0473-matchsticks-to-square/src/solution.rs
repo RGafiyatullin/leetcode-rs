@@ -29,7 +29,10 @@ impl Solution {
 fn solve(args: &Args, use_map: UseMap, mut sides_done: u8, memo: &mut Memo) -> bool {
     let memo_key = (use_map, sides_done);
 
-    let total = use_map.bits_set().map(|idx| args.matchsticks[idx]).sum::<i32>();
+    let total = use_map
+        .bits_set()
+        .map(|idx| args.matchsticks[idx])
+        .sum::<i32>();
 
     if total > 0 && total % args.side_len == 0 {
         sides_done += 1;
@@ -47,14 +50,13 @@ fn solve(args: &Args, use_map: UseMap, mut sides_done: u8, memo: &mut Memo) -> b
     let c = total / args.side_len;
     let rem = args.side_len * (c + 1) - total;
 
-
     for idx in use_map.bits_unset() {
         let candidate = args.matchsticks[idx];
 
         if candidate <= rem {
             if solve(args, use_map.with_bit(idx), sides_done, memo) {
                 ans = true;
-                break
+                break;
             }
         }
     }
@@ -96,8 +98,6 @@ impl UseMap {
 
     pub fn with_bit(&self, idx: usize) -> Self {
         let bits = self.bits | (1 << idx);
-        Self { 
-            bits
-            , ..*self }
+        Self { bits, ..*self }
     }
 }

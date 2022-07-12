@@ -7,11 +7,10 @@ impl Solution {
         let mut start = 0;
         let mut end = nums.len();
 
-        let pos = 
-        loop {
+        let pos = loop {
             // eprintln!("[{}..{}]", start, end);
             if start >= end {
-                break None
+                break None;
             }
             use std::cmp::Ordering;
 
@@ -21,7 +20,7 @@ impl Solution {
                 Ordering::Equal => break Some(mid),
                 Ordering::Greater => {
                     start = mid + 1;
-                },
+                }
                 Ordering::Less => {
                     end = mid;
                 }
@@ -38,7 +37,7 @@ mod tests {
 
     #[test]
     fn run() {
-        assert_eq!(Solution::search(vec![-1,0,3,5,9,12], 9), 4);
-        assert_eq!(Solution::search(vec![-1,0,3,5,9,12], 2), -1);
+        assert_eq!(Solution::search(vec![-1, 0, 3, 5, 9, 12], 9), 4);
+        assert_eq!(Solution::search(vec![-1, 0, 3, 5, 9, 12], 2), -1);
     }
 }
