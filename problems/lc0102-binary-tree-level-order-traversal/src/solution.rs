@@ -2,9 +2,9 @@ use super::*;
 
 pub struct Solution;
 
+use std::cell::RefCell;
 use std::collections::VecDeque;
 use std::rc::Rc;
-use std::cell::RefCell;
 
 impl Solution {
     pub fn level_order(mut root: Option<Rc<RefCell<TreeNode>>>) -> Vec<Vec<i32>> {
@@ -21,11 +21,15 @@ impl Solution {
 
             use std::cmp::Ordering;
             match out.len().cmp(&level) {
-                Ordering::Equal => {},
+                Ordering::Equal => {}
                 Ordering::Less => {
                     out.push(vec![]);
-                },
-                Ordering::Greater => panic!("Queue order violated! [out.len = {}; node.level = {}]", out.len(), level),
+                }
+                Ordering::Greater => panic!(
+                    "Queue order violated! [out.len = {}; node.level = {}]",
+                    out.len(),
+                    level
+                ),
             }
 
             out.last_mut().expect("Empty `out`").push(node.val);
