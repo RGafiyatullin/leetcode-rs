@@ -25,12 +25,9 @@ impl Solution {
     pub fn build_tree(preorder: Vec<i32>, inorder: Vec<i32>) -> Option<Rc<RefCell<TreeNode>>> {
         let mut inorder_rev = vec![0; 6001];
 
-        inorder
-            .into_iter()
-            .enumerate()
-            .for_each(|(idx, v)| {
-                inorder_rev[to_key(v)] = idx;
-            });
+        inorder.into_iter().enumerate().for_each(|(idx, v)| {
+            inorder_rev[to_key(v)] = idx;
+        });
 
         let mut root = None;
 
@@ -55,7 +52,6 @@ fn insert_into(node: &mut Option<Rc<RefCell<TreeNode>>>, val: i32, inorder: &[us
         } else {
             insert_into(&mut node.right, val, inorder);
         }
-
     } else {
         *node = Some(make_node(val));
     }
