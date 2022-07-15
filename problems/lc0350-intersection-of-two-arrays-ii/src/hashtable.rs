@@ -15,17 +15,20 @@ impl Solution {
             acc
         });
 
-        larger.into_iter().filter(|&item| {
-            if let Some(count) = map.get_mut(&item) {
-                if *count > 0 {
-                    *count -= 1;
-                    true
+        larger
+            .into_iter()
+            .filter(|&item| {
+                if let Some(count) = map.get_mut(&item) {
+                    if *count > 0 {
+                        *count -= 1;
+                        true
+                    } else {
+                        false
+                    }
                 } else {
                     false
                 }
-            } else {
-                false
-            }
-        }).collect()
+            })
+            .collect()
     }
 }

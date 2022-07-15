@@ -1,4 +1,3 @@
-
 pub struct Solution;
 
 impl Solution {
@@ -6,7 +5,11 @@ impl Solution {
         let mut max_profit = 0;
         let mut last_min = None;
         for price in prices {
-            last_min = Some(last_min.map(|min| std::cmp::min(min, price)).unwrap_or(price));
+            last_min = Some(
+                last_min
+                    .map(|min| std::cmp::min(min, price))
+                    .unwrap_or(price),
+            );
 
             if let Some(min) = last_min {
                 max_profit = std::cmp::max(max_profit, price - min);
@@ -19,10 +22,7 @@ impl Solution {
 
 #[cfg(test)]
 mod tests {
-    const CASES: &[(&[i32], i32)] = &[
-        (&[7,1,5,3,6,4], 5),
-        (&[7,6,4,3,1], 0),
-    ];
+    const CASES: &[(&[i32], i32)] = &[(&[7, 1, 5, 3, 6, 4], 5), (&[7, 6, 4, 3, 1], 0)];
 
     #[test]
     fn test_max_profit() {
