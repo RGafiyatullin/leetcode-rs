@@ -33,7 +33,7 @@ fn is_valid_board(board: Vec<Vec<char>>) -> Result<(), ()> {
                 invalid => panic!("Invalid square: {}", invalid),
             } {
                 let squares_idx = (row_idx / 3) * 3 + col_idx / 3;
-                
+
                 squares[squares_idx].add_digit(digit)?;
                 row_states[row_idx].add_digit(digit)?;
                 col_states[col_idx].add_digit(digit)?;
@@ -47,7 +47,6 @@ fn is_valid_board(board: Vec<Vec<char>>) -> Result<(), ()> {
 #[derive(Debug, Clone, Copy)]
 struct Nine(u16);
 impl Nine {
-
     pub fn new() -> Self {
         Self(0)
     }
