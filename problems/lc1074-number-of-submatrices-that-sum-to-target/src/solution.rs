@@ -1,4 +1,4 @@
-pub struct Solution ;
+pub struct Solution;
 
 use std::collections::HashMap;
 
@@ -10,12 +10,14 @@ impl Solution {
         let mut prefix_sums = vec![vec![0; col_count + 1]; row_count + 1];
         for i in 1..=row_count {
             for j in 1..=col_count {
-                prefix_sums[i][j] = prefix_sums[i - 1][j] + prefix_sums[i][j - 1] - prefix_sums[i - 1][j - 1] + matrix[i - 1][j - 1];
+                prefix_sums[i][j] = prefix_sums[i - 1][j] + prefix_sums[i][j - 1]
+                    - prefix_sums[i - 1][j - 1]
+                    + matrix[i - 1][j - 1];
             }
         }
 
         let mut count = 0;
-        
+
         let mut h = HashMap::<i32, i32>::new();
 
         for c1 in 1..=col_count {

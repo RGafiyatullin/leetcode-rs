@@ -15,7 +15,9 @@ impl Solution {
 
             for j in 1..=k {
                 let mut val = prev[j] + MODULO;
-                if j >= i { val -= prev[j - i]; }
+                if j >= i {
+                    val -= prev[j - i];
+                }
                 val %= MODULO;
 
                 curr[j] = curr[j - 1];
@@ -27,7 +29,9 @@ impl Solution {
         }
 
         let mut ret = prev[k] + MODULO;
-        if k > 0 { ret -= prev[k - 1]; }
+        if k > 0 {
+            ret -= prev[k - 1];
+        }
         ret %= MODULO;
 
         (ret % MODULO) as i32
