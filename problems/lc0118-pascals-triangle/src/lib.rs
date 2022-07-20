@@ -5,7 +5,7 @@ impl Solution {
         let num_rows = num_rows as usize;
 
         let mut out = Vec::<Vec<i32>>::new();
-        
+
         for i in 0..num_rows {
             if let Some(prev) = out.last() {
                 let mut row = vec![1];
