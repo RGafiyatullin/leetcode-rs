@@ -1,5 +1,5 @@
 [package]
-name = "lc0092-reverse-linked-list-II"
+name = "lc0092-reverse-linked-list-ii"
 version = "0.1.0"
 edition = "2021"
 
