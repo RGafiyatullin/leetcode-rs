@@ -1,9 +1,8 @@
 pub struct Solution;
 
 impl Solution {
-    pub fn hammingWeight (n: u32) -> i32 {
+    #[allow(non_snake_case)]
+    pub fn hammingWeight(n: u32) -> i32 {
         n.count_ones() as i32
     }
 }
-
-
