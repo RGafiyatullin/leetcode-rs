@@ -3,11 +3,11 @@ pub struct Solution;
 // Definition for a binary tree node.
 #[derive(Debug, PartialEq, Eq)]
 pub struct TreeNode {
-  pub val: i32,
-  pub left: Option<Rc<RefCell<Self>>>,
-  pub right: Option<Rc<RefCell<Self>>>,
+    pub val: i32,
+    pub left: Option<Rc<RefCell<Self>>>,
+    pub right: Option<Rc<RefCell<Self>>>,
 }
-// 
+//
 // impl TreeNode {
 //   #[inline]
 //   pub fn new(val: i32) -> Self {
@@ -18,8 +18,8 @@ pub struct TreeNode {
 //     }
 //   }
 // }
-use std::rc::Rc;
 use std::cell::RefCell;
+use std::rc::Rc;
 impl Solution {
     pub fn max_depth(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
         let mut max = 0;
