@@ -1,6 +1,5 @@
 use rand::prelude::Distribution;
 
-
 #[derive(Debug, Clone)]
 pub struct Calculator {
     hit: usize,
@@ -11,7 +10,12 @@ pub struct Calculator {
 
 impl Calculator {
     pub fn new() -> Self {
-        Self { hit: 0, miss: 0, rng: Default::default(), dist: rand::distributions::Uniform::new_inclusive(0.0, 1.0) }
+        Self {
+            hit: 0,
+            miss: 0,
+            rng: Default::default(),
+            dist: rand::distributions::Uniform::new_inclusive(0.0, 1.0),
+        }
     }
     pub fn tick(&mut self) {
         let x = self.dist.sample(&mut self.rng);
@@ -30,5 +34,3 @@ impl Calculator {
         pi / four * 4.0
     }
 }
-
-

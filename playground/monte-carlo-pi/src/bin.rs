@@ -20,6 +20,5 @@ fn main() {
 
             eprintln!("iterations: {}, diff: {}", i, diff);
         }
-
     }
 }
