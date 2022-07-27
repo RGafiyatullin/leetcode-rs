@@ -46,7 +46,7 @@ const CASES: &[(&[Option<i32>], i32, i32, i32)] = &[
 #[test]
 fn run_all_cases() {
     for &(bft, p, q, expected) in CASES.iter() {
-        let tree = tree::construct_tree_from_bft(bft);
+        let tree = tree::tree_from_bft(bft);
         let p = Some(Rc::new(RefCell::new(TreeNode {
             val: p,
             left: None,
@@ -70,7 +70,7 @@ fn run_all_cases() {
 fn run_specific_case() {
     let &(bft, p, q, expected) = &CASES[1];
 
-    let tree = tree::construct_tree_from_bft(bft);
+    let tree = tree::tree_from_bft(bft);
     let p = Some(Rc::new(RefCell::new(TreeNode {
         val: p,
         left: None,
