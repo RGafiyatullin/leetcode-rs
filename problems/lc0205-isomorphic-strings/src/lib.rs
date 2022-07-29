@@ -9,7 +9,7 @@ impl Solution {
 use std::collections::HashMap;
 fn normalize(s: &str) -> Vec<u8> {
     let mut next: u8 = 0;
-    let mut map = HashMap::<char, u8>::new();   
+    let mut map = HashMap::<char, u8>::new();
     let mut out = Vec::<u8>::new();
 
     for c in s.chars() {
@@ -32,6 +32,9 @@ fn test() {
         ("foo", "bar", false),
         ("paper", "title", true),
     ] {
-        assert_eq!(Solution::is_isomorphic(left.to_owned(), right.to_owned()), expected);
+        assert_eq!(
+            Solution::is_isomorphic(left.to_owned(), right.to_owned()),
+            expected
+        );
     }
 }

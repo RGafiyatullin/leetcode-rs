@@ -63,15 +63,12 @@ mod byte_freqs {
     }
 }
 
-
-
-
 #[test]
 fn test() {
-    for &(left, right, expected) in &[
-        ("", "", true),
-        ("anagram","nagaram", true)
-    ] {
-        assert_eq!(Solution::is_anagram(left.to_owned(), right.to_owned()), expected);
+    for &(left, right, expected) in &[("", "", true), ("anagram", "nagaram", true)] {
+        assert_eq!(
+            Solution::is_anagram(left.to_owned(), right.to_owned()),
+            expected
+        );
     }
 }

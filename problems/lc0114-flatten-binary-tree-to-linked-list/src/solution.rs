@@ -27,7 +27,7 @@ impl Solution {
             }
 
             queue.extend(right_opt.into_iter().chain(left_opt));
-            
+
             if head.is_none() {
                 assert!(tail.is_none());
                 head = Some(node);
