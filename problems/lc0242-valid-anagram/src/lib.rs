@@ -1,6 +1,6 @@
 pub use byte_freqs::Solution;
 
-mod sort_chars {
+pub mod sort_chars {
     pub struct Solution;
 
     impl Solution {
@@ -20,7 +20,7 @@ mod sort_chars {
     }
 }
 
-mod sort_bytes {
+pub mod sort_bytes {
     pub struct Solution;
 
     impl Solution {
@@ -40,7 +40,7 @@ mod sort_bytes {
     }
 }
 
-mod byte_freqs {
+pub mod byte_freqs {
     pub struct Solution;
 
     impl Solution {
