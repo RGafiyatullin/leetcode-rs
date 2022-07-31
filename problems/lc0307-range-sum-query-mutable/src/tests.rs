@@ -1,16 +1,17 @@
-use crate::solution::*;
+use crate::solution_buckets::*;
 
 #[test]
 fn test_01() {
-    let mut stats = NumArray::new(std::iter::repeat(1).take(1000).collect());
+    let mut stats = NumArray::new(std::iter::repeat(1).take(100).collect());
 
-    let sum_before = stats.sum_range(50, 950);
-    stats.update(500, 2);
-    stats.update(0, 500);
-    stats.update(999, 1500);
-    let sum_after = stats.sum_range(50, 950);
+    let sum_before = stats.sum_range(5, 95);
+    stats.update(50, 2);
+    stats.update(0, 100);
+    stats.update(99, 100);
+    let sum_after = stats.sum_range(5, 95);
 
-    assert_eq!(sum_before, (50..=950).count() as i32);
+    assert_eq!(sum_before, (5..=95).count() as i32);
+
     assert_eq!(sum_before + 1, sum_after);
 }
 

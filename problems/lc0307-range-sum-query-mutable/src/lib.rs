@@ -1,5 +1,5 @@
-mod solution;
-pub use solution::*;
+mod solution_buckets;
+pub use solution_buckets::*;
 
 #[cfg(test)]
 mod tests;
