@@ -53,9 +53,6 @@ impl P {
     fn is_empty(&self) -> bool {
         self.0.is_empty()
     }
-    fn is_one(&self) -> bool {
-        self.0.len() == 1
-    }
 
     fn render(&self, out_string: &mut String) {
         for sub in &self.0 {
