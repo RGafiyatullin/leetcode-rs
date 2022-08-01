@@ -1,11 +1,6 @@
-
 use super::*;
 
-const CASES: &[(i32, bool)] = &[
-    (1, false),
-    (2, true),
-    (3, false),
-];
+const CASES: &[(i32, bool)] = &[(1, false), (2, true), (3, false)];
 
 #[test]
 fn run_all_cases() {
