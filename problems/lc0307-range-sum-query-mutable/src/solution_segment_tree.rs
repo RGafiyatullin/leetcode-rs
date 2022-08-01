@@ -73,7 +73,10 @@ impl Range {
     }
 
     fn sum_range(&mut self, slice: &[i32], left_inc: usize, right_exc: usize) -> i32 {
-        eprintln!("sum_range: [{:?}..{:?}) @ [{:?}..{:?})", left_inc, right_exc, self.lo_inc, self.hi_exc);
+        eprintln!(
+            "sum_range: [{:?}..{:?}) @ [{:?}..{:?})",
+            left_inc, right_exc, self.lo_inc, self.hi_exc
+        );
 
         if left_inc >= self.hi_exc || right_exc <= self.lo_inc {
             // out of this node's range
@@ -108,7 +111,10 @@ impl Range {
 
                 lo_sum + hi_sum
             } else {
-                eprintln!("Calculating... [{:?}..{:?}) @ [{:?}..{:?})", lo_inc, hi_exc, self.lo_inc, self.hi_exc);
+                eprintln!(
+                    "Calculating... [{:?}..{:?}) @ [{:?}..{:?})",
+                    lo_inc, hi_exc, self.lo_inc, self.hi_exc
+                );
                 // this is a small range — just calculate it
                 let total_sum = slice[self.lo_inc..self.hi_exc].iter().copied().sum();
                 let range_sum = slice[lo_inc..hi_exc].iter().copied().sum();

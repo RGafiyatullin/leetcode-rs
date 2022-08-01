@@ -35,8 +35,6 @@ fn test_02() {
     assert_eq!(stats.sum_range(4, 4), 5);
 }
 
-
-
 #[test]
 fn test_03() {
     let mut stats = NumArray::new(std::iter::repeat(1).take(32).collect());
@@ -44,5 +42,4 @@ fn test_03() {
     let _ = stats.sum_range(0, 31);
     eprintln!("---");
     let _ = stats.sum_range(0, 15);
-    
 }
