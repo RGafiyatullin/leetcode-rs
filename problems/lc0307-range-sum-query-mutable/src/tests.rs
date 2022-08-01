@@ -1,3 +1,4 @@
+// use crate::solution_segment_tree::*;
 use crate::solution_buckets::*;
 
 #[test]
@@ -32,4 +33,16 @@ fn test_02() {
     stats.update(1, 9);
     // [8, 9, 5, 7, 5]
     assert_eq!(stats.sum_range(4, 4), 5);
+}
+
+
+
+#[test]
+fn test_03() {
+    let mut stats = NumArray::new(std::iter::repeat(1).take(32).collect());
+
+    let _ = stats.sum_range(0, 31);
+    eprintln!("---");
+    let _ = stats.sum_range(0, 15);
+    
 }

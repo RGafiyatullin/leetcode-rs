@@ -1,5 +1,5 @@
-mod solution_buckets;
-pub use solution_buckets::*;
+pub mod solution_buckets;
+pub mod solution_segment_tree;
 
 #[cfg(test)]
 mod tests;
