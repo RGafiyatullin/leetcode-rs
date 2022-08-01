@@ -4,4 +4,5 @@ members = [
     "problems/*",
     "featured/*/*",
     "playground/*",
+    "mock-assessments/*",
 ]
