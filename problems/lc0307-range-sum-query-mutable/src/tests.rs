@@ -37,7 +37,7 @@ fn test_02() {
 
 #[test]
 fn test_03() {
-    let mut stats = NumArray::new(std::iter::repeat(1).take(32).collect());
+    let stats = NumArray::new(std::iter::repeat(1).take(32).collect());
 
     let _ = stats.sum_range(0, 31);
     eprintln!("---");
