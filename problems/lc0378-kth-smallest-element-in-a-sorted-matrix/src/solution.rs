@@ -3,9 +3,7 @@ pub struct Solution;
 impl Solution {
     pub fn kth_smallest(matrix: Vec<Vec<i32>>, k: i32) -> i32 {
         let singles = matrix
-            .iter()
-            .map(IntoIterator::into_iter)
-            .map(Iterator::copied)
+            .into_iter()
             .map(MergeSort::single)
             .collect::<Vec<_>>();
 
