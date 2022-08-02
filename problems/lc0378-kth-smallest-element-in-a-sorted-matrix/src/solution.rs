@@ -28,30 +28,28 @@ impl Solution {
             doubles.pop()
         };
 
-        if let Some(merge_sorted) = merge_sorted_opt {
-            merge_sorted
-                .skip(k as usize - 1)
-                .next()
-                .expect("k is too large")
-        } else {
-            panic!("Empty matrix");
-        }
+        merge_sorted_opt
+            .expect("Empty matrix")
+            .skip(k as usize - 1)
+            .next()
+            .expect("k is too large")
     }
 }
 
-enum MergeSort<'a> {
-    Single(Option<i32>, Box<dyn Iterator<Item = i32> + 'a>),
+enum MergeSort<Inner> {
+    Single(Option<i32>, Inner),
     Double(Box<Self>, Box<Self>),
 }
 
-impl<'a> MergeSort<'a> {
-    pub fn single<I>(inner: I) -> Self
+impl<Inner> MergeSort<Inner> {
+    pub fn single<I>(root: I) -> Self
     where
-        I: IntoIterator<Item = i32> + 'a,
+        I: IntoIterator<IntoIter = Inner>,
+        Inner: Iterator<Item = i32>,
     {
-        let mut inner = inner.into_iter().fuse();
-        let peeked = inner.next();
-        Self::Single(peeked, Box::new(inner))
+        let mut root = root.into_iter();
+        let peeked = root.next();
+        Self::Single(peeked, root)
     }
 
     pub fn double(left: Self, right: Self) -> Self {
@@ -74,7 +72,10 @@ impl<'a> MergeSort<'a> {
     }
 }
 
-impl<'a> Iterator for MergeSort<'a> {
+impl<Inner> Iterator for MergeSort<Inner>
+where
+    Inner: Iterator<Item = i32>,
+{
     type Item = i32;
 
     fn next(&mut self) -> Option<Self::Item> {
