@@ -1,0 +1,13 @@
+[package]
+name = "lc0744-find-smallest-letter-greater-than-target"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[features]
+default = ["bin-search"]
+naive = []
+bin-search = []
+
+[dependencies]

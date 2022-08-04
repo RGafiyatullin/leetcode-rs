@@ -11,13 +11,12 @@ impl Solution {
 
         let (mut lo, mut hi) = (0, x);
 
-        let out =
-        loop {
+        let out = loop {
             let mid = (lo + hi) / 2;
             // std::thread::sleep(std::time::Duration::from_millis(100));
 
             // eprintln!("{:?}-{:?}-{:?} | {:?}", lo, mid, hi, (mid * mid).cmp(&x));
-            
+
             match (lo == hi, (mid * mid).cmp(&x)) {
                 (false, Less) => lo = mid + 1,
                 (false, Greater) => hi = mid,
