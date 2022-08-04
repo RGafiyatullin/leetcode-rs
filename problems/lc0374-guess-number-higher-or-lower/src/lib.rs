@@ -1,9 +1,11 @@
+#![allow(non_snake_case, dead_code)]
+
 pub struct Solution;
 
 use std::cmp::Ordering;
 
 impl Solution {
-    #[allow(non_snake_case)]
+    
     unsafe fn guessNumber(n: i32) -> i32 {
         let n = n as i64;
 
