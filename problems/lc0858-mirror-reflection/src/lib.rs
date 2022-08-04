@@ -2,6 +2,9 @@ pub struct Solution;
 
 impl Solution {
     pub fn mirror_reflection(p: i32, q: i32) -> i32 {
+        let p = p as i64;
+        let q = q as i64;
+
         let mut pos = 0;
         let mut left_side = true;
 
@@ -15,13 +18,11 @@ impl Solution {
                 (eq_p, false) if eq_p == p => break 1,
                 (eq_p, true) if eq_p == p => break 2,
                 (0, true) => break 3,
-                (_, _) => continue
+                (_, _) => continue,
             }
         }
     }
 }
-
-
 
 #[cfg(test)]
 mod tests {
@@ -31,7 +32,8 @@ mod tests {
         (7, 2, 0),
         (7, 3, 1),
         (7, 5, 1),
-        (999, 1000, 0),
+        (1000, 999, 2),
+        // (100000000, 99999999, 2),
     ];
 
     #[test]
@@ -39,6 +41,5 @@ mod tests {
         for &(p, q, exp) in CASES {
             assert_eq!(Solution::mirror_reflection(p, q), exp);
         }
-        
     }
 }

@@ -1,6 +1,4 @@
-
-use crate::{MyCalendar, Interval};
-
+use crate::{Interval, MyCalendar};
 
 #[test]
 fn test_interval_cmp() {
@@ -14,7 +12,6 @@ fn test_interval_cmp() {
     assert!(Interval::new(20, 30).cmp(&Interval::new(10, 20)).is_gt());
     assert!(Interval::new(25, 35).cmp(&Interval::new(10, 20)).is_gt());
 }
-
 
 #[test]
 fn test_00() {
@@ -65,16 +62,18 @@ fn test_04_other_start_in_the_middle() {
     });
 }
 
-
 mod utils {
     use super::*;
 
-    pub(super) fn with_calendar<F>(f: F) where F: FnOnce(&mut MyCalendar) {
+    pub(super) fn with_calendar<F>(f: F)
+    where
+        F: FnOnce(&mut MyCalendar),
+    {
         let mut c = MyCalendar::new();
         f(&mut c);
         eprintln!("{:#?}", c);
     }
-    
+
     pub(super) fn ok(c: &mut MyCalendar, start_inc: i32, end_exc: i32) {
         assert_eq!(c.book(start_inc, end_exc), true);
     }

@@ -1,14 +1,13 @@
-use std::{collections::BTreeSet, cmp::Ordering};
+use std::{cmp::Ordering, collections::BTreeSet};
 
 #[derive(Debug, Clone, Default)]
 pub struct MyCalendar(BTreeSet<Interval>);
 
 impl MyCalendar {
-
     pub fn new() -> Self {
         Default::default()
     }
-    
+
     pub fn book(&mut self, start_inc: i32, end_exc: i32) -> bool {
         let requested = Interval { start_inc, end_exc };
 
@@ -29,12 +28,12 @@ pub(crate) struct Interval {
 }
 
 impl Interval {
+    #[cfg(test)]
     pub fn new(start_inc: i32, end_exc: i32) -> Self {
         assert!(start_inc < end_exc);
         Self { start_inc, end_exc }
     }
 }
-
 
 impl PartialEq for Interval {
     fn eq(&self, other: &Self) -> bool {
