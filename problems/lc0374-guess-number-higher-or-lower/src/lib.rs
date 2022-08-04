@@ -5,7 +5,6 @@ pub struct Solution;
 use std::cmp::Ordering;
 
 impl Solution {
-    
     unsafe fn guessNumber(n: i32) -> i32 {
         let n = n as i64;
 
