@@ -18,19 +18,18 @@ impl Solution {
             map[index(val)] += 1;
         }
 
-        
         for val in arr {
             if val == 0 {
                 if map[index(0)] > 1 {
-                    return true
+                    return true;
                 }
             } else if val >= MIN_VAL && val <= MAX_VAL {
                 if map[index(val * 2)] > 0 {
-                    return true
+                    return true;
                 }
             }
         }
-        return false
+        return false;
     }
 }
 
@@ -44,10 +43,13 @@ mod tests {
 
     #[test]
     fn test() {
-        assert_eq!(Solution::check_if_exist([10,2,5,3].to_vec()), true);
-        assert_eq!(Solution::check_if_exist([7,1,14,11].to_vec()), true);
-        assert_eq!(Solution::check_if_exist([3,1,7,11].to_vec()), false);
-        assert_eq!(Solution::check_if_exist([-2,0,10,-19,4,6,-8].to_vec()), false);
-        assert_eq!(Solution::check_if_exist([0,0].to_vec()), true);
+        assert_eq!(Solution::check_if_exist([10, 2, 5, 3].to_vec()), true);
+        assert_eq!(Solution::check_if_exist([7, 1, 14, 11].to_vec()), true);
+        assert_eq!(Solution::check_if_exist([3, 1, 7, 11].to_vec()), false);
+        assert_eq!(
+            Solution::check_if_exist([-2, 0, 10, -19, 4, 6, -8].to_vec()),
+            false
+        );
+        assert_eq!(Solution::check_if_exist([0, 0].to_vec()), true);
     }
 }
