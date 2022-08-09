@@ -27,21 +27,20 @@ impl Solution {
                 .filter_map(|(d, q, _r)| {
                     let dc = memo.get(&d).copied();
                     let qc = memo.get(&q).copied();
-                    
+
                     // eprintln!("   {:?} = {:?} * {:?}", root, d, q);
 
-                    let count = dc.zip(qc)
-                        .map(|(dc, qc)| dc * qc)
-                        .map(mod_p);
+                    let count = dc.zip(qc).map(|(dc, qc)| dc * qc).map(mod_p);
 
                     // eprintln!("   | {:?} -> {:?}", d, dc);
                     // eprintln!("   | {:?} -> {:?}", q, qc);
                     // eprintln!("   || count: {:?}", count);
-                    
+
                     count
                 })
-                .sum::<usize>() + 1;
-                
+                .sum::<usize>()
+                + 1;
+
             // eprintln!("  MEMO: {:?} -> {:?}", root, count);
 
             memo.insert(root, count);
