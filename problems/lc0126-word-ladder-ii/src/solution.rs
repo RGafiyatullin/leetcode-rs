@@ -58,7 +58,7 @@ impl Solution {
             let (path_len, _) = memo[source_word_idx];
 
             if best_path_so_far.into_iter().any(|best| path_len >= best) {
-                continue
+                continue;
             }
 
             for bridge in word_to_bridges[source_word_idx].iter() {
@@ -112,7 +112,7 @@ impl Solution {
 
         if best_path_so_far.is_some() {
             let mut tasks = vec![(word_list.len() - 1, vec![])];
-            
+
             while let Some((word_idx, mut path)) = tasks.pop() {
                 let (_, next_words) = &memo[word_idx];
                 path.push(word_idx);

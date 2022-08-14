@@ -44,12 +44,7 @@ const CASES: &[(&str, &str, &[&str], &[&[&str]])] = &[
             &["hit", "hot", "lot", "log", "cog"],
         ],
     ),
-    (
-        "hot",
-        "dog",
-        &["hot","dog"],
-        &[],
-    ),
+    ("hot", "dog", &["hot", "dog"], &[]),
     (
         "aaaaa",
         "ggggg",
