@@ -1,4 +1,4 @@
-use crate::Solution;
+use crate::solution_window::Solution;
 
 #[test]
 fn run_all_cases() {
