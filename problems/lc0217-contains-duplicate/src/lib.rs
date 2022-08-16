@@ -4,10 +4,8 @@ use std::collections::HashSet;
 
 impl Solution {
     pub fn contains_duplicate(nums: Vec<i32>) -> bool {
-        let count = nums.len();
-        let count_unique = nums.into_iter().collect::<HashSet<_>>().len();
-
-        count != count_unique
+        let mut occurrences = HashSet::new();
+        nums.into_iter().any(|n| !occurrences.insert(n))
     }
 }
 
