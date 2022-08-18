@@ -80,33 +80,46 @@ fn bench() {
 
     let data = (0..1_000_000_000).collect::<Vec<_>>();
 
-    std::iter::repeat(()).scan(2, |state, ()| {
-        *state *= 2;
-        Some(*state)
-    }).take_while(|&input_size| {
-        if input_size > data.len() {
-            return false
-        }
-        
-        let nums = &data[0..input_size];
+    std::iter::repeat(())
+        .scan(2, |state, ()| {
+            *state *= 2;
+            Some(*state)
+        })
+        .take_while(|&input_size| {
+            if input_size > data.len() {
+                return false;
+            }
 
-        let t = std::time::Instant::now();
-        let scan_duration = time_it(TIMES, || { count_lt_scan(nums,  t.elapsed().as_secs() as i32 * nums.last().copied().unwrap()); });
-        let bisect_duration = time_it(TIMES, || { count_lt_bisect(nums, t.elapsed().as_secs() as i32 * nums.last().copied().unwrap()); });
+            let nums = &data[0..input_size];
 
-        eprintln!("INPUT-SIZE: {:?} ({:?} times)", input_size, TIMES);
-        eprintln!("  SCAN:   {:?}", scan_duration);
-        eprintln!("  BISECT: {:?}", bisect_duration);
+            let t = std::time::Instant::now();
+            let scan_duration = time_it(TIMES, || {
+                count_lt_scan(
+                    nums,
+                    t.elapsed().as_secs() as i32 * nums.last().copied().unwrap(),
+                );
+            });
+            let bisect_duration = time_it(TIMES, || {
+                count_lt_bisect(
+                    nums,
+                    t.elapsed().as_secs() as i32 * nums.last().copied().unwrap(),
+                );
+            });
 
-        (scan_duration < bisect_duration) || input_size < 4096
-    }).count();
+            eprintln!("INPUT-SIZE: {:?} ({:?} times)", input_size, TIMES);
+            eprintln!("  SCAN:   {:?}", scan_duration);
+            eprintln!("  BISECT: {:?}", bisect_duration);
+
+            (scan_duration < bisect_duration) || input_size < 4096
+        })
+        .count();
 }
 
 fn time_it<F: Fn()>(times: usize, func: F) -> Duration {
     let func = bencher::black_box(func);
     let t0 = std::time::Instant::now();
     let mut do_not_ignore = vec![];
-    
+
     for _ in 0..times {
         do_not_ignore.push((func)());
     }

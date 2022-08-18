@@ -37,7 +37,6 @@ fn scan_medium(bench: &mut Bencher) {
     })
 }
 
-
 fn bisect_large(bench: &mut Bencher) {
     let nums = (1..SIZE_LARGE).collect::<Vec<_>>();
     bench.iter(|| {
