@@ -14,8 +14,8 @@ impl Solution {
         let array_len = arr.len();
         let target = arr.len() / 2;
 
-        let (fine, coarse) = arr.into_iter().fold(
-            (vec![0; DOMAIN_SIZE], vec![0; MAX_ARRAY_SIZE + 1]),
+        let (_fine, coarse) = arr.into_iter().fold(
+            (vec![0; DOMAIN_SIZE], vec![0; array_len + 1]),
             |(mut fine, mut coarse), val| {
                 let fine_idx = fine_idx(val);
 
@@ -32,16 +32,16 @@ impl Solution {
             },
         );
 
-        assert_eq!(fine.into_iter().sum::<usize>(), array_len);
-        assert_eq!(
-            coarse
-                .iter()
-                .copied()
-                .enumerate()
-                .map(|(f, n)| f * n)
-                .sum::<usize>(),
-            array_len
-        );
+        // assert_eq!(fine.into_iter().sum::<usize>(), array_len);
+        // assert_eq!(
+        //     coarse
+        //         .iter()
+        //         .copied()
+        //         .enumerate()
+        //         .map(|(f, n)| f * n)
+        //         .sum::<usize>(),
+        //     array_len
+        // );
 
         let freqs = coarse
             .into_iter()
