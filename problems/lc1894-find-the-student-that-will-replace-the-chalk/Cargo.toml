@@ -1,0 +1,13 @@
+[package]
+name = "lc1894-find-the-student-that-will-replace-the-chalk"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[[bench]]
+harness = false
+name = "bench"
+
+[dependencies]
+bencher = "^0.1"
