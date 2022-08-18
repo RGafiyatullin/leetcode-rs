@@ -1,0 +1,13 @@
+[package]
+name = "lc0611-valid-triangle-number"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[[bench]]
+name = "scan-v-bisect"
+harness = false
+
+[dependencies]
+bencher = "^0.1"
