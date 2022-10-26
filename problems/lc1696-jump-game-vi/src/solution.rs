@@ -13,18 +13,22 @@ impl Solution {
         // Since we must go exactly from the first to the last element,
         // we can traverse the `cost` collection in any direction.
 
-        // We traverse each step in the `cost` collection and find out the best score we can get by using it.
-        // The best score is the sum of the step's own score and the best score of the previously evaluated steps within the reach of `k` steps.
+        // We traverse each step in the `cost` collection and find out the best score we can get by
+        // using it. The best score is the sum of the step's own score and the best score of
+        // the previously evaluated steps within the reach of `k` steps.
 
         // We use two data structures to keep track of the last `k` steps and their best scores:
-        // - the `memo` is just a circular buffer of the last `k` steps, when another value is pushed into it over its capacity, it evicts the least recent value.
-        // - the `prio` is the tree, mapping the score into the ref-count (i.e. the quantity of times this particular score appeared within the sliding window).
+        // - the `memo` is just a circular buffer of the last `k` steps, when another value is
+        //   pushed into it over its capacity, it evicts the least recent value.
+        // - the `prio` is the tree, mapping the score into the ref-count (i.e. the quantity of
+        //   times this particular score appeared within the sliding window).
 
         let mut memo = Memo::new(vec![Option::<i32>::None; k]);
         let mut prio = BTreeMap::<i32, usize>::new();
 
         for step_value in cost.iter().copied() {
-            // the best score for this step is defined as the sum of this step's own score and the best score among the last `k` steps (if there is any).
+            // the best score for this step is defined as the sum of this step's own score and the
+            // best score among the last `k` steps (if there is any).
             let best_step_score =
                 prio.range(..).next_back().map(|(k, _)| *k).unwrap_or(0) + step_value;
 
@@ -34,7 +38,8 @@ impl Solution {
 
             // Put this step's score into the circular buffer.
             if let Some(evicted) = memo.push(Some(best_step_score)) {
-                // If the circular buffer is full, the evicted value (one occurrence of it) should be removed from the tree as well.
+                // If the circular buffer is full, the evicted value (one occurrence of it) should
+                // be removed from the tree as well.
                 let rc = prio
                     .get_mut(&evicted)
                     .expect("This value has been previously inserted `k` steps ago. QED");
@@ -60,11 +65,7 @@ pub(crate) struct Memo<T, V> {
 
 impl<T, V> Memo<T, V> {
     pub fn new(memory: V) -> Self {
-        Memo {
-            slice: memory,
-            cursor: 0,
-            _pd: Default::default(),
-        }
+        Memo { slice: memory, cursor: 0, _pd: Default::default() }
     }
 
     pub fn get(&self, index: usize) -> &T
@@ -72,11 +73,7 @@ impl<T, V> Memo<T, V> {
         V: AsRef<[T]>,
     {
         let slice = self.slice.as_ref();
-        assert!(
-            index < slice.len(),
-            "Underlying collection's size is {}",
-            slice.len()
-        );
+        assert!(index < slice.len(), "Underlying collection's size is {}", slice.len());
 
         &slice[(self.cursor + index) % slice.len()]
     }

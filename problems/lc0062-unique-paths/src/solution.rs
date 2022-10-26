@@ -20,16 +20,8 @@ impl Solution {
             while let Some(zero) = space.get(r).and_then(|r| r.get(c)).copied() {
                 assert_eq!(zero, 0);
 
-                let next_row = space
-                    .get(r + 1)
-                    .and_then(|r| r.get(c))
-                    .copied()
-                    .unwrap_or_default();
-                let next_col = space
-                    .get(r)
-                    .and_then(|r| r.get(c + 1))
-                    .copied()
-                    .unwrap_or_default();
+                let next_row = space.get(r + 1).and_then(|r| r.get(c)).copied().unwrap_or_default();
+                let next_col = space.get(r).and_then(|r| r.get(c + 1)).copied().unwrap_or_default();
 
                 space[r][c] = next_row + next_col;
 
@@ -37,7 +29,7 @@ impl Solution {
                     r = r_;
                     c += 1;
                 } else {
-                    break;
+                    break
                 }
             }
 
@@ -46,11 +38,7 @@ impl Solution {
 
         dump_space(&space);
 
-        space
-            .get(0)
-            .and_then(|r| r.get(0))
-            .copied()
-            .unwrap_or_default()
+        space.get(0).and_then(|r| r.get(0)).copied().unwrap_or_default()
     }
 }
 

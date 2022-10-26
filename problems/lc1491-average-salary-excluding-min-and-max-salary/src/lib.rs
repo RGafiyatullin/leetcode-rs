@@ -16,8 +16,8 @@ impl Solution {
                 )
             },
         );
-        (sum - min.expect("non empty `salary`") - max.expect("non empty `salary`")) as f64
-            / (count - 2) as f64
+        (sum - min.expect("non empty `salary`") - max.expect("non empty `salary`")) as f64 /
+            (count - 2) as f64
     }
 }
 
@@ -25,20 +25,13 @@ impl Solution {
 mod tests {
     use super::*;
 
-    const CASES: &[(&[i32], f64)] = &[
-        (&[4000, 3000, 1000, 2000], 2500.0),
-        (&[1000, 2000, 3000], 2000.0),
-    ];
+    const CASES: &[(&[i32], f64)] =
+        &[(&[4000, 3000, 1000, 2000], 2500.0), (&[1000, 2000, 3000], 2000.0)];
 
     #[test]
     fn run_all_cases() {
         for case in CASES {
-            assert_eq!(
-                Solution::average(case.0.to_vec()),
-                case.1,
-                "case: {:?}",
-                case
-            );
+            assert_eq!(Solution::average(case.0.to_vec()), case.1, "case: {:?}", case);
         }
     }
 }

@@ -16,11 +16,7 @@ impl NumArray {
 
         let sum_buckets = vec![0; buckets_count];
 
-        let mut out = Self {
-            nums,
-            sum_buckets,
-            bucket_size,
-        };
+        let mut out = Self { nums, sum_buckets, bucket_size };
 
         out.rebuild_buckets();
         out
@@ -59,30 +55,16 @@ impl NumArray {
             let (fine_sum_left, bucket_idx_lo_inc) = if left_inc == bucket_bounds_lo.0 {
                 (0, bucket_idx_lo)
             } else {
-                (
-                    self.nums[left_inc..bucket_bounds_lo.1]
-                        .iter()
-                        .copied()
-                        .sum(),
-                    bucket_idx_lo + 1,
-                )
+                (self.nums[left_inc..bucket_bounds_lo.1].iter().copied().sum(), bucket_idx_lo + 1)
             };
             let (fine_sum_right, bucket_idx_hi_inc) = if right_inc == bucket_bounds_hi.1 - 1 {
                 (0, bucket_idx_hi)
             } else {
-                (
-                    self.nums[bucket_bounds_hi.0..=right_inc]
-                        .iter()
-                        .copied()
-                        .sum(),
-                    bucket_idx_hi - 1,
-                )
+                (self.nums[bucket_bounds_hi.0..=right_inc].iter().copied().sum(), bucket_idx_hi - 1)
             };
 
-            let coarse_sum: i32 = self.sum_buckets[bucket_idx_lo_inc..=bucket_idx_hi_inc]
-                .iter()
-                .copied()
-                .sum();
+            let coarse_sum: i32 =
+                self.sum_buckets[bucket_idx_lo_inc..=bucket_idx_hi_inc].iter().copied().sum();
 
             fine_sum_left + coarse_sum + fine_sum_right
         }

@@ -5,10 +5,8 @@ use std::cell::RefCell;
 use std::rc::Rc;
 impl Solution {
     pub fn flatten(root: &mut Option<Rc<RefCell<TreeNode>>>) {
-        let (mut head, mut tail) = (
-            Option::<Rc<RefCell<TreeNode>>>::None,
-            Option::<Rc<RefCell<TreeNode>>>::None,
-        );
+        let (mut head, mut tail) =
+            (Option::<Rc<RefCell<TreeNode>>>::None, Option::<Rc<RefCell<TreeNode>>>::None);
 
         let mut queue: Vec<_> = root.take().into_iter().collect();
 

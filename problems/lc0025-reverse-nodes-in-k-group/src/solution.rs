@@ -16,7 +16,7 @@ impl Solution {
             } else {
                 assert!(buf.len() < k);
                 output.extend(buf.drain(..));
-                break reverse(output).into();
+                break reverse(output).into()
             }
         }
     }
@@ -41,7 +41,7 @@ impl<'a> Iterator for &'a mut LL {
             Some(node) => {
                 self.0 = node.next;
                 Some(node.val)
-            }
+            },
         }
     }
 }
@@ -52,10 +52,7 @@ impl Extend<i32> for LL {
         T: IntoIterator<Item = i32>,
     {
         for i in iter {
-            self.0 = Some(Box::new(ListNode {
-                val: i,
-                next: self.0.take(),
-            }));
+            self.0 = Some(Box::new(ListNode { val: i, next: self.0.take() }));
         }
     }
 }

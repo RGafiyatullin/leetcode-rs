@@ -27,14 +27,8 @@ impl Solution {
             // eprintln!(" // bounds-fine: {:?}", bounds_fine);
             // eprintln!(" // bounds-coarse: {:?}", bounds_coarse);
 
-            out[idx] = stats_fine
-                .range(bounds_fine.clone())
-                .map(|(_, v)| *v)
-                .sum::<i32>()
-                + stats_coarse
-                    .range(bounds_coarse.clone())
-                    .map(|(_, v)| *v)
-                    .sum::<i32>();
+            out[idx] = stats_fine.range(bounds_fine.clone()).map(|(_, v)| *v).sum::<i32>() +
+                stats_coarse.range(bounds_coarse.clone()).map(|(_, v)| *v).sum::<i32>();
 
             // eprintln!(" out: {:?}", out[idx]);
 

@@ -11,15 +11,9 @@ impl Solution {
 
         let groups_target = target as usize;
 
-        let mut memo = Memo {
-            min_cost: None,
-            intermediate_costs: Default::default(),
-        };
+        let mut memo = Memo { min_cost: None, intermediate_costs: Default::default() };
 
-        let input = Input {
-            houses: houses.as_slice(),
-            cost: cost.as_slice(),
-        };
+        let input = Input { houses: houses.as_slice(), cost: cost.as_slice() };
 
         let (house, colors, tail) = input.split().expect("At least one house is expected!");
         if house != 0 {
@@ -68,14 +62,7 @@ impl Input<'_> {
         let (houses_head, houses) = self.houses.split_first()?;
         let (cost_head, cost) = self.cost.split_first()?;
 
-        Some((
-            *houses_head,
-            cost_head.as_ref(),
-            Input {
-                houses: houses,
-                cost: cost,
-            },
-        ))
+        Some((*houses_head, cost_head.as_ref(), Input { houses, cost }))
     }
 }
 
@@ -83,12 +70,12 @@ impl State {
     fn check(&self, memo: &mut Memo, input: Input, cost_so_far: i32, groups_target: usize) {
         if self.groups > groups_target {
             // eprintln!("too many groups: {:?}", self.solution);
-            return;
+            return
         }
 
         if let Some(min_cost) = memo.min_cost {
             if min_cost <= cost_so_far {
-                return;
+                return
             }
         }
 
@@ -96,18 +83,14 @@ impl State {
 
         if let Some(prev_cost) = memo.intermediate_costs.get(&key) {
             if prev_cost <= &cost_so_far {
-                return;
+                return
             }
         }
         memo.intermediate_costs.insert(key, cost_so_far);
 
         if let Some((house, colors, tail)) = input.split() {
             if house != 0 {
-                let group_count = if self.prev == house {
-                    self.groups
-                } else {
-                    self.groups + 1
-                };
+                let group_count = if self.prev == house { self.groups } else { self.groups + 1 };
                 let next = State {
                     prev: house,
                     this_idx: self.this_idx + 1,
@@ -123,11 +106,8 @@ impl State {
                 for (color_idx, color_price) in colors.iter().copied().enumerate() {
                     let color = color_idx as i32 + 1;
 
-                    let group_count = if self.prev == color {
-                        self.groups
-                    } else {
-                        self.groups + 1
-                    };
+                    let group_count =
+                        if self.prev == color { self.groups } else { self.groups + 1 };
 
                     let next = State {
                         prev: color,

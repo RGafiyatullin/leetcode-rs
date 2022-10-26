@@ -1,4 +1,5 @@
-use std::{io::BufRead, str::FromStr};
+use std::io::BufRead;
+use std::str::FromStr;
 
 mod solution;
 
@@ -40,12 +41,12 @@ impl Command {
             Command::Init(capacity) => {
                 *cache = solution::LRUCache::new(capacity);
                 None
-            }
+            },
             Command::Get(key) => Some(cache.get(key)),
             Command::Put(key, value) => {
                 cache.put(key, value);
                 None
-            }
+            },
         }
     }
 }
@@ -58,8 +59,8 @@ fn main() {
             Ok(command) => command,
             Err(e) => {
                 eprintln!("{}", e);
-                continue;
-            }
+                continue
+            },
         };
         let result = command.apply(&mut cache);
         eprintln!("{:#?}", cache);

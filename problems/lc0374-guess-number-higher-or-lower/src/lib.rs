@@ -15,10 +15,10 @@ impl Solution {
             match guess(mid as i32).cmp(&0) {
                 Ordering::Less => {
                     hi = mid - 1;
-                }
+                },
                 Ordering::Greater => {
                     lo = mid + 1;
-                }
+                },
                 Ordering::Equal => break mid as i32,
             }
         }

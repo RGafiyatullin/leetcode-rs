@@ -8,11 +8,7 @@ fn main() {
         let mode = std::env::var("MODE").unwrap_or("TREE".to_owned());
 
         let line = line.expect("Failed to read line from stdin");
-        match line
-            .split_whitespace()
-            .map(|x| x.parse())
-            .collect::<Result<Vec<i32>, _>>()
-        {
+        match line.split_whitespace().map(|x| x.parse()).collect::<Result<Vec<i32>, _>>() {
             Ok(nums) => {
                 let out = match mode.as_str() {
                     "TREE" => tree::Solution::longest_consecutive(nums),
@@ -21,7 +17,7 @@ fn main() {
                 };
 
                 eprintln!("out> {}", out);
-            }
+            },
             Err(reason) => eprintln!("Failed to parse input: {}", reason),
         }
     }

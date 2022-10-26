@@ -43,7 +43,7 @@ fn count_valid_pairs(nums: &[i32], largest: i32) -> usize {
 
 fn count_valid_smallest_sides(nums: &[i32], largest: i32, second: i32) -> usize {
     if nums.is_empty() {
-        return 0;
+        return 0
     }
 
     use std::cmp::Ordering::*;
@@ -69,14 +69,14 @@ fn count_valid_smallest_sides(nums: &[i32], largest: i32, second: i32) -> usize 
             (false, Less | Equal) => {
                 count -= idx - lo + 1;
                 lo = idx + 1;
-            }
+            },
             (false, Greater) => hi = idx,
 
             (true, Greater) => break,
             (true, Less | Equal) => {
                 count -= 1;
-                break;
-            }
+                break
+            },
         }
     }
 

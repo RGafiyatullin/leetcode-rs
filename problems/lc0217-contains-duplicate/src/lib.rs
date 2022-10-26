@@ -13,22 +13,13 @@ impl Solution {
 mod tests {
     use super::*;
 
-    const CASES: &[(&[i32], bool)] = &[
-        (&[1], false),
-        (&[1, 2], false),
-        (&[1, 1], true),
-        (&[1, 2, 3, 1], true),
-    ];
+    const CASES: &[(&[i32], bool)] =
+        &[(&[1], false), (&[1, 2], false), (&[1, 1], true), (&[1, 2, 3, 1], true)];
 
     #[test]
     fn run_all_cases() {
         for case in CASES {
-            assert_eq!(
-                Solution::contains_duplicate(case.0.to_vec()),
-                case.1,
-                "case: {:?}",
-                case
-            );
+            assert_eq!(Solution::contains_duplicate(case.0.to_vec()), case.1, "case: {:?}", case);
         }
     }
 }

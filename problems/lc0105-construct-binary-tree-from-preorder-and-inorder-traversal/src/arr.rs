@@ -53,11 +53,7 @@ fn insert_into(node: &mut Option<Rc<RefCell<TreeNode>>>, val: i32, inorder: &[us
 }
 
 fn make_node(val: i32) -> Rc<RefCell<TreeNode>> {
-    Rc::new(RefCell::new(TreeNode {
-        val,
-        left: None,
-        right: None,
-    }))
+    Rc::new(RefCell::new(TreeNode { val, left: None, right: None }))
 }
 
 fn to_key(v: i32) -> usize {

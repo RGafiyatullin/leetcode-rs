@@ -2,10 +2,7 @@ pub struct Solution;
 
 impl Solution {
     pub fn kth_smallest(matrix: Vec<Vec<i32>>, k: i32) -> i32 {
-        let singles = matrix
-            .into_iter()
-            .map(MergeSort::single)
-            .collect::<Vec<_>>();
+        let singles = matrix.into_iter().map(MergeSort::single).collect::<Vec<_>>();
 
         let merge_sorted_opt = {
             let mut doubles = singles;
@@ -83,7 +80,7 @@ where
                 *peeked = inner.next();
 
                 out
-            }
+            },
             Self::Double(left, right) => match (left.peek(), right.peek()) {
                 (None, None) => None,
                 (Some(_l), None) => left.next(),
@@ -92,7 +89,7 @@ where
                 (Some(l), Some(r)) => {
                     assert!(l > r);
                     right.next()
-                }
+                },
             },
         }
     }

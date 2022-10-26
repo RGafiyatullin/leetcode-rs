@@ -1,4 +1,5 @@
-use std::{cmp::Ordering, collections::BTreeSet};
+use std::cmp::Ordering;
+use std::collections::BTreeSet;
 
 #[derive(Debug, Clone, Default)]
 pub struct MyCalendar(BTreeSet<Interval>);

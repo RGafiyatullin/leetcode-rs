@@ -10,7 +10,7 @@ impl Solution {
         let pos = loop {
             // eprintln!("[{}..{}]", start, end);
             if start >= end {
-                break None;
+                break None
             }
             use std::cmp::Ordering;
 
@@ -20,10 +20,10 @@ impl Solution {
                 Ordering::Equal => break Some(mid),
                 Ordering::Greater => {
                     start = mid + 1;
-                }
+                },
                 Ordering::Less => {
                     end = mid;
-                }
+                },
             }
         };
 

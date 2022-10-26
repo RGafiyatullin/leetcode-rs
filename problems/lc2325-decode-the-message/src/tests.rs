@@ -4,11 +4,7 @@ const CASES: &[(&str, &str, &str)] = &[
         "zwx hnfx lqantp mnoeius ycgk vcnjrdb",
         "the five boxing wizards jump quickly",
     ),
-    (
-        "the quick brown fox jumps over the lazy dog",
-        "vkbs bs t suepuv",
-        "this is a secret",
-    ),
+    ("the quick brown fox jumps over the lazy dog", "vkbs bs t suepuv", "this is a secret"),
 ];
 
 #[test]

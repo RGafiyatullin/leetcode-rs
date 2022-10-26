@@ -29,10 +29,7 @@ impl LogAggregator {
     }
 
     pub fn push_log(&mut self, log_id: i32, machine_id: i32, service_id: i32, message: String) {
-        let entry = Entry {
-            log_id,
-            /*machine_id, service_id,*/ message,
-        };
+        let entry = Entry { log_id, /* machine_id, service_id, */ message };
         let entry_id = self.entries.len();
         self.entries.push(entry);
 

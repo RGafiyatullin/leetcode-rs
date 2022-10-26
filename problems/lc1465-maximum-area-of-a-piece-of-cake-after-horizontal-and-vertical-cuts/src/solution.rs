@@ -34,11 +34,11 @@ fn get_max_interval(l: i32, cuts: &[i32]) -> Option<i32> {
             None => {
                 *prev_opt = Some(this);
                 Some(None)
-            }
+            },
             Some(prev) => {
                 *prev_opt = Some(this);
                 Some(Some(this - prev))
-            }
+            },
         })
         // .inspect(|i| eprintln!("int: {:?}", i))
         .filter_map(std::convert::identity)

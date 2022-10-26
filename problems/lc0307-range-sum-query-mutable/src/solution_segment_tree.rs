@@ -55,12 +55,7 @@ impl Range {
             })
         };
 
-        Self {
-            lo_inc: idx_lo_inc,
-            hi_exc: idx_hi_exc,
-            sum: None,
-            subs,
-        }
+        Self { lo_inc: idx_lo_inc, hi_exc: idx_hi_exc, sum: None, subs }
     }
 
     fn update(&mut self, index: usize) {
@@ -95,7 +90,7 @@ impl Range {
                 if let Some(sum) = self.sum {
                     eprintln!("HIT [{:?}, {:?})", self.lo_inc, self.hi_exc);
                     // ... and there is a cached value
-                    return sum;
+                    return sum
                 }
             }
 

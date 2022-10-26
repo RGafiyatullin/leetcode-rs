@@ -35,8 +35,8 @@ fn check(nums: &[i32], candidate: usize) -> Ordering {
     let gte_opt = gte_slice.last();
     let lt_opt = lt_slice.first();
 
-    if lt_opt.into_iter().all(|x| *x < candidate as i32)
-        && gte_opt.into_iter().all(|x| *x >= candidate as i32)
+    if lt_opt.into_iter().all(|x| *x < candidate as i32) &&
+        gte_opt.into_iter().all(|x| *x >= candidate as i32)
     {
         Ordering::Equal
     } else if lt_opt.into_iter().any(|x| *x >= candidate as i32) {

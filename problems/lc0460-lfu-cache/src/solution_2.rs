@@ -68,7 +68,7 @@ where
 {
     pub fn get(&mut self, key: &K) -> Option<&V> {
         if self.capacity == 0 {
-            return None;
+            return None
         }
 
         let idx = self.keys.get(key).copied()?;
@@ -78,7 +78,7 @@ where
 
     pub fn put(&mut self, key: K, value: V) {
         if self.capacity == 0 {
-            return;
+            return
         }
 
         if let Some(idx) = self.keys.get(&key).copied() {
@@ -89,11 +89,7 @@ where
             self.queue.as_mut()[idx].data.hits = hit_count + 1;
             self.insert(idx);
         } else if self.queue.len() < self.capacity {
-            let idx = self.queue.push(KV {
-                key: key.to_owned(),
-                value,
-                hits: 1,
-            });
+            let idx = self.queue.push(KV { key: key.to_owned(), value, hits: 1 });
             self.insert(idx);
             self.keys.insert(key, idx);
         } else {
@@ -105,11 +101,7 @@ where
             self.exclude_from_hits(idx, hit_count, None);
 
             self.keys.remove(&self.queue.as_ref()[idx].data.key);
-            self.queue.as_mut()[idx].data = KV {
-                key: key.to_owned(),
-                value,
-                hits: 1,
-            };
+            self.queue.as_mut()[idx].data = KV { key: key.to_owned(), value, hits: 1 };
             self.insert(idx);
             self.keys.insert(key, idx);
         }
@@ -137,7 +129,7 @@ where
 
             self.queue.insert_before(before_idx, idx);
             inserted = true;
-            break;
+            break
         }
         if !inserted {
             self.queue.insert_last(idx);
@@ -157,11 +149,11 @@ where
         match (leader_idx == idx, next, next_hit_count == Some(hit_count)) {
             (true, Some(next), true) => {
                 self.hits.insert(hit_count, next);
-            }
+            },
             (true, _, _) => {
                 self.hits.remove(&hit_count);
-            }
-            (false, _, _) => {}
+            },
+            (false, _, _) => {},
         }
     }
 }
@@ -186,11 +178,7 @@ impl<T> AsMut<[QItem<T>]> for Queue<T> {
 
 impl<T> Queue<T> {
     pub fn new(vec: Vec<QItem<T>>) -> Self {
-        Self {
-            vec,
-            head: None,
-            tail: None,
-        }
+        Self { vec, head: None, tail: None }
     }
 
     pub fn len(&self) -> usize {
@@ -319,11 +307,7 @@ pub struct QItem<T> {
 
 impl<T> QItem<T> {
     pub fn new(data: T) -> Self {
-        Self {
-            data,
-            prev: None,
-            next: None,
-        }
+        Self { data, prev: None, next: None }
     }
 
     fn assert_unlinked(&self) {

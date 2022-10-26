@@ -6,9 +6,6 @@ const CASES: &[(i32, i32, &[i32], &[i32], i32)] =
 #[test]
 fn test_all_cases() {
     for (h, w, hc, vc, expected) in CASES {
-        assert_eq!(
-            Solution::max_area(*h, *w, hc.to_vec(), vc.to_vec()),
-            *expected
-        );
+        assert_eq!(Solution::max_area(*h, *w, hc.to_vec(), vc.to_vec()), *expected);
     }
 }

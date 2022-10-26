@@ -40,7 +40,7 @@ impl Solution {
             if let Some(end_word_idx) = end_word_idx {
                 (end_word_idx, bridge_to_words, word_to_bridges)
             } else {
-                return vec![];
+                return vec![]
             }
         };
 
@@ -58,7 +58,7 @@ impl Solution {
             let (path_len, _) = memo[source_word_idx];
 
             if best_path_so_far.into_iter().any(|best| path_len >= best) {
-                continue;
+                continue
             }
 
             for bridge in word_to_bridges[source_word_idx].iter() {
@@ -69,10 +69,10 @@ impl Solution {
                     .iter()
                     .copied()
                 {
-                    if word_list[word_idx] == word_list[source_word_idx]
-                        && word_idx != source_word_idx
+                    if word_list[word_idx] == word_list[source_word_idx] &&
+                        word_idx != source_word_idx
                     {
-                        continue;
+                        continue
                     }
 
                     let (existing_path_len, from_words) = &mut memo[word_idx];
@@ -83,11 +83,11 @@ impl Solution {
                             from_words.clear();
                             from_words.push(source_word_idx);
                             true
-                        }
+                        },
                         Equal => {
                             from_words.push(source_word_idx);
                             false
-                        }
+                        },
                         Greater => false,
                     };
                     if word_idx == target_word_idx {
@@ -123,11 +123,7 @@ impl Solution {
                 // );
 
                 if next_words.is_empty() {
-                    output.push(
-                        path.into_iter()
-                            .map(|idx| word_list[idx].to_owned())
-                            .collect(),
-                    )
+                    output.push(path.into_iter().map(|idx| word_list[idx].to_owned()).collect())
                 } else {
                     for next_idx in next_words.iter().copied() {
                         tasks.push((next_idx, path.to_owned()));
@@ -157,8 +153,8 @@ impl<'a> Bridge<'a> {
 
 impl<'a> PartialEq for Bridge<'a> {
     fn eq(&self, other: &Self) -> bool {
-        (&self.word[0..self.via], &self.word[self.via + 1..])
-            == (&other.word[0..other.via], &other.word[other.via + 1..])
+        (&self.word[0..self.via], &self.word[self.via + 1..]) ==
+            (&other.word[0..other.via], &other.word[other.via + 1..])
     }
 }
 impl<'a> Eq for Bridge<'a> {}

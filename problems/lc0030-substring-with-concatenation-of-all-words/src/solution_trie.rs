@@ -50,16 +50,16 @@ impl Solution {
                     ContextState::Working => {
                         // eprintln!("    {:?} — working {:?}", active_idx, ctx.word_count);
                         ()
-                    }
+                    },
                     ContextState::Complete => {
                         // eprintln!("    {:?} — complete! {:?}", active_idx, ctx.word_count);
                         evicted_contexts.push(active_idx);
                         complete_contexts.push(active_idx);
-                    }
+                    },
                     ContextState::Failed => {
                         // eprintln!("    {:?} — failed: {:?}", active_idx, ctx.word_count);
                         evicted_contexts.push(active_idx)
-                    }
+                    },
                 }
             }
             for evicted_idx in evicted_contexts {
@@ -67,10 +67,7 @@ impl Solution {
             }
         }
 
-        complete_contexts
-            .into_iter()
-            .map(|idx| idx as i32)
-            .collect()
+        complete_contexts.into_iter().map(|idx| idx as i32).collect()
     }
 }
 
@@ -83,11 +80,7 @@ struct Context<'a> {
 
 impl<'a> Context<'a> {
     pub fn new(trie: &'a [Node], word_count: &HashMap<&'a str, usize>) -> Self {
-        Self {
-            current_idx: 0,
-            trie,
-            word_count: word_count.to_owned(),
-        }
+        Self { current_idx: 0, trie, word_count: word_count.to_owned() }
     }
 
     pub fn process_char(&mut self, ch: char) -> ContextState {

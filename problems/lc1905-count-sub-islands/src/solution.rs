@@ -26,10 +26,7 @@ impl Solution {
 
         let mut graph_count = 0;
         while let Some(&entry_point) = edges.keys().next() {
-            if take_graph(&mut edges, entry_point)
-                .into_iter()
-                .all(|(row, col)| mask[row][col])
-            {
+            if take_graph(&mut edges, entry_point).into_iter().all(|(row, col)| mask[row][col]) {
                 graph_count += 1;
             }
         }

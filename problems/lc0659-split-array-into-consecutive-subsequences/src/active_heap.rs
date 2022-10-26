@@ -13,11 +13,11 @@ impl Solution {
                 Err { .. } => return false,
                 Ok(None) => {
                     active.push(vec![n].into());
-                }
+                },
                 Ok(Some(mut seq)) => {
                     seq.push(n);
                     active.push(seq);
-                }
+                },
             }
         }
         active.into_iter().all(|s| s.is_long_enough())
@@ -32,20 +32,20 @@ fn find_seq_for(heap: &mut BinaryHeap<Seq>, n: i32) -> Result<Option<Seq>, ()> {
 
             let last = s.last();
             if last == n - 1 {
-                break Ok(Some(s));
+                break Ok(Some(s))
             } else if last < n - 1 {
                 if s.is_long_enough() {
-                    continue;
+                    continue
                 } else {
-                    break Err(());
+                    break Err(())
                 }
             } else {
                 assert!(n == last);
                 kept.push(s);
-                continue;
+                continue
             }
         } else {
-            break Ok(None);
+            break Ok(None)
         }
     };
     heap.extend(kept);
@@ -53,9 +53,7 @@ fn find_seq_for(heap: &mut BinaryHeap<Seq>, n: i32) -> Result<Option<Seq>, ()> {
     result
 }
 
-use std::cmp::PartialEq;
-use std::cmp::PartialOrd;
-use std::cmp::Reverse;
+use std::cmp::{PartialEq, PartialOrd, Reverse};
 use std::collections::BinaryHeap;
 
 #[derive(Debug, Ord, Eq)]

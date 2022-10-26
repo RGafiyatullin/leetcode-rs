@@ -3,19 +3,7 @@ use crate::Solution;
 const CASES: &[(&[Option<i32>], &[Option<i32>])] = &[
     (
         &[Some(1), Some(2), Some(5), Some(3), Some(4), None, Some(6)],
-        &[
-            Some(1),
-            None,
-            Some(2),
-            None,
-            Some(3),
-            None,
-            Some(4),
-            None,
-            Some(5),
-            None,
-            Some(6),
-        ],
+        &[Some(1), None, Some(2), None, Some(3), None, Some(4), None, Some(5), None, Some(6)],
     ),
     (&[], &[]),
     (&[Some(0)], &[Some(0)]),

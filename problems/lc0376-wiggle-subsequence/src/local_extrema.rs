@@ -15,7 +15,7 @@ enum Extremum {
 impl Solution {
     pub fn wiggle_max_length(nums: Vec<i32>) -> i32 {
         if nums.is_empty() {
-            return 0;
+            return 0
         }
 
         let pairs = nums.windows(2).map(|pair| (pair[0], pair[1]));

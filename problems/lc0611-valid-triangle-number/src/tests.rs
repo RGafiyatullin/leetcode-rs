@@ -33,23 +33,14 @@ const CASES: &[(&[i32], i32)] = &[
 #[test]
 fn run_all_cases() {
     let mut alright = true;
-    CASES
-        .into_iter()
-        .copied()
-        .enumerate()
-        .for_each(|(idx, (nums, exp))| {
-            eprintln!("#{}: {:?} -> {:?}", idx, nums, exp);
+    CASES.into_iter().copied().enumerate().for_each(|(idx, (nums, exp))| {
+        eprintln!("#{}: {:?} -> {:?}", idx, nums, exp);
 
-            let act = Solution::triangle_number(nums.to_vec());
-            eprintln!(
-                "\t{:?} (exp: {:?}) [{}]",
-                act,
-                exp,
-                if act == exp { "OK" } else { "FAIL" }
-            );
+        let act = Solution::triangle_number(nums.to_vec());
+        eprintln!("\t{:?} (exp: {:?}) [{}]", act, exp, if act == exp { "OK" } else { "FAIL" });
 
-            alright = alright && act == exp;
-        });
+        alright = alright && act == exp;
+    });
 
     assert!(alright);
 }
@@ -87,23 +78,17 @@ fn bench() {
         })
         .take_while(|&input_size| {
             if input_size > data.len() {
-                return false;
+                return false
             }
 
             let nums = &data[0..input_size];
 
             let t = std::time::Instant::now();
             let scan_duration = time_it(TIMES, || {
-                count_lt_scan(
-                    nums,
-                    t.elapsed().as_secs() as i32 * nums.last().copied().unwrap(),
-                );
+                count_lt_scan(nums, t.elapsed().as_secs() as i32 * nums.last().copied().unwrap());
             });
             let bisect_duration = time_it(TIMES, || {
-                count_lt_bisect(
-                    nums,
-                    t.elapsed().as_secs() as i32 * nums.last().copied().unwrap(),
-                );
+                count_lt_bisect(nums, t.elapsed().as_secs() as i32 * nums.last().copied().unwrap());
             });
 
             eprintln!("INPUT-SIZE: {:?} ({:?} times)", input_size, TIMES);

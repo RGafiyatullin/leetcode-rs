@@ -15,14 +15,14 @@ impl Solution {
                 Ordering::Equal => return true,
                 Ordering::Less => {
                     coords = go_up((row, col));
-                }
+                },
                 Ordering::Greater => {
                     coords = go_right((row, col), col_count);
-                }
+                },
             }
         }
 
-        return false;
+        return false
     }
 }
 

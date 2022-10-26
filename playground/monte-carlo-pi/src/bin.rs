@@ -15,7 +15,7 @@ fn main() {
                 prev_diff = diff;
             } else {
                 eprintln!("[DONE] iterations: {}, diff: {}", i, diff);
-                break;
+                break
             }
 
             eprintln!("iterations: {}, diff: {}", i, diff);

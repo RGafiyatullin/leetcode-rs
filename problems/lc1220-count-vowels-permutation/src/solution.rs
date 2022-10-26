@@ -27,7 +27,6 @@ impl Solution {
             acc = next;
         }
 
-        acc.into_iter()
-            .fold(0 as usize, |acc, item| (acc + (item % MOD_P)) % MOD_P) as i32
+        acc.into_iter().fold(0 as usize, |acc, item| (acc + (item % MOD_P)) % MOD_P) as i32
     }
 }

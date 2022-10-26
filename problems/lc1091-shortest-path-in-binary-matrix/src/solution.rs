@@ -8,19 +8,15 @@ impl Solution {
         assert!(grid.len() <= 100);
 
         let mut queue = VecDeque::<(usize, usize, usize)>::new();
-        let mut visited = grid
-            .iter()
-            .map(|r| vec![Option::<usize>::None; r.len()])
-            .collect::<Vec<_>>();
+        let mut visited =
+            grid.iter().map(|r| vec![Option::<usize>::None; r.len()]).collect::<Vec<_>>();
 
         if grid[0][0] == 0 {
             queue.push_back((0, 0, 1));
         }
 
-        let destination = (
-            grid.len() - 1,
-            grid.last().map(|row| row.len() - 1).expect("1 <= n <= 100"),
-        );
+        let destination =
+            (grid.len() - 1, grid.last().map(|row| row.len() - 1).expect("1 <= n <= 100"));
         // eprintln!("destination: {:?}", destination);
 
         let mut best_distance = Option::<usize>::None;
@@ -28,20 +24,19 @@ impl Solution {
         while let Some((row, col, steps_so_far)) = queue.pop_front() {
             // eprintln!("- {:?} @ {}", (row, col), steps_so_far);
             if (row, col) == destination {
-                best_distance = best_distance
-                    .map(|b| std::cmp::min(b, steps_so_far))
-                    .or(Some(steps_so_far));
+                best_distance =
+                    best_distance.map(|b| std::cmp::min(b, steps_so_far)).or(Some(steps_so_far));
             }
             for (n_row, n_col) in neighbours(&grid, row, col) {
                 // eprintln!("  ? {:?}", (n_row, n_col));
                 let n_steps = steps_so_far + 1;
                 match (grid[n_row][n_col] == 0, visited[n_row][n_col]) {
-                    (false, _) => {}
-                    (true, Some(better)) if better <= n_steps => {}
+                    (false, _) => {},
+                    (true, Some(better)) if better <= n_steps => {},
                     (true, _) => {
                         visited[n_row][n_col] = Some(n_steps);
                         queue.push_back((n_row, n_col, n_steps));
-                    }
+                    },
                 }
             }
         }

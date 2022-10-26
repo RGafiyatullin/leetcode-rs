@@ -7,9 +7,6 @@ const CASES: &[(&[i32], i32)] = &[
 #[test]
 fn test_local_extrema() {
     for (input, expected) in CASES {
-        assert_eq!(
-            crate::local_extrema::Solution::wiggle_max_length(input.to_vec()),
-            *expected
-        );
+        assert_eq!(crate::local_extrema::Solution::wiggle_max_length(input.to_vec()), *expected);
     }
 }

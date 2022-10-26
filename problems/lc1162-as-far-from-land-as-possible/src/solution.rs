@@ -20,7 +20,7 @@ impl Solution {
             if let Some(prior_this_dist) = dist_map[row_idx][col_idx] {
                 if prior_this_dist <= this_dist {
                     // this cell has already been visited with a smaller distance, so we can skip it
-                    continue;
+                    continue
                 }
             }
             dist_map[row_idx][col_idx] = Some(this_dist);
@@ -28,12 +28,9 @@ impl Solution {
 
             let left = col_idx.checked_sub(1).map(|c| (row_idx, c));
             let up = row_idx.checked_sub(1).map(|r| (r, col_idx));
-            let right = Some(col_idx + 1)
-                .filter(|c| *c < dist_map[row_idx].len())
-                .map(|c| (row_idx, c));
-            let down = Some(row_idx + 1)
-                .filter(|r| *r < dist_map.len())
-                .map(|r| (r, col_idx));
+            let right =
+                Some(col_idx + 1).filter(|c| *c < dist_map[row_idx].len()).map(|c| (row_idx, c));
+            let down = Some(row_idx + 1).filter(|r| *r < dist_map.len()).map(|r| (r, col_idx));
 
             left.into_iter()
                 .chain(up)

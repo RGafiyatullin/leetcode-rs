@@ -15,10 +15,7 @@ impl Solution {
             assert!(lo <= hi);
             let mid_idx = (lo + hi) / 2;
 
-            match (
-                arr[mid_idx - 1].cmp(&arr[mid_idx]),
-                arr[mid_idx].cmp(&arr[mid_idx + 1]),
-            ) {
+            match (arr[mid_idx - 1].cmp(&arr[mid_idx]), arr[mid_idx].cmp(&arr[mid_idx + 1])) {
                 (Less, Less) => lo = mid_idx + 1,
                 (Greater, Greater) => hi = mid_idx,
                 (Less, Greater) => break mid_idx,
@@ -35,12 +32,8 @@ impl Solution {
 mod tests {
     use super::*;
 
-    const CASES: &[(&[i32], i32)] = &[
-        (&[0, 1, 0], 1),
-        (&[0, 2, 1, 0], 1),
-        (&[0, 10, 5, 2], 1),
-        (&[3, 4, 5, 1], 2),
-    ];
+    const CASES: &[(&[i32], i32)] =
+        &[(&[0, 1, 0], 1), (&[0, 2, 1, 0], 1), (&[0, 10, 5, 2], 1), (&[3, 4, 5, 1], 2)];
 
     #[test]
     fn run_all_cases() {

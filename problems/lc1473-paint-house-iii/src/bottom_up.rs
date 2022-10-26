@@ -29,7 +29,7 @@ impl Solution {
             for neighbourhoods in 1..=std::cmp::min(target, house + 1) {
                 for color in 1..=n {
                     if houses[house] != 0 && color != houses[house] as usize {
-                        continue;
+                        continue
                     }
 
                     let curr_cost = (1..=n)
@@ -44,12 +44,7 @@ impl Solution {
                         .min();
 
                     memo[neighbourhoods][color - 1] = curr_cost.map(|curr_cost| {
-                        curr_cost
-                            + if houses[house] != 0 {
-                                0
-                            } else {
-                                cost[house][color - 1]
-                            }
+                        curr_cost + if houses[house] != 0 { 0 } else { cost[house][color - 1] }
                     });
                 }
             }

@@ -2,14 +2,8 @@
 fn run_all_cases() {
     for &(input, expected) in CASES {
         eprintln!("{:?} -> {:?}", input, expected);
-        assert_eq!(
-            crate::active_vec::Solution::is_possible(input.to_vec()),
-            expected
-        );
-        assert_eq!(
-            crate::active_heap::Solution::is_possible(input.to_vec()),
-            expected
-        );
+        assert_eq!(crate::active_vec::Solution::is_possible(input.to_vec()), expected);
+        assert_eq!(crate::active_heap::Solution::is_possible(input.to_vec()), expected);
     }
 }
 

@@ -22,8 +22,5 @@ fn case_01() {
         head = Some(Box::new(node));
     }
 
-    assert_eq!(
-        Solution::partition(head, 3).unwrap().into_vec(),
-        &[1, 2, 2, 4, 3, 5]
-    );
+    assert_eq!(Solution::partition(head, 3).unwrap().into_vec(), &[1, 2, 2, 4, 3, 5]);
 }

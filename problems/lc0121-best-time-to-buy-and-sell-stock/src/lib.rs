@@ -5,11 +5,7 @@ impl Solution {
         let mut max_profit = 0;
         let mut last_min = None;
         for price in prices {
-            last_min = Some(
-                last_min
-                    .map(|min| std::cmp::min(min, price))
-                    .unwrap_or(price),
-            );
+            last_min = Some(last_min.map(|min| std::cmp::min(min, price)).unwrap_or(price));
 
             if let Some(min) = last_min {
                 max_profit = std::cmp::max(max_profit, price - min);

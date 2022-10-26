@@ -23,13 +23,10 @@ impl Solution {
             .expect("words is a non-empty array");
 
         let word_count: HashMap<&[u8], usize> =
-            words
-                .iter()
-                .copied()
-                .fold(HashMap::with_capacity(words.len()), |mut acc, w| {
-                    *acc.entry(w).or_default() += 1;
-                    acc
-                });
+            words.iter().copied().fold(HashMap::with_capacity(words.len()), |mut acc, w| {
+                *acc.entry(w).or_default() += 1;
+                acc
+            });
 
         let window_size = word_len * words.len();
 
@@ -51,7 +48,7 @@ impl Solution {
                         }
                         sub_s = &sub_s[word_len..];
                     } else {
-                        break;
+                        break
                     }
                 }
                 if word_count.is_empty() {

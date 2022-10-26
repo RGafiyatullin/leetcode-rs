@@ -38,8 +38,8 @@ impl Solution {
 
                     count
                 })
-                .sum::<usize>()
-                + 1;
+                .sum::<usize>() +
+                1;
 
             // eprintln!("  MEMO: {:?} -> {:?}", root, count);
 

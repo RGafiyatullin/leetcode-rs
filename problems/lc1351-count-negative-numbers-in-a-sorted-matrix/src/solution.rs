@@ -31,7 +31,7 @@ impl Solution {
                     let remaining_neg_cells = (col_count - col) * row_count;
                     // eprintln!("  neg-count += {:?}", remaining_neg_cells);
                     negatives_count += remaining_neg_cells;
-                    break;
+                    break
                 }
             } else {
                 assert!(grid[row][col] >= 0);
@@ -44,7 +44,7 @@ impl Solution {
                 if c < col_count {
                     col = c;
                 } else {
-                    break;
+                    break
                 }
             }
         }

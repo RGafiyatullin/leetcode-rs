@@ -53,7 +53,7 @@ impl Nine {
     pub fn add_digit(&mut self, digit: u8) -> Result<(), ()> {
         let is_set = (self.0 & (1 << digit)) != 0;
         if is_set {
-            return Err(());
+            return Err(())
         }
 
         self.0 |= 1 << digit;

@@ -8,11 +8,7 @@ impl Solution {
         assert!(letters.len() >= 2);
         assert!(letters.len() <= 10000);
 
-        letters
-            .into_iter()
-            .copied()
-            .find(|&l| l > target)
-            .unwrap_or(letters[0])
+        letters.into_iter().copied().find(|&l| l > target).unwrap_or(letters[0])
     }
 }
 #[cfg(feature = "bin-search")]

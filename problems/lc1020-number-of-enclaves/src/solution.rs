@@ -18,9 +18,7 @@ impl Solution {
         }
 
         while let Some(&entry_point) = edges.keys().next() {
-            let g = take_graph(&mut edges, entry_point)
-                .into_iter()
-                .collect::<Vec<_>>();
+            let g = take_graph(&mut edges, entry_point).into_iter().collect::<Vec<_>>();
             let is_enclave = g.iter().all(|v| !is_at_edge(dim_rows, dim_cols, v.0, v.1));
             if is_enclave {
                 cell_count += g.len();

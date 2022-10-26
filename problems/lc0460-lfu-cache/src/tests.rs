@@ -1,5 +1,4 @@
-use super::Command;
-use super::LFUCache;
+use super::{Command, LFUCache};
 
 const CASES: &[&[(Command, Option<i32>)]] = &[
     /*

@@ -2,18 +2,14 @@ use crate::Solution;
 
 #[test]
 fn run_all_cases() {
-    for &(begin_word, end_word, word_list, expected) in /*&CASES[3..4]*/ CASES {
+    for &(begin_word, end_word, word_list, expected) in /* &CASES[3..4] */ CASES {
         eprintln!("===");
         eprintln!("{:?} -> {:?} via {:?}", begin_word, end_word, word_list);
 
         let mut actual = Solution::find_ladders(
             begin_word.to_owned(),
             end_word.to_owned(),
-            word_list
-                .into_iter()
-                .copied()
-                .map(ToOwned::to_owned)
-                .collect(),
+            word_list.into_iter().copied().map(ToOwned::to_owned).collect(),
         );
         let mut expected = expected.to_owned();
 
@@ -29,20 +25,14 @@ const CASES: &[(&str, &str, &[&str], &[&[&str]])] = &[
         "hit",
         "cog",
         &["hot", "dot", "dog", "lot", "log", "cog"],
-        &[
-            &["hit", "hot", "dot", "dog", "cog"],
-            &["hit", "hot", "lot", "log", "cog"],
-        ],
+        &[&["hit", "hot", "dot", "dog", "cog"], &["hit", "hot", "lot", "log", "cog"]],
     ),
     ("hit", "cog", &["hot", "dot", "dog", "lot", "log"], &[]),
     (
         "hit",
         "cog",
         &["hot", "cog", "dot", "dog", "hit", "lot", "log"],
-        &[
-            &["hit", "hot", "dot", "dog", "cog"],
-            &["hit", "hot", "lot", "log", "cog"],
-        ],
+        &[&["hit", "hot", "dot", "dog", "cog"], &["hit", "hot", "lot", "log", "cog"]],
     ),
     ("hot", "dog", &["hot", "dog"], &[]),
     (

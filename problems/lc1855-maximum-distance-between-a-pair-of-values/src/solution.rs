@@ -6,13 +6,10 @@ impl Solution {
     pub fn max_distance(nums1: Vec<i32>, nums2: Vec<i32>) -> i32 {
         // eprintln!("nums2: {:?}", nums2);
 
-        let index2 = nums2
-            .into_iter()
-            .enumerate()
-            .fold(BTreeMap::new(), |mut acc, (idx, val)| {
-                acc.insert(val, idx);
-                acc
-            });
+        let index2 = nums2.into_iter().enumerate().fold(BTreeMap::new(), |mut acc, (idx, val)| {
+            acc.insert(val, idx);
+            acc
+        });
 
         // eprintln!("index2: {:?}", index2);
 

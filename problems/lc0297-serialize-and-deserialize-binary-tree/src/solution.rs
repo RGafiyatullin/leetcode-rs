@@ -41,11 +41,7 @@ impl Codec {
         });
 
         if let Some(Some(root_val)) = bft.next() {
-            let root = Rc::new(RefCell::new(TreeNode {
-                val: root_val,
-                left: None,
-                right: None,
-            }));
+            let root = Rc::new(RefCell::new(TreeNode { val: root_val, left: None, right: None }));
 
             let mut queue = VecDeque::from([root.clone()]);
             while let Some(parent) = queue.pop_front() {
@@ -61,7 +57,7 @@ impl Codec {
                         queue.push_back(left);
                     }
                 } else {
-                    break;
+                    break
                 }
                 if let Some(next) = bft.next() {
                     if let Some(right_val) = next {
@@ -74,7 +70,7 @@ impl Codec {
                         queue.push_back(right)
                     }
                 } else {
-                    break;
+                    break
                 }
             }
 

@@ -15,7 +15,7 @@ impl Solution {
                         eprintln!("* {:?} {:?} {:?}", first, second, third);
                         count += 1;
                     } else {
-                        break;
+                        break
                     }
                 }
             }

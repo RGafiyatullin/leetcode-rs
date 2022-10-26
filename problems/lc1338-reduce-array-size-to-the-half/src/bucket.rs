@@ -57,7 +57,7 @@ impl Solution {
             total += q;
             distinct += 1;
             if total >= target {
-                return distinct;
+                return distinct
             }
         }
 

@@ -20,10 +20,7 @@ const CASES: &[(&[i32], i32)] = &[
 fn test_local_extrema() {
     for (input, expected) in CASES {
         eprintln!("IN: {:?}", input);
-        assert_eq!(
-            crate::local_extrema::Solution::candy(input.to_vec()),
-            *expected
-        );
+        assert_eq!(crate::local_extrema::Solution::candy(input.to_vec()), *expected);
     }
 }
 

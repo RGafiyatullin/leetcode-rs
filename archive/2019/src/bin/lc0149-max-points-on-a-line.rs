@@ -19,22 +19,23 @@ struct Solution;
 impl Solution {
     pub fn max_points(points: Vec<Vec<i32>>) -> i32 {
         if points.len() == 1 {
-            return 1;
+            return 1
         }
 
-        use std::collections::HashMap;
-        use std::collections::HashSet;
+        use std::collections::{HashMap, HashSet};
 
         let points = points
             .into_iter()
             .enumerate()
-            .filter_map(|(id, dims)| {
-                if dims.len() == 2 {
-                    Some((dims[0], dims[1], id))
-                } else {
-                    None
-                }
-            })
+            .filter_map(
+                |(id, dims)| {
+                    if dims.len() == 2 {
+                        Some((dims[0], dims[1], id))
+                    } else {
+                        None
+                    }
+                },
+            )
             .collect::<Vec<_>>();
 
         let count = points
@@ -49,23 +50,20 @@ impl Solution {
                 })
             })
             .flatten()
-            .fold(
-                HashMap::<Line, HashSet<usize, _>, _>::new(),
-                |mut acc, (dot1, dot2)| {
-                    let line = Line::from_dots((dot1.0, dot1.1), (dot2.0, dot2.1));
+            .fold(HashMap::<Line, HashSet<usize, _>, _>::new(), |mut acc, (dot1, dot2)| {
+                let line = Line::from_dots((dot1.0, dot1.1), (dot2.0, dot2.1));
 
-                    if let Some(dots) = acc.get_mut(&line) {
-                        dots.insert(dot1.2);
-                        dots.insert(dot2.2);
-                    } else {
-                        let mut dots = HashSet::new();
-                        dots.insert(dot1.2);
-                        dots.insert(dot2.2);
-                        acc.insert(line, dots);
-                    };
-                    acc
-                },
-            )
+                if let Some(dots) = acc.get_mut(&line) {
+                    dots.insert(dot1.2);
+                    dots.insert(dot2.2);
+                } else {
+                    let mut dots = HashSet::new();
+                    dots.insert(dot1.2);
+                    dots.insert(dot2.2);
+                    acc.insert(line, dots);
+                };
+                acc
+            })
             .into_iter()
             .map(|(_line, dots)| dots.len())
             .fold(0, |acc, c| if acc > c { acc } else { c });

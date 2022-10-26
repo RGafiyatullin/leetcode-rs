@@ -21,10 +21,7 @@ impl Solution {
                 //     last.iter().map(P::render).collect::<Vec<_>>()
                 // );
 
-                let next = last
-                    .into_iter()
-                    .flat_map(|p| p.next())
-                    .collect::<HashSet<_>>();
+                let next = last.into_iter().flat_map(|p| p.next()).collect::<HashSet<_>>();
 
                 // eprintln!(
                 //     "next: {:#?}",

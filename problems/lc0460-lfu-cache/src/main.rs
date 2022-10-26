@@ -1,4 +1,5 @@
-use std::{io::BufRead, str::FromStr};
+use std::io::BufRead;
+use std::str::FromStr;
 
 mod solution_2;
 use solution_2::LFUCache;
@@ -42,12 +43,12 @@ impl Command {
             Command::Init(capacity) => {
                 *cache = LFUCache::new(capacity);
                 None
-            }
+            },
             Command::Get(key) => Some(cache.get(key)),
             Command::Put(key, value) => {
                 cache.put(key, value);
                 None
-            }
+            },
         }
     }
 }
@@ -62,8 +63,8 @@ fn main() {
             Ok(command) => command,
             Err(e) => {
                 eprintln!("{}", e);
-                continue;
-            }
+                continue
+            },
         };
         eprintln!("{:?}", command);
 

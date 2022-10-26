@@ -21,10 +21,7 @@ impl Solution {
             *memo.get_mut(0) = min_cost;
         }
 
-        (0..max_step_len)
-            .map(|n| memo.get(n).unwrap())
-            .min()
-            .unwrap()
+        (0..max_step_len).map(|n| memo.get(n).unwrap()).min().unwrap()
     }
 }
 
@@ -37,11 +34,7 @@ pub(crate) struct Memo<T, V> {
 
 impl<T, V> Memo<T, V> {
     pub fn new(memory: V) -> Self {
-        Memo {
-            slice: memory,
-            cursor: 0,
-            _pd: Default::default(),
-        }
+        Memo { slice: memory, cursor: 0, _pd: Default::default() }
     }
 
     pub fn get(&self, index: usize) -> &T
@@ -49,11 +42,7 @@ impl<T, V> Memo<T, V> {
         V: AsRef<[T]>,
     {
         let slice = self.slice.as_ref();
-        assert!(
-            index < slice.len(),
-            "Underlying collection's size is {}",
-            slice.len()
-        );
+        assert!(index < slice.len(), "Underlying collection's size is {}", slice.len());
 
         &slice[(self.cursor + index) % slice.len()]
     }
@@ -63,11 +52,7 @@ impl<T, V> Memo<T, V> {
         V: AsMut<[T]>,
     {
         let slice = self.slice.as_mut();
-        assert!(
-            index < slice.len(),
-            "Underlying collection's size is {}",
-            slice.len()
-        );
+        assert!(index < slice.len(), "Underlying collection's size is {}", slice.len());
 
         &mut slice[(self.cursor + index) % slice.len()]
     }
@@ -76,9 +61,6 @@ impl<T, V> Memo<T, V> {
     where
         V: AsRef<[T]>,
     {
-        self.cursor = self
-            .cursor
-            .checked_sub(1)
-            .unwrap_or(self.slice.as_ref().len() - 1);
+        self.cursor = self.cursor.checked_sub(1).unwrap_or(self.slice.as_ref().len() - 1);
     }
 }
