@@ -15,10 +15,10 @@ fn pick_row<R: AsRef<[i32]>>(rows: &[R], target: i32) -> Option<&R> {
 
     while let Some(taken) = rows.take() {
         if taken.is_empty() {
-            break;
+            break
         }
         if taken.len() == 1 {
-            return taken.first();
+            return taken.first()
         }
 
         let (left, right) = taken.split_at(taken.len() / 2);
@@ -38,15 +38,15 @@ fn pick_row<R: AsRef<[i32]>>(rows: &[R], target: i32) -> Option<&R> {
         match (left_last_gte, right_first_lte) {
             (Some(true), _) => {
                 rows = Some(left);
-            }
+            },
             (_, Some(true)) => {
                 rows = Some(right);
-            }
+            },
             _ => (),
         }
     }
 
-    return None;
+    return None
 }
 
 fn pick_cell(row: &[i32], target: i32) -> bool {
@@ -54,10 +54,10 @@ fn pick_cell(row: &[i32], target: i32) -> bool {
 
     while let Some(taken) = slice.take() {
         if taken.is_empty() {
-            break;
+            break
         }
         if taken.len() == 1 {
-            return taken[0] == target;
+            return taken[0] == target
         }
 
         let (left, right) = taken.split_at(taken.len() / 2);
@@ -67,10 +67,10 @@ fn pick_cell(row: &[i32], target: i32) -> bool {
         match (left_last_gte, right_first_lte) {
             (Some(true), _) => {
                 slice = Some(left);
-            }
+            },
             (_, Some(true)) => {
                 slice = Some(right);
-            }
+            },
             _ => (),
         }
     }

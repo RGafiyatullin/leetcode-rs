@@ -532,18 +532,11 @@ pub const CASES: &[(i32, i32, &[&[i32]], i32)] = &[
 fn run_all_cases() {
     for &(target, start_fuel, stations, expected) in CASES {
         eprintln!("====");
-        eprintln!(
-            "{:?} | {:?} @ {:?} -> {:?}",
-            stations, target, start_fuel, expected
-        );
+        eprintln!("{:?} | {:?} @ {:?} -> {:?}", stations, target, start_fuel, expected);
         let actual = crate::solution::Solution::min_refuel_stops(
             target,
             start_fuel,
-            stations
-                .into_iter()
-                .copied()
-                .map(ToOwned::to_owned)
-                .collect(),
+            stations.into_iter().copied().map(ToOwned::to_owned).collect(),
         );
         assert_eq!(actual, expected);
     }

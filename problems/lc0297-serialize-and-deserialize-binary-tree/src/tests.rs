@@ -2,10 +2,7 @@ use crate::solution::Codec;
 
 pub use utils::tree::{self, TreeNode};
 
-const CASES: &[&[Option<i32>]] = &[
-    &[Some(1), Some(2), Some(3), None, None, Some(4), Some(5)],
-    &[],
-];
+const CASES: &[&[Option<i32>]] = &[&[Some(1), Some(2), Some(3), None, None, Some(4), Some(5)], &[]];
 
 #[test]
 fn run_all_cases() {

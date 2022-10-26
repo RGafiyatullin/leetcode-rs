@@ -10,7 +10,7 @@ impl Solution {
             let complement = target - value;
 
             if let Some(&complement_idx) = value_to_index.get(&complement) {
-                return vec![complement_idx as i32, idx as i32];
+                return vec![complement_idx as i32, idx as i32]
             }
 
             value_to_index.insert(value, idx);

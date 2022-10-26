@@ -7,3 +7,6 @@ test-debug:
 
 test-release:
 	cargo nextest run --no-fail-fast --release
+
+fmt:
+	cargo +nightly fmt

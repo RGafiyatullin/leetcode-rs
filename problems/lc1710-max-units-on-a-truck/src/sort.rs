@@ -8,7 +8,7 @@ impl Solution {
 
         while let Some(pair) = box_types.pop() {
             if capacity <= 0 {
-                break;
+                break
             }
 
             let c = pair[0];

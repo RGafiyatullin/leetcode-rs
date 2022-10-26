@@ -54,14 +54,8 @@ pub mod tests {
     #[test]
     fn run_all_cases() {
         for &(chalk, k, exp) in CASES {
-            assert_eq!(
-                crate::moddiv::Solution::chalk_replacer(chalk.to_vec(), k),
-                exp
-            );
-            assert_eq!(
-                crate::naive::Solution::chalk_replacer(chalk.to_vec(), k),
-                exp
-            );
+            assert_eq!(crate::moddiv::Solution::chalk_replacer(chalk.to_vec(), k), exp);
+            assert_eq!(crate::naive::Solution::chalk_replacer(chalk.to_vec(), k), exp);
         }
     }
 

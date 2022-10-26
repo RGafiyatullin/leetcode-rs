@@ -11,39 +11,26 @@ impl Solution {
             let acc_len = acc.len();
 
             for i in 0..=(target.len() - stamp.len()) {
-                let left = target
-                    .into_iter()
-                    .copied()
-                    .enumerate()
-                    .skip(i)
-                    .take(stamp.len());
+                let left = target.into_iter().copied().enumerate().skip(i).take(stamp.len());
                 let right = stamp.into_iter().copied();
 
                 let matches = left.zip(right).all(|((idx, l), r)| mask[idx] || l == r);
-                let matches = matches
-                    && mask
-                        .iter()
-                        .copied()
-                        .skip(i)
-                        .take(stamp.len())
-                        .any(|used| !used);
+                let matches =
+                    matches && mask.iter().copied().skip(i).take(stamp.len()).any(|used| !used);
 
                 if matches {
                     acc.push(i);
-                    mask.iter_mut()
-                        .skip(i)
-                        .take(stamp.len())
-                        .for_each(|m| *m = true);
-                    break;
+                    mask.iter_mut().skip(i).take(stamp.len()).for_each(|m| *m = true);
+                    break
                 }
             }
 
             if acc_len == acc.len() {
-                return vec![];
+                return vec![]
             }
 
             if mask.iter().copied().all(std::convert::identity) {
-                break;
+                break
             }
         }
 

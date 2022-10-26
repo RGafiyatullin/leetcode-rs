@@ -35,13 +35,7 @@ impl Solution {
 
         message
             .chars()
-            .map(|ch_s| {
-                if ch_s.is_whitespace() {
-                    ch_s
-                } else {
-                    map.get(&ch_s).copied().unwrap()
-                }
-            })
+            .map(|ch_s| if ch_s.is_whitespace() { ch_s } else { map.get(&ch_s).copied().unwrap() })
             .collect()
     }
 }

@@ -6,11 +6,7 @@ impl Solution {
             .iter()
             .copied()
             .scan(None, |min_opt, val| {
-                let min = if let Some(min) = *min_opt {
-                    std::cmp::min(val, min)
-                } else {
-                    val
-                };
+                let min = if let Some(min) = *min_opt { std::cmp::min(val, min) } else { val };
                 *min_opt = Some(min);
                 *min_opt
             })
@@ -25,7 +21,7 @@ impl Solution {
 
             for candidate_idx in candidate_idxs {
                 if mins[candidate_idx] > val {
-                    break;
+                    break
                 }
 
                 if nums[candidate_idx] <= val {

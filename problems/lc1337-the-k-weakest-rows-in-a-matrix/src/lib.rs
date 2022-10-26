@@ -10,10 +10,7 @@ impl Solution {
 
         v.sort_by_key(|&(_idx, count)| count);
 
-        v.into_iter()
-            .map(|(idx, _count)| idx as i32)
-            .take(k as usize)
-            .collect()
+        v.into_iter().map(|(idx, _count)| idx as i32).take(k as usize).collect()
     }
 }
 
@@ -33,11 +30,7 @@ mod tests {
             3,
             &[2, 0, 3],
         ),
-        (
-            &[&[1, 0, 0, 0], &[1, 1, 1, 1], &[1, 0, 0, 0], &[1, 0, 0, 0]],
-            2,
-            &[0, 2],
-        ),
+        (&[&[1, 0, 0, 0], &[1, 1, 1, 1], &[1, 0, 0, 0], &[1, 0, 0, 0]], 2, &[0, 2]),
     ];
 
     #[test]

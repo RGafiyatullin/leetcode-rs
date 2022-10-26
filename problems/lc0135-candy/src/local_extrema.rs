@@ -45,7 +45,7 @@ impl Scanner {
                 // self.debug.push(current_output);
 
                 // eprintln!(" out: {:?}", self);
-            }
+            },
             Ordering::Equal => {
                 // eprintln!("Eq");
                 // eprintln!(" in:  {:?}", self);
@@ -60,7 +60,7 @@ impl Scanner {
                 // self.debug.push(1);
 
                 // eprintln!(" out: {:?}", self);
-            }
+            },
             Ordering::Less => {
                 // eprintln!("Lt None");
                 // eprintln!(" in:  {:?}", self);
@@ -77,11 +77,11 @@ impl Scanner {
                     Some(0) => {
                         self.timer = None;
                         last_drop - 1
-                    }
+                    },
                     Some(n) => {
                         self.timer = Some(n - 1);
                         last_drop
-                    }
+                    },
                 };
 
                 self.last_drop = Some(last_drop);
@@ -97,7 +97,7 @@ impl Scanner {
                 // self.debug.push(1);
 
                 // eprintln!(" out: {:?}", self);
-            }
+            },
         }
     }
 }
@@ -107,7 +107,7 @@ impl Solution {
         let mut scanner = if let Some(head) = ratings.first() {
             Scanner::init(*head)
         } else {
-            return 0;
+            return 0
         };
 
         for (idx, value) in ratings.iter().enumerate().skip(1) {

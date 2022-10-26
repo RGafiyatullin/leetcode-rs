@@ -11,10 +11,7 @@ impl Solution {
             update_digest(&mut full_digest, &m_digest);
         }
 
-        words
-            .into_iter()
-            .filter(|w| check_match(&full_digest, w.as_str()))
-            .collect()
+        words.into_iter().filter(|w| check_match(&full_digest, w.as_str())).collect()
     }
 }
 

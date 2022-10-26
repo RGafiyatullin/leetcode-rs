@@ -1,9 +1,6 @@
 use crate::Solution;
 
-const CASES: &[(&[i32], i32)] = &[
-    (&[10, 15, 20], 15),
-    (&[1, 100, 1, 1, 1, 100, 1, 1, 100, 1], 6),
-];
+const CASES: &[(&[i32], i32)] = &[(&[10, 15, 20], 15), (&[1, 100, 1, 1, 1, 100, 1, 1, 100, 1], 6)];
 
 fn run_one_case(case: (&[i32], i32)) {
     let (cost, expected) = case;

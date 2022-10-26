@@ -12,11 +12,7 @@ impl Solution {
         let mut expected_n: Option<i32> = None;
 
         for n in tree.range(..).copied() {
-            current_len = if expected_n == Some(n) {
-                current_len + 1
-            } else {
-                1
-            };
+            current_len = if expected_n == Some(n) { current_len + 1 } else { 1 };
             longest_len = std::cmp::max(longest_len, current_len);
             expected_n = Some(n + 1);
         }

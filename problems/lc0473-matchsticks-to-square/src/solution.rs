@@ -7,7 +7,7 @@ impl Solution {
 
         let perimeter = matchsticks.iter().sum::<i32>();
         if perimeter % 4 != 0 {
-            return false;
+            return false
         }
         let side_len = perimeter / 4;
 
@@ -15,10 +15,7 @@ impl Solution {
         matchsticks.reverse();
 
         solve(
-            &Args {
-                side_len,
-                matchsticks: matchsticks.as_ref(),
-            },
+            &Args { side_len, matchsticks: matchsticks.as_ref() },
             UseMap::new(matchsticks.len() as u8),
             0,
             &mut Default::default(),
@@ -29,21 +26,18 @@ impl Solution {
 fn solve(args: &Args, use_map: UseMap, mut sides_done: u8, memo: &mut Memo) -> bool {
     let memo_key = (use_map, sides_done);
 
-    let total = use_map
-        .bits_set()
-        .map(|idx| args.matchsticks[idx])
-        .sum::<i32>();
+    let total = use_map.bits_set().map(|idx| args.matchsticks[idx]).sum::<i32>();
 
     if total > 0 && total % args.side_len == 0 {
         sides_done += 1;
     }
 
     if sides_done == 3 {
-        return true;
+        return true
     }
 
     if let Some(visited) = memo.get(&memo_key) {
-        return *visited;
+        return *visited
     }
 
     let mut ans = false;
@@ -56,14 +50,14 @@ fn solve(args: &Args, use_map: UseMap, mut sides_done: u8, memo: &mut Memo) -> b
         if candidate <= rem {
             if solve(args, use_map.with_bit(idx), sides_done, memo) {
                 ans = true;
-                break;
+                break
             }
         }
     }
 
     memo.insert(memo_key, ans);
 
-    return ans;
+    return ans
 }
 
 type Memo = std::collections::HashMap<(UseMap, u8), bool>;
@@ -81,10 +75,7 @@ struct UseMap {
 
 impl UseMap {
     pub fn new(total: u8) -> Self {
-        Self {
-            total,
-            bits: 0b_0000_0000_0000_0000,
-        }
+        Self { total, bits: 0b_0000_0000_0000_0000 }
     }
 
     pub fn bits_set(&self) -> impl Iterator<Item = usize> {

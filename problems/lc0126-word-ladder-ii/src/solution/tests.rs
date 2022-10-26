@@ -16,8 +16,5 @@ fn check_hash_and_eq() {
 fn vecdeque_extend_pushes_back() {
     let mut queue: VecDeque<_> = vec![1, 2, 3, 4].into();
     queue.extend([5, 6, 7, 8]);
-    assert_eq!(
-        queue.into_iter().collect::<Vec<_>>(),
-        &[1, 2, 3, 4, 5, 6, 7, 8]
-    );
+    assert_eq!(queue.into_iter().collect::<Vec<_>>(), &[1, 2, 3, 4, 5, 6, 7, 8]);
 }

@@ -57,7 +57,7 @@ impl Solution {
 
 fn count_valid_largest_sides(nums: &[i32], hi_exc: i32) -> usize {
     if nums.is_empty() {
-        return 0;
+        return 0
     }
 
     if nums.len() < SCAN_TO_BISECT_THRESHOLD {
@@ -68,10 +68,7 @@ fn count_valid_largest_sides(nums: &[i32], hi_exc: i32) -> usize {
 }
 
 pub fn count_lt_scan(nums: &[i32], hi_exc: i32) -> usize {
-    nums.into_iter()
-        .copied()
-        .take_while(|&largest| largest < hi_exc)
-        .count()
+    nums.into_iter().copied().take_while(|&largest| largest < hi_exc).count()
 }
 
 pub fn count_lt_bisect(nums: &[i32], hi_exc: i32) -> usize {
@@ -90,13 +87,13 @@ pub fn count_lt_bisect(nums: &[i32], hi_exc: i32) -> usize {
             (false, Greater | Equal) => {
                 count -= hi - idx;
                 hi = idx;
-            }
+            },
             (false, Less) => lo = idx + 1,
 
             (true, Greater | Equal) => {
                 count -= 1;
-                break;
-            }
+                break
+            },
             (true, Less) => break,
         }
     }

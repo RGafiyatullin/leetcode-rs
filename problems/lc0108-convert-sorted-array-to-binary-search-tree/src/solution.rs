@@ -29,11 +29,7 @@ impl Solution {
                     assert!(mid_val > assert_gt);
                 }
 
-                let node = TreeNode {
-                    val: mid_val,
-                    left: None,
-                    right: None,
-                };
+                let node = TreeNode { val: mid_val, left: None, right: None };
                 let node = RefCell::new(node);
                 let node = Rc::new(node);
 
@@ -42,17 +38,17 @@ impl Solution {
                     match task.target {
                         Target::Root(root) => {
                             *root = Some(node);
-                        }
+                        },
                         Target::LeftOf(parent) => {
                             let mut parent = parent.borrow_mut();
                             assert!(parent.left.is_none());
                             parent.left = Some(node);
-                        }
+                        },
                         Target::RightOf(parent) => {
                             let mut parent = parent.borrow_mut();
                             assert!(parent.right.is_none());
                             parent.right = Some(node);
-                        }
+                        },
                     }
                 }
 

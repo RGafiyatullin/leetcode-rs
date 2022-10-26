@@ -8,10 +8,7 @@ fn case_01() {
         head = Some(Box::new(node));
     }
 
-    assert_eq!(
-        Solution::reverse_between(head, 2, 4).unwrap().into_vec(),
-        &[1, 4, 3, 2, 5]
-    );
+    assert_eq!(Solution::reverse_between(head, 2, 4).unwrap().into_vec(), &[1, 4, 3, 2, 5]);
 }
 
 impl ListNode {

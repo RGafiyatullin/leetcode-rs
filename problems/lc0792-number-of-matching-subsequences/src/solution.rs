@@ -12,10 +12,7 @@ impl Solution {
             },
         );
 
-        words
-            .iter()
-            .filter(|w| is_match(&index, w.as_str()))
-            .count() as i32
+        words.iter().filter(|w| is_match(&index, w.as_str())).count() as i32
     }
 }
 
@@ -26,11 +23,11 @@ fn is_match(index: &HashMap<char, BTreeSet<usize>>, word: &str) -> bool {
             if let Some(pos) = positions.range(min_pos..).next() {
                 min_pos = *pos + 1;
             } else {
-                return false;
+                return false
             }
         } else {
-            return false;
+            return false
         }
     }
-    return true;
+    return true
 }

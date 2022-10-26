@@ -43,8 +43,8 @@ impl Solution {
                 (true, false, false) => panic!("no bad version"),
                 (true, true, true) => {
                     assert_eq!(ver_this, 1);
-                    break 1;
-                }
+                    break 1
+                },
 
                 (false, true, true) => hi = ver_this,
                 (false, false, false) => lo = ver_this + 1,
@@ -64,19 +64,13 @@ mod tests {
         for total in 1..=10 {
             for bad_ver in 1..=total {
                 eprintln!("{:?}/{:?}", bad_ver, total);
-                assert_eq!(
-                    Solution::new(total, bad_ver).first_bad_version(total),
-                    bad_ver
-                );
+                assert_eq!(Solution::new(total, bad_ver).first_bad_version(total), bad_ver);
             }
         }
     }
 
     #[test]
     fn test_01() {
-        assert_eq!(
-            Solution::new(2126753390, 1702766719).first_bad_version(2126753390),
-            1702766719
-        )
+        assert_eq!(Solution::new(2126753390, 1702766719).first_bad_version(2126753390), 1702766719)
     }
 }

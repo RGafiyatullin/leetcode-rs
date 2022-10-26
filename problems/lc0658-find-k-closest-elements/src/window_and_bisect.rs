@@ -24,12 +24,10 @@ impl Solution {
 
             match (best, (x - val).abs()) {
                 (None, this) => best = Some((idx, this, val)),
-                (Some((_idx, that, that_val)), this) if this == that && val < that_val => {
-                    best = Some((idx, this, val))
-                }
-                (Some((_idx, that, _that_val)), this) if that > this => {
-                    best = Some((idx, this, val))
-                }
+                (Some((_idx, that, that_val)), this) if this == that && val < that_val =>
+                    best = Some((idx, this, val)),
+                (Some((_idx, that, _that_val)), this) if that > this =>
+                    best = Some((idx, this, val)),
                 (Some((_idx, that, _that_val)), this) => assert!(this >= that),
             }
 
@@ -67,7 +65,7 @@ impl Solution {
                 (Some(left), Some(right)) => {
                     assert!(left > right);
                     hi += 1;
-                }
+                },
             }
         }
 

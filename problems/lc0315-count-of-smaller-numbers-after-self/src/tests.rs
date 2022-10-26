@@ -13,16 +13,10 @@ fn run_specific_case() {
     let &(input, expected) = &CASES[4];
     let actual = Solution::count_smaller(input.to_vec());
 
-    for (idx, (actual, expected)) in actual
-        .into_iter()
-        .zip(expected.into_iter().copied())
-        .enumerate()
+    for (idx, (actual, expected)) in
+        actual.into_iter().zip(expected.into_iter().copied()).enumerate()
     {
-        assert_eq!(
-            actual, expected,
-            "[{:?}] {:?} != {:?}",
-            idx, actual, expected
-        );
+        assert_eq!(actual, expected, "[{:?}] {:?} != {:?}", idx, actual, expected);
     }
 }
 

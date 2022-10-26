@@ -12,10 +12,7 @@ fn main() -> () {
     let input = input.trim();
     let pattern = pattern.trim();
 
-    println!(
-        "{:?}",
-        Solution::is_match(input.to_owned(), pattern.to_owned())
-    );
+    println!("{:?}", Solution::is_match(input.to_owned(), pattern.to_owned()));
 }
 
 struct Solution;
@@ -73,12 +70,10 @@ impl std::str::FromStr for Pattern {
                 '.' => acc.push(PatternNode(CharMatch::Any, Quantifier::One)),
                 '*' => match acc.pop() {
                     None => return Err("asterisk cannot start an expression".to_owned()),
-                    Some(PatternNode(_ch, Quantifier::Any)) => {
-                        return Err("cannot have two asterisks in a row".to_owned())
-                    }
-                    Some(PatternNode(ch, Quantifier::One)) => {
-                        acc.push(PatternNode(ch, Quantifier::Any))
-                    }
+                    Some(PatternNode(_ch, Quantifier::Any)) =>
+                        return Err("cannot have two asterisks in a row".to_owned()),
+                    Some(PatternNode(ch, Quantifier::One)) =>
+                        acc.push(PatternNode(ch, Quantifier::Any)),
                 },
                 ch => acc.push(PatternNode(CharMatch::Exact(ch), Quantifier::One)),
             }
@@ -99,13 +94,8 @@ impl Pattern {
         loop {
             // println!("state: {:?}; forks: {:?}", state, forks);
             state = match state {
-                State::Unwind => {
-                    if let Some(Fork {
-                        nodes,
-                        chars,
-                        char_match,
-                    }) = forks.pop()
-                    {
+                State::Unwind =>
+                    if let Some(Fork { nodes, chars, char_match }) = forks.pop() {
                         if let (Some(char), next_chars) = chars.next() {
                             if char_match.is_match(*char) {
                                 let fork = Fork {
@@ -122,29 +112,26 @@ impl Pattern {
                             State::Unwind
                         }
                     } else {
-                        return false;
-                    }
-                }
+                        return false
+                    },
 
                 State::Match(nodes, chars) => match nodes.next() {
-                    (None, _) => {
+                    (None, _) =>
                         if chars.has_next() {
                             State::Unwind
                         } else {
-                            return true;
-                        }
-                    }
+                            return true
+                        },
 
                     (Some(node), next_nodes) => match node.quantifier() {
                         Quantifier::One => match chars.next() {
                             (None, _) => State::Unwind,
-                            (Some(char), next_chars) => {
+                            (Some(char), next_chars) =>
                                 if node.char().is_match(*char) {
                                     State::Match(next_nodes, next_chars)
                                 } else {
                                     State::Unwind
-                                }
-                            }
+                                },
                         },
 
                         Quantifier::Any => {
@@ -155,7 +142,7 @@ impl Pattern {
                             };
                             forks.push(fork);
                             State::Match(next_nodes, chars)
-                        }
+                        },
                     },
                 },
             }

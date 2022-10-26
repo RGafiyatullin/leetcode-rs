@@ -21,19 +21,13 @@ impl<const SZ: usize> Window<SZ> {
 
     fn next(&self) -> Self {
         if self.idx < SZ {
-            Self {
-                prev: self.prev,
-                idx: self.idx + 1,
-            }
+            Self { prev: self.prev, idx: self.idx + 1 }
         } else {
             let mut next = [0; SZ];
             next[0..(SZ - 1)].copy_from_slice(&self.prev[1..]);
             next[SZ - 1] = self.n();
 
-            Self {
-                prev: next,
-                idx: self.idx + 1,
-            }
+            Self { prev: next, idx: self.idx + 1 }
         }
     }
 }
@@ -77,15 +71,7 @@ fn test_fib() {
 
 #[test]
 fn test_trib() {
-    for (n, f) in &[
-        (0, 0),
-        (1, 1),
-        (2, 1),
-        (3, 2),
-        (4, 4),
-        (5, 7),
-        (25, 1389537),
-    ] {
+    for (n, f) in &[(0, 0), (1, 1), (2, 1), (3, 2), (4, 4), (5, 7), (25, 1389537)] {
         assert_eq!(Solution::tribonacci(*n), *f);
     }
 }

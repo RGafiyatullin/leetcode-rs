@@ -19,17 +19,13 @@ impl Solution {
 
         let digits = s.chars().map(digit_value).collect::<Vec<_>>();
 
-        let value = digits
-            .iter()
-            .copied()
-            .enumerate()
-            .fold(0, |acc, (idx, digit)| {
-                if digits[idx + 1..].iter().copied().any(|r| r > digit) {
-                    acc - digit
-                } else {
-                    acc + digit
-                }
-            });
+        let value = digits.iter().copied().enumerate().fold(0, |acc, (idx, digit)| {
+            if digits[idx + 1..].iter().copied().any(|r| r > digit) {
+                acc - digit
+            } else {
+                acc + digit
+            }
+        });
 
         value
     }

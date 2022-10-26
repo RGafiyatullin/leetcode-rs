@@ -22,7 +22,7 @@ impl Solution {
                     // eprintln!("**L**: {:?} R: {:?} | SUM: {:?}", left, right, sum);
 
                     if !check(&mut best, target, sum, left, right) {
-                        break;
+                        break
                     }
                 }
             }

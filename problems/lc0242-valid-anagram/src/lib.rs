@@ -6,7 +6,7 @@ pub mod sort_chars {
     impl Solution {
         pub fn is_anagram(s: String, t: String) -> bool {
             if s.len() != t.len() {
-                return false;
+                return false
             }
 
             let mut s = s.chars().collect::<Vec<_>>();
@@ -29,7 +29,7 @@ pub mod sort_bytes {
             let mut t = t.into_bytes();
 
             if s.len() != t.len() {
-                return false;
+                return false
             }
 
             s.sort();
@@ -66,9 +66,6 @@ pub mod byte_freqs {
 #[test]
 fn test() {
     for &(left, right, expected) in &[("", "", true), ("anagram", "nagaram", true)] {
-        assert_eq!(
-            Solution::is_anagram(left.to_owned(), right.to_owned()),
-            expected
-        );
+        assert_eq!(Solution::is_anagram(left.to_owned(), right.to_owned()), expected);
     }
 }

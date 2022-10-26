@@ -12,40 +12,30 @@ pub struct TreeNode {
 pub fn tree_from_bft(bft: &[Option<i32>]) -> Option<Node> {
     let mut bft = bft.into_iter().copied().fuse();
     if let Some(Some(root_val)) = bft.next() {
-        let root = Rc::new(RefCell::new(TreeNode {
-            val: root_val,
-            left: None,
-            right: None,
-        }));
+        let root = Rc::new(RefCell::new(TreeNode { val: root_val, left: None, right: None }));
 
         let mut queue = VecDeque::from([root.clone()]);
         while let Some(parent) = queue.pop_front() {
             let mut parent = parent.borrow_mut();
             if let Some(next) = bft.next() {
                 if let Some(left_val) = next {
-                    let left = Rc::new(RefCell::new(TreeNode {
-                        val: left_val,
-                        left: None,
-                        right: None,
-                    }));
+                    let left =
+                        Rc::new(RefCell::new(TreeNode { val: left_val, left: None, right: None }));
                     parent.left = Some(Rc::clone(&left));
                     queue.push_back(left);
                 }
             } else {
-                break;
+                break
             }
             if let Some(next) = bft.next() {
                 if let Some(right_val) = next {
-                    let right = Rc::new(RefCell::new(TreeNode {
-                        val: right_val,
-                        left: None,
-                        right: None,
-                    }));
+                    let right =
+                        Rc::new(RefCell::new(TreeNode { val: right_val, left: None, right: None }));
                     parent.right = Some(Rc::clone(&right));
                     queue.push_back(right)
                 }
             } else {
-                break;
+                break
             }
         }
 
@@ -79,13 +69,7 @@ pub fn tree_to_bft(tree: Option<Node>) -> Vec<Option<i32>> {
 fn test_tree_from_and_to_bft() {
     const NODE_COUNT: usize = 1000000;
     let bft_in = (0..NODE_COUNT)
-        .map(|i| {
-            if i % 7 == 1 || i % 11 == 1 {
-                None
-            } else {
-                Some(i as i32)
-            }
-        })
+        .map(|i| if i % 7 == 1 || i % 11 == 1 { None } else { Some(i as i32) })
         .chain(vec![Some(NODE_COUNT as i32)])
         .collect::<Vec<_>>();
     let tree = tree_from_bft(&bft_in[..]);

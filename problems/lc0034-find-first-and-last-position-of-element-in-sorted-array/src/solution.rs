@@ -21,16 +21,16 @@ impl Solution {
 
                                 tasks.push(Task::FindLeft(left));
                                 tasks.push(Task::FindRight(right));
-                            }
+                            },
                             Ordering::Less => {
                                 tasks.push(Task::FindAny(right));
-                            }
+                            },
                             Ordering::Greater => {
                                 tasks.push(Task::FindAny(left));
-                            }
+                            },
                         }
                     }
-                }
+                },
                 Task::FindLeft(range) => {
                     if let Some((mid_idx, left, right)) = range.split() {
                         match nums[mid_idx].cmp(&target) {
@@ -40,16 +40,16 @@ impl Solution {
                                 left_idx = Some(mid_idx);
 
                                 tasks.push(Task::FindLeft(left));
-                            }
+                            },
                             Ordering::Less => {
                                 tasks.push(Task::FindLeft(right));
-                            }
+                            },
                             Ordering::Greater => {
                                 panic!("[L] the array is not sorted");
-                            }
+                            },
                         }
                     }
-                }
+                },
                 Task::FindRight(range) => {
                     if let Some((mid_idx, left, right)) = range.split() {
                         match nums[mid_idx].cmp(&target) {
@@ -59,23 +59,20 @@ impl Solution {
                                 right_idx = Some(mid_idx);
 
                                 tasks.push(Task::FindRight(right));
-                            }
+                            },
                             Ordering::Greater => {
                                 tasks.push(Task::FindRight(left));
-                            }
+                            },
                             Ordering::Less => {
                                 panic!("[R] the array is not sorted");
-                            }
+                            },
                         }
                     }
-                }
+                },
             }
         }
 
-        vec![
-            left_idx.map(|i| i as i32).unwrap_or(-1),
-            right_idx.map(|i| i as i32).unwrap_or(-1),
-        ]
+        vec![left_idx.map(|i| i as i32).unwrap_or(-1), right_idx.map(|i| i as i32).unwrap_or(-1)]
     }
 }
 
@@ -110,11 +107,7 @@ impl Range {
 
     pub fn split(&self) -> Option<(usize, Self, Self)> {
         self.middle().map(|mid_idx| {
-            (
-                mid_idx,
-                Self::new(self.start, mid_idx),
-                Self::new(mid_idx + 1, self.end),
-            )
+            (mid_idx, Self::new(self.start, mid_idx), Self::new(mid_idx + 1, self.end))
         })
     }
 }

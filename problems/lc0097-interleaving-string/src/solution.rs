@@ -1,6 +1,7 @@
 pub struct Solution;
 
-use std::{collections::HashSet, hash::Hash};
+use std::collections::HashSet;
+use std::hash::Hash;
 
 impl Solution {
     pub fn is_interleave(left: String, right: String, target: String) -> bool {
@@ -25,7 +26,7 @@ impl Solution {
             // eprintln!("candidate: {}", candidate);
             if candidate.check(&mut candidates) {
                 found = true;
-                break;
+                break
             }
         }
 
@@ -50,10 +51,7 @@ impl<'a> Cursor<'a> {
     }
     fn advance(&self) -> Self {
         if !self.finished() {
-            Self {
-                pos: self.pos + 1,
-                ..(*self)
-            }
+            Self { pos: self.pos + 1, ..(*self) }
         } else {
             panic!("Attempt to advance a finished cursor: {:?}", self)
         }
@@ -76,10 +74,7 @@ impl<'a, const I: usize> Candidate<'a, I> {
                 if c.current() == Some(current) {
                     let mut src = self.src;
                     src[idx] = c.advance();
-                    candidates.extend(std::iter::once(Self {
-                        src,
-                        target: self.target.advance(),
-                    }));
+                    candidates.extend(std::iter::once(Self { src, target: self.target.advance() }));
                 }
             }
             false
@@ -106,10 +101,7 @@ impl<T> Iterator for CandidatePool<T> {
 
 impl<T> CandidatePool<T> {
     pub fn new() -> Self {
-        Self {
-            set: Default::default(),
-            pool: Default::default(),
-        }
+        Self { set: Default::default(), pool: Default::default() }
     }
 }
 
@@ -142,10 +134,7 @@ impl Hash for Cursor<'_> {
 impl<'a, const I: usize> std::fmt::Display for Candidate<'a, I> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "Candidate[target: {}; src: ", self.target.pos)?;
-        self.src
-            .iter()
-            .fold(&mut f.debug_list(), |l, s| l.entry(&s.pos))
-            .finish()?;
+        self.src.iter().fold(&mut f.debug_list(), |l, s| l.entry(&s.pos)).finish()?;
         write!(f, "]")?;
 
         Ok(())

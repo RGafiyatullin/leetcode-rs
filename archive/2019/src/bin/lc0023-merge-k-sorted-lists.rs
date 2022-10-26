@@ -83,13 +83,12 @@ impl MultiList {
             match (peek(self.nth_ref(idx)), candidate) {
                 (None, _) => unreachable!("A ref to an empty LList in the index"),
                 (Some(item), None) => candidate = Some((idx, item)),
-                (Some(item), Some((_idx, candidate_value))) => {
+                (Some(item), Some((_idx, candidate_value))) =>
                     if candidate_value < item {
-                        continue;
+                        continue
                     } else {
                         candidate = Some((idx, item))
-                    }
-                }
+                    },
             }
         }
 
@@ -98,7 +97,7 @@ impl MultiList {
             Some((idx, value)) => {
                 self.nth_pop(idx);
                 Some(value)
-            }
+            },
         }
     }
     fn nth_ref(&self, n: usize) -> Option<&ListNode> {
@@ -112,7 +111,7 @@ impl MultiList {
                     self.index.remove(&n);
                 }
                 self.heads[n] = head.next;
-            }
+            },
         }
     }
 }

@@ -4,11 +4,7 @@ const MIN_SEQ_LEN: usize = 3;
 
 impl Solution {
     pub fn is_possible(nums: Vec<i32>) -> bool {
-        let state = nums
-            .into_iter()
-            .enumerate()
-            .fold(State::default(), State::fold)
-            .finish();
+        let state = nums.into_iter().enumerate().fold(State::default(), State::fold).finish();
 
         assert!(state.active.is_empty());
 
@@ -39,13 +35,9 @@ impl State {
 
         let mut active = vec![];
         for s in self.active.into_iter() {
-            match (
-                n - s.last().copied().expect("No empty sequences there").1,
-                s.len(),
-            ) {
-                (gt1, gte_min_len) if gt1 > 1 && gte_min_len >= MIN_SEQ_LEN => {
-                    self.complete.push(s)
-                }
+            match (n - s.last().copied().expect("No empty sequences there").1, s.len()) {
+                (gt1, gte_min_len) if gt1 > 1 && gte_min_len >= MIN_SEQ_LEN =>
+                    self.complete.push(s),
                 (gt1, _) if gt1 > 1 => self.failed.push(s),
                 (_, _) => active.push(s),
             }

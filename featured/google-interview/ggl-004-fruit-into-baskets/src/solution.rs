@@ -16,17 +16,17 @@ impl Solution {
                     (Some(fruit_type), Some((same_type, q))) if same_type == fruit_type => {
                         *last = Some((same_type, q + 1));
                         Some(None)
-                    }
+                    },
                     (Some(fruit_type), Some((other_type, other_q))) => {
                         assert_ne!(other_type, fruit_type);
 
                         *last = Some((fruit_type, 1));
                         Some(Some((other_type, other_q)))
-                    }
+                    },
                     (Some(fruit_type), None) => {
                         *last = Some((fruit_type, 1));
                         Some(None)
-                    }
+                    },
                     (None, None) => Some(None),
                     (None, Some((fruit_type, q))) => Some(Some((fruit_type, q))),
                 }
@@ -45,29 +45,10 @@ impl Solution {
 
 #[derive(Debug, Clone, Copy)]
 enum Folder {
-    Empty {
-        max: usize,
-    },
-    One {
-        max: usize,
-        t: i32,
-        c: usize,
-    },
-    TwoA {
-        max: usize,
-        l_t: i32,
-        l_c: usize,
-        r_t: i32,
-        r_c: usize,
-    },
-    TwoB {
-        max: usize,
-        l_t: i32,
-        l_c: usize,
-        l_cp: usize,
-        r_t: i32,
-        r_c: usize,
-    },
+    Empty { max: usize },
+    One { max: usize, t: i32, c: usize },
+    TwoA { max: usize, l_t: i32, l_c: usize, r_t: i32, r_c: usize },
+    TwoB { max: usize, l_t: i32, l_c: usize, l_cp: usize, r_t: i32, r_c: usize },
 }
 
 impl Folder {
@@ -82,11 +63,8 @@ impl Folder {
     fn fold(self, group: (i32, usize)) -> Self {
         let (next_type, next_count) = group;
         match self {
-            Self::Empty { max } => Self::One {
-                max: std::cmp::max(max, next_count),
-                t: next_type,
-                c: next_count,
-            },
+            Self::Empty { max } =>
+                Self::One { max: std::cmp::max(max, next_count), t: next_type, c: next_count },
 
             Self::One { max, t, c } => {
                 assert_ne!(t, next_type);
@@ -98,15 +76,9 @@ impl Folder {
                     r_t: t,
                     r_c: c,
                 }
-            }
+            },
 
-            Self::TwoA {
-                max,
-                l_t,
-                l_c,
-                r_t,
-                r_c,
-            } => {
+            Self::TwoA { max, l_t, l_c, r_t, r_c } => {
                 assert_ne!(l_t, next_type);
 
                 if r_t == next_type {
@@ -129,16 +101,9 @@ impl Folder {
                         r_c: l_c,
                     }
                 }
-            }
+            },
 
-            Self::TwoB {
-                max,
-                l_t,
-                l_c,
-                l_cp,
-                r_t,
-                r_c,
-            } => {
+            Self::TwoB { max, l_t, l_c, l_cp, r_t, r_c } => {
                 assert_ne!(l_t, next_type);
 
                 if r_t == next_type {
@@ -161,7 +126,7 @@ impl Folder {
                         r_c: l_c,
                     }
                 }
-            }
+            },
         }
     }
 }

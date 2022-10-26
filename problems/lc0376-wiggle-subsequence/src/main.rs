@@ -17,10 +17,7 @@ fn main() {
 }
 
 fn process_line(line: &str) -> Result<i32, ParseIntError> {
-    let numbers = line
-        .split_whitespace()
-        .map(FromStr::from_str)
-        .collect::<Result<Vec<_>, _>>()?;
+    let numbers = line.split_whitespace().map(FromStr::from_str).collect::<Result<Vec<_>, _>>()?;
 
     let n = crate::local_extrema::Solution::wiggle_max_length(numbers);
 

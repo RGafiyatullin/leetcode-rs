@@ -28,7 +28,7 @@ fn index_of(slice: &[i32], starting_from_index: usize, target: i32) -> Option<us
     use std::cmp::Ordering::*;
 
     if slice[starting_from_index..].is_empty() {
-        return None;
+        return None
     }
 
     let (mut lo, mut hi) = (starting_from_index, slice.len() - 1);
@@ -36,20 +36,14 @@ fn index_of(slice: &[i32], starting_from_index: usize, target: i32) -> Option<us
     loop {
         let idx = (lo + hi) / 2;
         let val = slice[idx];
-        let left_neighbour_val = slice
-            .get(idx - 1)
-            .filter(|_| idx - 1 >= starting_from_index)
-            .copied();
+        let left_neighbour_val =
+            slice.get(idx - 1).filter(|_| idx - 1 >= starting_from_index).copied();
 
         // std::thread::sleep(std::time::Duration::from_millis(100));
         // eprintln!(" | {:?}<={:?}<={:?}", lo, idx, hi);
         // eprintln!("   | val={:?}, left={:?}", val, left_neighbour_val);
 
-        match (
-            lo == hi,
-            val.cmp(&target),
-            left_neighbour_val.map(|v| v.cmp(&target)),
-        ) {
+        match (lo == hi, val.cmp(&target), left_neighbour_val.map(|v| v.cmp(&target))) {
             (false, Less, _) => lo = idx + 1,
             (false, Greater, _) => hi = idx,
             (_, Equal, Some(Less) | None) => break Some(idx),

@@ -3,10 +3,7 @@ pub struct Solution;
 impl Solution {
     pub fn find_and_replace_pattern(words: Vec<String>, pattern: String) -> Vec<String> {
         let pattern = normalize(pattern.as_str());
-        words
-            .into_iter()
-            .filter(|w| normalize(w) == pattern)
-            .collect()
+        words.into_iter().filter(|w| normalize(w) == pattern).collect()
     }
 }
 

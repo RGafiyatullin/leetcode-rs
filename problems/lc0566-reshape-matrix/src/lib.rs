@@ -10,9 +10,7 @@ impl Solution {
         } else {
             let mut items = mat.into_iter().flat_map(std::convert::identity);
 
-            let out = (0..r)
-                .map(|_| (0..c).filter_map(|_| items.next()).collect())
-                .collect();
+            let out = (0..r).map(|_| (0..c).filter_map(|_| items.next()).collect()).collect();
 
             assert!(items.next().is_none());
 

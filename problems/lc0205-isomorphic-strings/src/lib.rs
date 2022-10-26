@@ -27,14 +27,9 @@ fn normalize(s: &str) -> Vec<u8> {
 
 #[test]
 fn test() {
-    for &(left, right, expected) in &[
-        ("egg", "add", true),
-        ("foo", "bar", false),
-        ("paper", "title", true),
-    ] {
-        assert_eq!(
-            Solution::is_isomorphic(left.to_owned(), right.to_owned()),
-            expected
-        );
+    for &(left, right, expected) in
+        &[("egg", "add", true), ("foo", "bar", false), ("paper", "title", true)]
+    {
+        assert_eq!(Solution::is_isomorphic(left.to_owned(), right.to_owned()), expected);
     }
 }

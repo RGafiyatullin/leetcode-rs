@@ -15,11 +15,8 @@ impl Solution {
 
 #[test]
 fn test() {
-    for (types, exp) in [
-        (vec![1, 1, 2, 2, 3, 3], 3),
-        (vec![1, 1, 2, 3], 2),
-        (vec![6, 6, 6, 6], 1),
-    ] {
+    for (types, exp) in [(vec![1, 1, 2, 2, 3, 3], 3), (vec![1, 1, 2, 3], 2), (vec![6, 6, 6, 6], 1)]
+    {
         assert_eq!(Solution::distribute_candies(types), exp)
     }
 }

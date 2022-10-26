@@ -16,7 +16,7 @@ impl Solution {
                 // eprintln!("# {:?}^2 = {:?}", n, n_squared);
                 squares.push((n, n_squared));
             } else {
-                break;
+                break
             }
         }
         // eprintln!("Precalculated {:?} squares", squares.len());
@@ -26,7 +26,7 @@ impl Solution {
 
             let complement = c - n_squared;
             if complement > n_squared {
-                break;
+                break
             }
 
             // eprintln!(" Complement: {:?}", complement);
@@ -55,10 +55,10 @@ impl Solution {
                 //     "Found! {}^2 + {}^2 = {:?} + {:?} = {:?}",
                 //     n, complement_n, n_squared, _complement_n_squared, c
                 // );
-                return true;
+                return true
             }
         }
 
-        return false;
+        return false
     }
 }

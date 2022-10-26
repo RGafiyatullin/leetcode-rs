@@ -7,14 +7,8 @@ fn main() -> () {
     stdin.read_line(&mut line_a).unwrap();
     stdin.read_line(&mut line_b).unwrap();
 
-    let nums1 = line_a
-        .split_whitespace()
-        .map(|s| s.parse().unwrap())
-        .collect::<Vec<i32>>();
-    let nums2 = line_b
-        .split_whitespace()
-        .map(|s| s.parse().unwrap())
-        .collect::<Vec<i32>>();
+    let nums1 = line_a.split_whitespace().map(|s| s.parse().unwrap()).collect::<Vec<i32>>();
+    let nums2 = line_b.split_whitespace().map(|s| s.parse().unwrap()).collect::<Vec<i32>>();
 
     let result = Solution::find_median_sorted_arrays(nums1, nums2);
 
@@ -88,13 +82,13 @@ where
                 self.left = iter.next().map(move |i| (i, iter));
 
                 Some(item)
-            }
+            },
             (None, Some((item, mut iter))) => {
                 self.right = iter.next().map(move |i| (i, iter));
 
                 Some(item)
-            }
-            (Some((l_item, mut l_iter)), Some((r_item, mut r_iter))) => {
+            },
+            (Some((l_item, mut l_iter)), Some((r_item, mut r_iter))) =>
                 if l_item < r_item {
                     self.left = l_iter.next().map(move |i| (i, l_iter));
                     self.right = Some((r_item, r_iter));
@@ -105,8 +99,7 @@ where
                     self.left = Some((l_item, l_iter));
 
                     Some(r_item)
-                }
-            }
+                },
         }
     }
 }

@@ -1,11 +1,7 @@
 use crate::Solution;
 
 const CASES: &[(&[&str], &str, &[&str])] = &[
-    (
-        &["abc", "deq", "mee", "aqq", "dkd", "ccc"],
-        "abb",
-        &["mee", "aqq"],
-    ),
+    (&["abc", "deq", "mee", "aqq", "dkd", "ccc"], "abb", &["mee", "aqq"]),
     (&["a", "b", "c"], "a", &["a", "b", "c"]),
 ];
 

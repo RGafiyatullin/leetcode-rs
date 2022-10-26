@@ -21,10 +21,10 @@ impl Solution {
 
             use std::cmp::Ordering;
             match out.len().cmp(&level) {
-                Ordering::Equal => {}
+                Ordering::Equal => {},
                 Ordering::Less => {
                     out.push(vec![]);
-                }
+                },
                 Ordering::Greater => panic!(
                     "Queue order violated! [out.len = {}; node.level = {}]",
                     out.len(),

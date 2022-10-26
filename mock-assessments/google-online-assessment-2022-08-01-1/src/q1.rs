@@ -11,7 +11,7 @@ impl Solution {
             match ch {
                 '(' => {
                     stack.push(Default::default());
-                }
+                },
                 ')' => {
                     let last = stack.pop().expect("Unbalanced parenthesis!");
                     if let Some(prev) = stack.last_mut() {
@@ -19,7 +19,7 @@ impl Solution {
                     } else {
                         output.push(last)
                     }
-                }
+                },
 
                 illegal => panic!("Illegal char: {:?}", illegal),
             }

@@ -9,11 +9,8 @@ fn run_all_cases() {
 
         if actual != expected {
             eprintln!("exp.len: {:?}; act.len: {:?}", expected.len(), actual.len());
-            expected
-                .chunks(10)
-                .zip(actual.chunks(10))
-                .enumerate()
-                .for_each(|(chunk_idx, (exp, act))| {
+            expected.chunks(10).zip(actual.chunks(10)).enumerate().for_each(
+                |(chunk_idx, (exp, act))| {
                     eprintln!(
                         "{}\t{:?} | {:?} | {:?}",
                         if exp == act { "[OK]" } else { "[ERR]" },
@@ -21,7 +18,8 @@ fn run_all_cases() {
                         exp,
                         act
                     );
-                });
+                },
+            );
             assert!(false, "{:?} | {:?}, {:?}", sorted, k, x)
         }
     }
@@ -30,12 +28,7 @@ fn run_all_cases() {
 pub const CASES: &[(&[i32], i32, i32, &[i32])] = &[
     (&[1, 2, 3, 4, 5], 4, 3, &[1, 2, 3, 4]),
     (&[1, 2, 3, 4, 5], 4, -1, &[1, 2, 3, 4]),
-    (
-        &[1, 1, 2, 2, 3, 4, 4, 4, 4, 4, 5, 6, 7, 8, 8],
-        3,
-        4,
-        &[4, 4, 4],
-    ),
+    (&[1, 1, 2, 2, 3, 4, 4, 4, 4, 4, 5, 6, 7, 8, 8], 3, 4, &[4, 4, 4]),
     (&[0, 0, 1, 2, 3, 3, 4, 7, 7, 8], 3, 5, &[3, 3, 4]),
     (&[1, 25, 35, 45, 50, 59], 1, 30, &[25]),
     (
