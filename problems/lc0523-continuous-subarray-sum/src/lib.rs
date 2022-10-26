@@ -1,4 +1,4 @@
-mod solution;
+#![cfg(test)]
 
-#[cfg(test)]
+mod solution;
 mod tests;
