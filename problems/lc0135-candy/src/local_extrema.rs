@@ -104,11 +104,8 @@ impl Scanner {
 
 impl Solution {
     pub fn candy(ratings: Vec<i32>) -> i32 {
-        let mut scanner = if let Some(head) = ratings.first() {
-            Scanner::init(*head)
-        } else {
-            return 0
-        };
+        let mut scanner =
+            if let Some(head) = ratings.first() { Scanner::init(*head) } else { return 0 };
 
         for (idx, value) in ratings.iter().enumerate().skip(1) {
             scanner.scan(idx, *value);
