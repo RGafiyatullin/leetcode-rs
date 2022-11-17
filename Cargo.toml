@@ -6,3 +6,6 @@ members = [
     "playground/*",
     "mock-assessments/*",
 ]
+
+[workspace.dependencies]
+utils = {path = "utils"}

@@ -1,5 +1,5 @@
 [package]
-name = "lc0104-max-depth-of-binary-tree"
+name = "lc0002-add-two-numbers"
 version = "0.1.0"
 edition = "2021"
 
