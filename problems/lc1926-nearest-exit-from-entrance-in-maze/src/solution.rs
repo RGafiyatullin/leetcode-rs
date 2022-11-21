@@ -1,108 +1,108 @@
 pub struct Solution;
 
+use std::collections::VecDeque;
+use std::ops::{Index, IndexMut};
+
 impl Solution {
     pub fn nearest_exit(maze: Vec<Vec<char>>, entrance: Vec<i32>) -> i32 {
         let entrance = (entrance[0] as usize, entrance[1] as usize);
-        let mut maze = Maze::try_from(maze).expect("Bad maze");
-        maze.set_entrance(entrance);
-        eprintln!("{}", maze);
+        let rows = maze.len();
+        let cols = maze.first().map(Vec::len).unwrap_or(0);
 
-        
+        maze.iter().for_each(|r| assert_eq!(cols, r.len()));
 
-        unimplemented!()
+        let mut scores =
+            Scores { scores: vec![usize::MAX; rows * cols], height: rows, width: cols };
+
+        let mut queue = VecDeque::new();
+
+        for at in (0..rows)
+            .flat_map(|row| [(row, 0), (row, cols - 1)])
+            .chain((0..cols).flat_map(|col| [(0, col), (rows - 1, col)]))
+            .filter(|at| *at != entrance)
+            .filter(|at| !is_wall(&maze, *at))
+        {
+            // eprintln!("start {:?}", at);
+            queue.push_back((at, 0));
+        }
+
+        while let Some((at, score)) = queue.pop_front() {
+            // eprintln!("=> {:?} — {:?}", at, score);
+            proceed(&maze, rows, cols, &mut scores, &mut queue, at, score);
+        }
+
+        // eprintln!("ENTRANCE: {:?}", entrance);
+        // eprintln!("SCORES: {:?}", scores);
+        let score = scores[entrance];
+        if score == usize::MAX {
+            -1
+        } else {
+            score as i32
+        }
     }
+}
+
+fn proceed(
+    maze: &[Vec<char>],
+    rows: usize,
+    cols: usize,
+    scores: &mut Scores,
+    queue: &mut VecDeque<((usize, usize), usize)>,
+    at: (usize, usize),
+    score: usize,
+) {
+    if !is_wall(maze, at) && scores[at] > score {
+        scores[at] = score;
+
+        for next in neighbours(at, rows, cols) {
+            queue.push_back((next, score + 1));
+        }
+    }
+}
+
+fn is_wall(maze: &[Vec<char>], at: (usize, usize)) -> bool {
+    maze[at.0][at.1] == '+'
+}
+
+fn neighbours(
+    at: (usize, usize),
+    rows: usize,
+    cols: usize,
+) -> impl Iterator<Item = (usize, usize)> {
+    let left = at.1.checked_sub(1).map(|c| (at.0, c));
+    let right = Some(at.1 + 1).filter(|c| *c < cols).map(|c| (at.0, c));
+    let up = at.0.checked_sub(1).map(|r| (r, at.1));
+    let down = Some(at.0 + 1).filter(|r| *r < rows).map(|r| (r, at.1));
+
+    left.into_iter().chain(right).chain(up).chain(down)
 }
 
 #[derive(Debug)]
-struct Maze {
-    cells: Vec<Cell>,
-    cols: usize,
-    rows: usize,
+struct Scores {
+    scores: Vec<usize>,
+    height: usize,
+    width: usize,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum Cell {
-    Wall,
-    Exit,
-    Entrance,
-    Path(usize),
-}
+impl Index<(usize, usize)> for Scores {
+    type Output = usize;
 
-impl Maze {
-    pub fn set_entrance(&mut self, entrance: (usize, usize)) {
-        *self.get_mut(entrance) = Cell::Entrance;
-    }
-    fn idx(&self, coordinates: (usize, usize)) -> usize {
-        assert!(coordinates.1 < self.cols);
-        assert!(coordinates.0 < self.rows);
+    fn index(&self, index: (usize, usize)) -> &Self::Output {
+        assert!(index.0 < self.height);
+        assert!(index.1 < self.width);
 
-        coordinates.0 * self.cols + coordinates.1
-    }
-    pub fn get(&self, coordinates: (usize, usize)) -> Cell {
-        let idx = self.idx(coordinates);
-        self.cells[idx]
-    }
-    pub fn get_mut(&mut self, coordinates: (usize, usize)) -> &mut Cell {
-        let idx = self.idx(coordinates);
-        &mut self.cells[idx]
+        let idx = index.0 * self.width + index.1;
+
+        &self.scores[idx]
     }
 }
+impl IndexMut<(usize, usize)> for Scores {
+    fn index_mut(&mut self, index: (usize, usize)) -> &mut Self::Output {
+        assert!(index.0 < self.height);
+        assert!(index.1 < self.width);
 
-impl std::fmt::Display for Maze {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        for row_idx in 0..self.rows {
-            for col_idx in 0..self.cols {
-                write!(f, "{}", self.get((row_idx, col_idx)))?;
-            }
-            writeln!(f)?
-        }
-        Ok(())
-    }
-}
-impl std::fmt::Display for Cell {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Self::Entrance => write!(f, "[ I ]"),
-            Self::Exit => write!(f, "[ O ]"),
-            Self::Path(v) if *v == usize::MAX => write!(f, "[ ? ]"),
-            Self::Path(v) => write!(f, "[{:3}]", v),
-            Self::Wall => write!(f, "[ W ]"),
-        }
-    }
-}
+        let idx = index.0 * self.width + index.1;
 
-impl TryFrom<Vec<Vec<char>>> for Maze {
-    type Error = &'static str;
-    fn try_from(rows: Vec<Vec<char>>) -> Result<Self, Self::Error> {
-        let height = rows.len();
-        let width = if let Some(width) = rows.first().map(Vec::len) {
-            for row in rows.iter() {
-                if row.len() != width {
-                    return Err("the maze is not rectangular")
-                }
-            }
-            width
-        } else {
-            0
-        };
-
-        let mut cells = Vec::with_capacity(height * width);
-
-        for (row_idx, row) in rows.into_iter().enumerate() {
-            for (col_idx, ch) in row.into_iter().enumerate() {
-                let is_edge =
-                    row_idx == 0 || row_idx == height - 1 || col_idx == 0 || col_idx == width - 1;
-                cells.push(match (ch, is_edge) {
-                    ('+', _) => Cell::Wall,
-                    ('.', true) => Cell::Exit,
-                    ('.', false) => Cell::Path(usize::MAX),
-                    (_, _) => return Err("invalid char"),
-                });
-            }
-        }
-
-        let out = Self { cells, cols: width, rows: height };
-
-        Ok(out)
+        &mut self.scores[idx]
     }
 }

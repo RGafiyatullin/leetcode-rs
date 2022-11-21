@@ -6,6 +6,7 @@ const CASES: &[(&[&[bool]], (usize, usize), Option<usize>)] = &[
     ),
     (&[&[false, false, false], &[true, true, true], &[false, false, false]], (1, 0), Some(2)),
     (&[&[true, false]], (0, 0), None),
+    (&[&[false], &[true]], (1, 0), None),
 ];
 
 fn run_one_test(maze: &[&[bool]], entrance: (usize, usize), expected: Option<usize>) {
@@ -42,5 +43,10 @@ fn run_1() {
 #[test]
 fn run_2() {
     let (maze, entrance, expected) = CASES[2];
+    run_one_test(maze, entrance, expected);
+}
+#[test]
+fn run_3() {
+    let (maze, entrance, expected) = CASES[3];
     run_one_test(maze, entrance, expected);
 }
