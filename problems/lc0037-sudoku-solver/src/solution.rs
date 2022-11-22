@@ -8,8 +8,23 @@ const VALUE_BITS: u32 = 0b0000_0000_0000_0000_0000_0001_1111_1111;
 impl Solution {
     pub fn solve_sudoku(board: &mut Vec<Vec<char>>) {
         let mut board_solver = BoardSolver::empty();
-        board_solver.fill(board);
+        board_solver.load(board);
         eprintln!("{}", board_solver);
+
+        let mut iteration = 0;
+        while let Some(trigger_id) = board_solver.pending_trigger() {
+            iteration += 1;
+            eprintln!("ITERATION: #{}", iteration);
+            eprintln!(" Trigger #{} ({:?})", trigger_id, Trigger::from(trigger_id));
+
+            let values_found = board_solver.process_trigger(trigger_id);
+            eprintln!(" Values found: {:?}", values_found);
+            if values_found > 0 {
+                eprintln!("{}", board_solver);
+            }
+        }
+
+        board_solver.save(board);
     }
 }
 
@@ -38,23 +53,107 @@ impl BoardSolver {
         Self { cells, trigger_map, pending_triggers: 0 }
     }
 
-    pub fn fill(&mut self, board: &Vec<Vec<char>>) {
+    pub fn load(&mut self, board: &Vec<Vec<char>>) {
         for (row_idx, row) in board.iter().enumerate() {
             for (col_idx, ch) in row.iter().copied().enumerate() {
                 match ch {
                     '1'..='9' => {
-                        let v = ch as u8 - '1' as u8;
-                        let value_bit = 0b1 << v;
-                        let cell = &mut self.cells[row_idx][col_idx];
-                        *cell = cell.rm_values(VALUE_BITS).add_values(value_bit);
-
-                        eprintln!("cell-triggers: {:?}", cell.triggers());
-                        self.pending_triggers |= cell.triggers();
+                        let value = ch as u8 - '1' as u8;
+                        self.set_cell_value(row_idx, col_idx, value)
                     },
                     _ => (),
                 }
             }
         }
+        self.pending_triggers |= TRIGGER_BITS;
+    }
+    pub fn save(&mut self, board: &mut Vec<Vec<char>>) {
+        for (row_idx, row) in board.iter_mut().enumerate() {
+            for (col_idx, ch) in row.iter_mut().enumerate() {
+                *ch = if let Some(value) = self.cells[row_idx][col_idx].value() {
+                    ('1' as u8 + value as u8) as char
+                } else {
+                    '.'
+                };
+            }
+        }
+    }
+
+    pub fn set_cell_value(&mut self, row_idx: usize, col_idx: usize, value: u8) {
+        assert!(value < BOARD_SIZE as u8);
+        let value_bit = 0b1 << value;
+        let cell = self.cells[row_idx][col_idx];
+        self.cells[row_idx][col_idx] = cell.rm_values(VALUE_BITS).add_values(value_bit);
+        self.pending_triggers |= cell.triggers();
+    }
+
+    pub fn pending_trigger(&self) -> Option<usize> {
+        let mut pending_triggers = self.pending_triggers;
+        for id in 0..TRIGGERS_COUNT {
+            if pending_triggers & 0b1 == 0b1 {
+                return Some(id)
+            } else {
+                pending_triggers >>= 1;
+            }
+        }
+        None
+    }
+    pub fn clear_pending_trigger(&mut self, trigger_id: usize) {
+        let trigger_bit: u32 = 0b1 << trigger_id;
+        self.pending_triggers &= !trigger_bit;
+    }
+    pub fn process_trigger(&mut self, trigger_id: usize) -> usize {
+        // let pending_before = self.pending_triggers;
+        // eprintln!("processing trigger #{:?} ({:?})", trigger_id, Trigger::from(trigger_id));
+
+        let values_found = self.process_trigger_once(trigger_id);
+
+        self.clear_pending_trigger(trigger_id);
+        // eprintln!("PENDING BEFORE: [{:027b}]", pending_before);
+        // eprintln!("PENDING AFTER:  [{:027b}]", self.pending_triggers);
+
+        values_found
+    }
+
+    fn process_trigger_once(&mut self, trigger_id: usize) -> usize {
+        let mut values_found = 0;
+
+        let coords = &self.trigger_map[trigger_id];
+
+        let mut used_values = 0b0_0000_0000;
+
+        loop {
+            let used_values_before = used_values;
+
+            for &(row, col) in coords.iter() {
+                if let Some(value) = self.cells[row][col].value() {
+                    let value_bit = 0b1 << value;
+                    used_values |= value_bit;
+                }
+            }
+
+            if used_values_before == used_values {
+                break
+            }
+
+            if used_values != 0 {
+                for &(row, col) in coords.iter() {
+                    let cell = &mut self.cells[row][col];
+                    if cell.value().is_none() {
+                        let values_before = cell.values();
+                        *cell = cell.rm_values(used_values);
+
+                        if cell.values() != values_before {
+                            eprintln!("[{}:{}] triggers [{:027b}]", row, col, cell.triggers());
+                            self.pending_triggers |= cell.triggers();
+                            values_found += 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        values_found
     }
 }
 
@@ -73,13 +172,19 @@ struct Cell(u64);
 
 impl Cell {
     pub fn add_triggers(self, triggers: u32) -> Self {
-        Self(self.0 | ((triggers & TRIGGER_BITS) as u64) << 32)
+        let out = Self(self.0 | ((triggers & TRIGGER_BITS) as u64) << 32);
+        assert_eq!(self.values(), out.values(), "add_triggers");
+        out
     }
     pub fn add_values(self, values: u32) -> Self {
-        Self(self.0 | (values & VALUE_BITS) as u64)
+        let out = Self(self.0 | (values & VALUE_BITS) as u64);
+        assert_eq!(self.triggers(), out.triggers(), "add_values");
+        out
     }
     pub fn rm_values(self, values: u32) -> Self {
-        Self(self.0 & !(values as u64))
+        let out = Self(self.0 & !(values as u64));
+        assert_eq!(self.triggers(), out.triggers(), "rm_values");
+        out
     }
     pub fn triggers(self) -> u32 {
         (self.0 >> 32) as u32
@@ -87,6 +192,19 @@ impl Cell {
 
     pub fn new() -> Self {
         Self(TRIGGER_BITS as u64)
+    }
+
+    pub fn values(&self) -> u32 {
+        self.0 as u32
+    }
+
+    pub fn value(&self) -> Option<usize> {
+        let value_bits = self.0 as u32 & VALUE_BITS;
+        if value_bits.count_ones() == 1 {
+            first_set_bit(value_bits)
+        } else {
+            None
+        }
     }
 }
 
@@ -151,6 +269,17 @@ impl From<Trigger> for usize {
     }
 }
 
+fn first_set_bit(mut bits: u32) -> Option<usize> {
+    for pos in 0..(std::mem::size_of_val(&bits) * 8) {
+        if bits & 0b1 == 0b1 {
+            return Some(pos)
+        } else {
+            bits >>= 1;
+        }
+    }
+    None
+}
+
 mod impl_fmt {
     use super::*;
     use std::fmt;
@@ -187,20 +316,9 @@ mod impl_fmt {
 
             match bits_set.count_ones() {
                 0 => write!(f, "{:9}", "ERROR"),
-                1 => write!(f, "={:8}", first_set_bit(bits_set as u32) + 1),
-                _ => write!(f, "{:9b}", bits_set),
+                1 => write!(f, "={:8}", first_set_bit(bits_set as u32).unwrap() + 1),
+                _ => write!(f, "{:09b}", bits_set),
             }
         }
     }
-}
-
-fn first_set_bit(mut bits: u32) -> usize {
-    let mut pos = 0;
-
-    while bits & 0b1 != 0b1 {
-        bits >>= 1;
-        pos += 1;
-    }
-
-    pos
 }
