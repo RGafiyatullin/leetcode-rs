@@ -11,14 +11,17 @@ impl Solution {
     pub fn solve_sudoku(board: &mut Vec<Vec<char>>) {
         let mut board_solver = BoardSolver::empty();
         board_solver.load(board);
+
+        // eprintln!("=== START ===");
         // eprintln!("{}", board_solver);
 
         let mut iterations = 0;
         board_solver.solve(&mut iterations).expect("An error at the top-level solver");
         assert!(board_solver.is_done());
 
-        eprintln!("iterations: {}", iterations);
-        eprintln!("speculations: {}", board_solver.speculated.count_ones());
+        // eprintln!("=== DONE ===");
+        // eprintln!("iterations: {}", iterations);
+        // eprintln!("speculations: {}", board_solver.speculated.count_ones());
 
         // eprintln!("{}", board_solver);
 
@@ -65,6 +68,7 @@ enum Error {
     NoPossibleValues(usize, usize, usize),
     NoProgress,
     NoSolutionFound,
+    Duplicate(usize, usize, usize),
 }
 
 impl BoardSolver<[[(usize, usize); BOARD_SIZE]; TRIGGERS_COUNT]> {
@@ -109,16 +113,22 @@ where
             // eprintln!("ITERATION: #{} (total: #{})", iteration, *iterations_counter);
             // eprintln!(" Trigger #{} ({:?})", trigger_id, Trigger::from(trigger_id));
 
-            let _values_found = self.process_trigger(trigger_id)?;
-            // eprintln!(" Values found: {:?}", values_found);
+            let _cells_updated = self.process_trigger(trigger_id)?;
+            // eprintln!(" Cells updated: {:?}", cells_updated);
 
-            // if values_found > 0 {
+            // if cells_updated > 0 {
             //     eprintln!("{}", self);
             // }
         }
 
         if !self.is_done() {
             // (self.cells, self.speculated) = self.speculate(iterations_counter)?;
+
+            let _updated_cells: usize = (0..TRIGGERS_COUNT)
+                .map(|trigger_id| self.process_trigger(trigger_id).unwrap())
+                .sum();
+            // eprintln!("Last chance updated {} cells", updated_cells);
+
             let (cells, speculated) = self.speculate(iterations_counter)?;
             self.cells = cells;
             self.speculated = speculated;
@@ -133,12 +143,22 @@ where
     ) -> Result<([[Cell; BOARD_SIZE]; BOARD_SIZE], u128), Error> {
         let currently_unsolved_cells = self.unsolved_cells().count();
 
+        // eprintln!("SPECULATE [unsolved: {}]", currently_unsolved_cells);
+        // eprintln!("{}", self);
+
         if currently_unsolved_cells >= self.max_unsolved_cells {
             return Err(Error::NoProgress)
         }
 
-        for (row, col, _) in self.unsolved_cells() {
-            // eprintln!("Speculating {}:{} [depth: {}]", row, col, self.speculated.count_ones());
+        for (row, col, cell) in self.unsolved_cells() {
+            // eprintln!(
+            //     "Speculating {}:{} [cell: {}; depth: {}; iteration: #{}]",
+            //     row,
+            //     col,
+            //     cell,
+            //     self.speculated.count_ones(),
+            //     *iterations_counter
+            // );
 
             let cell_id = row * BOARD_SIZE + col;
             let speculated_bit = 0b1 << cell_id;
@@ -146,7 +166,8 @@ where
 
             for candidate in 0..BOARD_SIZE {
                 let candidate_bit = 0b1 << candidate;
-                if self.cells[row][col].values() & candidate_bit != 0 && !is_speculated {
+
+                if cell.values() & candidate_bit != 0 && !is_speculated {
                     // eprintln!("  trying {:?}", candidate);
 
                     let mut child_solver = BoardSolver {
@@ -168,7 +189,8 @@ where
                         Err(
                             Error::NoProgress |
                             Error::NoPossibleValues { .. } |
-                            Error::NoSolutionFound,
+                            Error::NoSolutionFound |
+                            Error::Duplicate { .. },
                         ) => continue,
                     }
                 }
@@ -223,63 +245,55 @@ where
         self.pending_triggers.activate_bits(cell.triggers());
     }
 
-    pub fn process_trigger(&mut self, trigger_id: usize) -> Result<usize, Error> {
-        // let pending_before = self.pending_triggers;
-        // eprintln!("processing trigger #{:?} ({:?})", trigger_id, Trigger::from(trigger_id));
-
-        let values_found = self.process_trigger_once(trigger_id)?;
-
-        // eprintln!("PENDING BEFORE: [{:027b}]", pending_before);
-        // eprintln!("PENDING AFTER:  [{:027b}]", self.pending_triggers);
-
-        self.pending_triggers.clear_bits(0b1 << trigger_id);
-
-        Ok(values_found)
-    }
-
-    fn process_trigger_once(&mut self, trigger_id: usize) -> Result<usize, Error> {
-        let mut values_found = 0;
+    fn process_trigger(&mut self, trigger_id: usize) -> Result<usize, Error> {
+        let mut cells_updated = 0;
 
         let coords = &self.trigger_map.borrow()[trigger_id];
 
-        let mut used_values = 0b0_0000_0000;
+        let mut used_values_prev = 0b0_0000_0000;
 
         loop {
-            let used_values_before = used_values;
+            let mut used_values = 0b0_0000_0000;
 
             for &(row, col) in coords.iter() {
                 if let Some(value) = self.cells[row][col].value() {
                     let value_bit = 0b1 << value;
+                    if used_values & value_bit != 0 {
+                        return Err(Error::Duplicate(row, col, trigger_id))
+                    }
                     used_values |= value_bit;
                 }
             }
 
-            if used_values_before == used_values {
-                break
-            }
+            for &(row, col) in coords.iter() {
+                let cell = &mut self.cells[row][col];
+                if cell.value().is_none() {
+                    let values_before = cell.values();
+                    *cell = cell.rm_values(used_values);
 
-            if used_values != 0 {
-                for &(row, col) in coords.iter() {
-                    let cell = &mut self.cells[row][col];
-                    if cell.value().is_none() {
-                        let values_before = cell.values();
-                        *cell = cell.rm_values(used_values);
+                    if cell.is_error() {
+                        return Err(Error::NoPossibleValues(row, col, trigger_id))
+                    }
 
-                        if cell.is_error() {
-                            return Err(Error::NoPossibleValues(row, col, trigger_id))
-                        }
-
-                        if cell.values() != values_before {
-                            // eprintln!("[{}:{}] triggers [{:032b}]", row, col, cell.triggers());
-                            self.pending_triggers.activate_bits(cell.triggers());
-                            values_found += 1;
-                        }
+                    if cell.values() != values_before {
+                        // eprintln!("[{}:{}] {:09b}=>{:09b} triggers [{:032b}]", row, col,
+                        // values_before, cell.values(), cell.triggers());
+                        cells_updated += 1;
+                    }
+                    if cell.value().is_some() {
+                        self.pending_triggers.activate_bits(cell.triggers());
                     }
                 }
             }
+
+            if used_values_prev == used_values {
+                break
+            }
+            used_values_prev = used_values;
         }
 
-        Ok(values_found)
+        self.pending_triggers.clear_bits(0b1 << trigger_id);
+        Ok(cells_updated)
     }
 }
 
@@ -454,7 +468,7 @@ mod impl_fmt {
             if self.is_error() {
                 write!(f, "{:9}", "ERROR")
             } else if let Some(value) = self.value() {
-                write!(f, "={:8}", value)
+                write!(f, "={:8}", value + 1)
             } else {
                 let bits = 0b0001_1111_1111;
                 let bits_set = self.0 & bits;
@@ -481,6 +495,13 @@ mod impl_fmt {
                 Self::NoPossibleValues(row, col, trigger) => write!(
                     f,
                     "No possible values [at: {}:{}; trigger: {:?}]",
+                    row,
+                    col,
+                    Trigger::from(*trigger)
+                ),
+                Self::Duplicate(row, col, trigger) => write!(
+                    f,
+                    "Duplicate [at: {}:{}; trigger: {:?}]",
                     row,
                     col,
                     Trigger::from(*trigger)
