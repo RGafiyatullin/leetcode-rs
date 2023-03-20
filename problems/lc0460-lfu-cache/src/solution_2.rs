@@ -124,12 +124,11 @@ where
         let hit_count = self.queue.as_ref()[idx].data.hits;
         let mut inserted = false;
 
-        for (_hit_count, before_idx) in self.hits.range(..=hit_count).next_back() {
+        if let Some((_hit_count, before_idx)) = self.hits.range(..=hit_count).next_back() {
             let before_idx = *before_idx;
 
             self.queue.insert_before(before_idx, idx);
             inserted = true;
-            break
         }
         if !inserted {
             self.queue.insert_last(idx);
