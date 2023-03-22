@@ -12,3 +12,8 @@ fn test_01() {
 fn test_02() {
     assert_eq!(Solution::min_score(4, vec![vec![1, 2, 2], vec![1, 3, 4], vec![3, 4, 7]]), 2);
 }
+
+#[test]
+fn test_03() {
+    assert_eq!(Solution::min_score(3, vec![vec![3, 2, 1], vec![1, 3, 3]]), 1);
+}
