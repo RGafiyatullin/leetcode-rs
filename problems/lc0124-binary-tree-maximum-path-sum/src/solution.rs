@@ -128,7 +128,7 @@ mod walk {
         let mut tasks = nodes
             .iter()
             .enumerate()
-            .map(|(node_id, node)| Task { this_id: node_id, prev_id: None, score: 0 })
+            .map(|(node_id, _node)| Task { this_id: node_id, prev_id: None, score: 0 })
             .collect::<VecDeque<_>>();
 
         while let Some(task) = tasks.pop_back() {
