@@ -4,8 +4,6 @@ const RADIX: i32 = 10;
 
 impl Solution {
     pub fn reverse(x: i32) -> i32 {
-        let is_negative = x.is_negative();
-
         let mut input: i32 = x;
         let mut output: i32 = 0;
 

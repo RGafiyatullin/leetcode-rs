@@ -7,5 +7,5 @@ macro_rules! test {
     };
 }
 
-test!(example_1, [1,8,6,2,5,4,8,3,7], 49);
-test!(example_2, [1,1], 1);
+test!(example_1, [1, 8, 6, 2, 5, 4, 8, 3, 7], 49);
+test!(example_2, [1, 1], 1);

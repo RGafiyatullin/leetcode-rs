@@ -11,7 +11,7 @@ impl Solution {
             let w = (r - l) as i32;
             let h = heights[l].min(heights[r]);
             max = max.max(w * h);
-            
+
             if heights[l] < heights[r] {
                 l += 1;
             } else {
