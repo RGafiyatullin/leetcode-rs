@@ -1,3 +1,5 @@
+#![allow(unused)]
+
 pub struct MinStack(Vec<(i32, i32)>);
 
 impl MinStack {
