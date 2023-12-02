@@ -1,26 +1,22 @@
 pub struct Solution;
 
+const MIN_CHAR: u8 = b'a';
+const MAX_CHAR: u8 = b'z';
+type Map = [usize; (MAX_CHAR - MIN_CHAR + 1) as usize];
+
+
 impl Solution {
     pub fn count_characters(words: Vec<String>, chars: String) -> i32 {
-        use std::collections::HashMap;
-
-        let chars = chars.chars().fold(HashMap::<_, usize>::new(), |mut acc, ch| {
-            *acc.entry(ch).or_default() += 1;
-            acc
-        });
+        let chars = chars.bytes().fold(Map::default(), |mut map, ch| {map[(ch - MIN_CHAR) as usize] += 1; map});
 
         words
             .iter()
             .filter(|w| {
                 let mut chars = chars.clone();
-                for ch in w.chars() {
+                for ch in w.bytes() {
                     // FUCK YOU LEETCODE! (FFS update the Rust-toolchain already!)
-                    if let Some(available) = chars.get_mut(&ch) {
-                        if let Some(next_available) = (*available).checked_sub(1) {
-                            *available = next_available;
-                        } else {
-                            return false
-                        };
+                    if let Some(left) = chars[(ch - MIN_CHAR) as usize].checked_sub(1) {
+                        chars[(ch - MIN_CHAR) as usize] = left;
                     } else {
                         return false
                     };
