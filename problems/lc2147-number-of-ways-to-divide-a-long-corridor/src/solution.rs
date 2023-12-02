@@ -26,7 +26,7 @@ impl Solution {
                 },
                 (false, true) => {
                     plants += 1;
-                }
+                },
                 (false, false) => {},
             }
         }
@@ -34,7 +34,7 @@ impl Solution {
         if seats != 2 {
             acc *= 0;
         }
-        
+
         acc as i32
     }
 }

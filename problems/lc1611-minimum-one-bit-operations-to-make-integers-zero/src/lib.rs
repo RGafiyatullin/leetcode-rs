@@ -8,4 +8,3 @@ impl Solution {
         n
     }
 }
-
